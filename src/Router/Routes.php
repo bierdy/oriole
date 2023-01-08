@@ -63,7 +63,7 @@ class Routes
      *
      * @var string|null
      */
-    protected ? string $group;
+    protected ? string $group = null;
     
     /**
      * Stores copy of current options being
@@ -80,7 +80,7 @@ class Routes
      *     ],
      * ]
      */
-    protected ? array $groupOptions;
+    protected ? array $groupOptions = null;
     
     /**
      * Constructor
