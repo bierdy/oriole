@@ -2,7 +2,7 @@
 
 namespace Oriole;
 
-class Bootstrap
+class Oriole
 {
     /**
      * Run Oriole application
