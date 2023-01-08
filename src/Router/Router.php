@@ -1,6 +1,6 @@
 <?php
 
-namespace Oriole;
+namespace Oriole\Router;
 
 class Router
 {
