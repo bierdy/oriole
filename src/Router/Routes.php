@@ -226,6 +226,8 @@ class Routes
         
         if ($from !== '/')
             $from = trim($from, '/');
+    
+        $name = $options['as'] ?? $from;
         
         $options = array_merge($this->groupOptions ?? [], $options ?? []);
         
