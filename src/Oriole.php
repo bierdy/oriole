@@ -5,16 +5,26 @@ namespace Oriole;
 class Oriole
 {
     /**
+     * Init Oriole application
+     *
+     * @return void
+     */
+    public function init() : void
+    {
+        require_once 'Common.php';
+        
+        $this->defineConstants();
+        $this->setRoutes();
+    }
+    
+    /**
      * Run Oriole application
      *
      * @return void
      */
     public function run() : void
     {
-        require_once 'Common.php';
         
-        $this->defineConstants();
-        $this->addRoutes();
     }
     
     protected function defineConstants() : void
@@ -24,11 +34,11 @@ class Oriole
     }
     
     /**
-     * Add routes
+     * Set routes
      *
      * @return void
      */
-    protected function addRoutes(): void
+    protected function setRoutes(): void
     {
         if (defined('CONFIG_PATH') && is_file(CONFIG_PATH . 'Routes.php'))
             require_once CONFIG_PATH . 'Routes.php';
