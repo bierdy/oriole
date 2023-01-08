@@ -14,4 +14,15 @@ class Request
     {
     
     }
+    
+    /**
+     * Get value from $_SERVER
+     *
+     * @param string $name
+     * @return string
+     */
+    public function getServer(string $name) : string
+    {
+        return $_SERVER[$name];
+    }
 }
