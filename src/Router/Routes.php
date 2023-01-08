@@ -221,8 +221,6 @@ class Routes
      */
     protected function create(string $verb, string $from, string|Closure $to, ? array $options = null) : void
     {
-        $name = $options['as'] ?? $from;
-        
         $prefix = $this->group === null ? '' : $this->group . '/';
         $from = esc(strip_tags($prefix . $from));
         
@@ -254,5 +252,10 @@ class Routes
                 'domains' => $domains,
             ],
         ];
+    }
+    
+    public function getRoutes() : array
+    {
+        return $this->routes;
     }
 }
