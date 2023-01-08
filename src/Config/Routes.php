@@ -1,5 +1,11 @@
 <?php
 
-use Oriole\Router\Routes;
+namespace Oriole\Config;
 
-$routes = Routes::getInstance();
+class Routes extends AbstractRoutes
+{
+    public function setRoutes() : void
+    {
+    
+    }
+}
