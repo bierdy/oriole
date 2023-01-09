@@ -7,6 +7,13 @@ use LogicException;
 class Oriole
 {
     /**
+     * Initiated flag
+     *
+     * @var bool
+     */
+    protected static bool $is_initiated = false;
+    
+    /**
      * Configs
      *
      * @var array
@@ -28,11 +35,16 @@ class Oriole
      */
     public function init() : void
     {
+        if (self::$is_initiated === true)
+            return;
+        
         require_once 'Common.php';
         
         $this->defineConstants();
         $this->setConfigs();
         $this->setRoutes();
+        
+        self::$is_initiated = true;
     }
     
     /**
