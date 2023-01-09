@@ -45,6 +45,11 @@ class Oriole
         
     }
     
+    /**
+     * Define constants
+     *
+     * @return void
+     */
     protected function defineConstants() : void
     {
         define('ORIOLE_PATH', __DIR__ . DIRECTORY_SEPARATOR);
