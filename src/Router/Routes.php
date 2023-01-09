@@ -30,18 +30,12 @@ class Routes
      *
      * [
      *     verb => [
-     *         routeName => [
-     *             'route' => [
-     *                  routeKey(or from) => handler
-     *              ],
-     *             'options' => [
-     *                  'domains' => [
-     *                      'example.com',
-     *                      'example.org',
-     *                      'example.us',
-     *                  ],
+     *         domain => [
+     *             route => [
+     *                 'handler' => handler,
+     *                 'alias' => alias,
      *             ],
-     *         ]
+     *         ],
      *     ],
      * ]
      */
@@ -226,8 +220,8 @@ class Routes
         
         if ($from !== '/')
             $from = trim($from, '/');
-    
-        $name = $options['as'] ?? $from;
+        
+        $alias = $options['as'] ?? $from;
         
         $options = array_merge($this->groupOptions ?? [], $options ?? []);
         
@@ -237,23 +231,16 @@ class Routes
         if (! empty($options['namespace']) && is_string($to))
             $to = '\\' . trim($options['namespace'], '\\') . '\\' . ltrim($to, '\\');
         
-        if (! empty($options['domains'])) {
-            if (is_string($options['domains']))
-                $domains = [$options['domains']];
-            elseif (is_array($options['domains']))
-                $domains = $options['domains'];
-            else
-                $domains = [];
-        } else {
-            $domains = [];
-        }
+        if (! empty($options['domains']))
+            $options['domains'] = is_string($options['domains']) ? [$options['domains']] : (is_array($options['domains']) ? $options['domains'] : ['*']);
+        else
+            $options['domains'] = ['*'];
         
-        $this->routes[$verb][$name] = [
-            'route' => [$from => $to],
-            'options' => [
-                'domains' => $domains,
-            ],
-        ];
+        foreach ($options['domains'] as $domain)
+            $this->routes[$verb][$domain][$from] = [
+                'handler' => $to,
+                'alias' => $alias,
+            ];
     }
     
     public function getRoutes() : array
