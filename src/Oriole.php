@@ -40,9 +40,13 @@ class Oriole
      */
     protected function setRoutes(): void
     {
-        if (defined('CONFIG_PATH') && is_file(CONFIG_PATH . 'Routes.php'))
-            require_once CONFIG_PATH . 'Routes.php';
+        (new \Oriole\Config\Routes)->setRoutes();
         
-        require_once ORIOLE_CONFIG_PATH . 'Routes.php';
+        if (class_exists('\App\Config\Routes')) {
+            if (! is_subclass_of('\App\Config\Routes', '\Oriole\Config\AbstractRoutes'))
+                throw new LogicException('Routes config class is not extended from Oriole abstract routes config class.');
+            
+            (new \App\Config\Routes)->setRoutes();
+        }
     }
 }
