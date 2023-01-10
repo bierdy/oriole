@@ -15,6 +15,7 @@ if (! function_exists('esc')) {
      *
      * @param array|string $data
      * @phpstan-param 'html'|'js'|'css'|'url'|'attr'|'raw' $context
+     * @param string $context
      * @param string|null $encoding Current encoding for escaping.
      *                              If not UTF-8, we convert strings from this encoding
      *                              pre-escaping and back to this encoding post-escaping.
@@ -23,7 +24,7 @@ if (! function_exists('esc')) {
      *
      * @throws InvalidArgumentException
      */
-    function esc($data, string $context = 'html', ?string $encoding = null)
+    function esc(array|string $data, string $context = 'html', ? string $encoding = null) : array|string
     {
         if (is_array($data)) {
             foreach ($data as &$value) {
