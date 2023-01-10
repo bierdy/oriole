@@ -2,6 +2,10 @@
 
 namespace Oriole;
 
+use Oriole\HTTP\Request;
+use Oriole\Router\Router;
+use Oriole\Router\Routes;
+use App\Config\App;
 use LogicException;
 
 class Oriole
@@ -54,7 +58,15 @@ class Oriole
      */
     public function run() : void
     {
+        $routes = Routes::getInstance();
+        $request = new Request();
+    
+        $router = new Router($routes, $request);
+    
+        if (! $router->defineRoute())
+            throw new LogicException('Can\'t find current route.');
         
+        $router->runHandler();
     }
     
     /**
@@ -81,7 +93,7 @@ class Oriole
         if (! is_subclass_of('\App\Config\App', '\Oriole\Config\App'))
             throw new LogicException('App config class is not extended from Oriole app config class.');
         
-        self::$configs['app'] = (new \App\Config\App)->getProperties();
+        self::$configs['app'] = (new App)->getProperties();
     }
     
     public function getConfig(string $group, string $name = '') : mixed
@@ -99,7 +111,7 @@ class Oriole
      */
     protected function setRoutes(): void
     {
-        (new \Oriole\Config\Routes)->setRoutes();
+        (new Config\Routes)->setRoutes();
         
         if (class_exists('\App\Config\Routes')) {
             if (! is_subclass_of('\App\Config\Routes', '\Oriole\Config\AbstractRoutes'))
