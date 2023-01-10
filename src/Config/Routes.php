@@ -9,7 +9,7 @@ class Routes extends AbstractRoutes
         $appConfig = $this->appConfig;
         $routes = $this->routes;
         
-        $routes->group($appConfig['backRootPath'], ['namespace' => 'Wagtail\Controllers\Back', 'domains' => $appConfig['backDomain']], function($routes)
+        $routes->group($appConfig['backRootPath'], ['namespace' => 'Oriole\Controllers', 'domains' => $appConfig['backDomain']], function($routes)
         {
             $routes->get('', 'Home::index');
             
