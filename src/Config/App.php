@@ -4,13 +4,13 @@ namespace Oriole\Config;
 
 class App extends BaseConfig
 {
-    protected string $backRootPath = 'admin';
+    protected string $adminRootPath = 'admin';
     
-    protected string $frontRootPath = '/';
+    protected string $publicRootPath = '/';
     
-    protected string $backDomain = '';
+    protected string $adminDomain = '';
     
-    protected string $frontDomain = '';
+    protected string $publicDomain = '';
     
     protected string $resourceUrlSeparator = '-';
     
