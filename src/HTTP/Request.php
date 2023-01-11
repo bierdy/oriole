@@ -26,6 +26,15 @@ class Request
         return $_SERVER[$name] ?? null;
     }
     
+    protected function getHttpScheme() : string
+    {
+        $requestScheme = $this->getServer('REQUEST_SCHEME') ? : null;
+        $https = $this->getServer('HTTPS') ? : null;
+        $serverPort = $this->getServer('SERVER_PORT') ? : null;
+    
+        return $requestScheme ? : (($https === 'on') || ($serverPort == 443) ? 'https' : 'http');
+    }
+    
     /**
      * Get current base url of the current request
      *
@@ -34,11 +43,7 @@ class Request
     public function getCurrentBaseURL() : string
     {
         $httpHost = $this->getServer('HTTP_HOST') ? : '';
-        $requestScheme = $this->getServer('REQUEST_SCHEME') ? : null;
-        $https = $this->getServer('HTTPS') ? : null;
-        $serverPort = $this->getServer('SERVER_PORT') ? : null;
-    
-        $scheme = $requestScheme ? : (($https === 'on') || ($serverPort == 443) ? 'https' : 'http');
+        $scheme = $this->getHttpScheme();
         
         return $scheme . '://' . $httpHost . '/';
     }
