@@ -27,11 +27,11 @@ class Request
     }
     
     /**
-     * Get base url of the current request
+     * Get current base url of the current request
      *
      * @return string
      */
-    public function getBaseURL() : string
+    public function getCurrentBaseURL() : string
     {
         $httpHost = $this->getServer('HTTP_HOST') ? : '';
         $requestScheme = $this->getServer('REQUEST_SCHEME') ? : null;
