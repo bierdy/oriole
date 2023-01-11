@@ -2,6 +2,8 @@
 
 namespace Oriole\HTTP;
 
+use Oriole\Oriole;
+
 /**
  * Representation of an HTTP request.
  */
@@ -46,5 +48,41 @@ class Request
         $scheme = $this->getHttpScheme();
         
         return $scheme . '://' . $httpHost . '/';
+    }
+    
+    /**
+     * Get admin base url or current base url
+     * of the current request if admin domain
+     * is empty
+     *
+     * @return string
+     */
+    public function getAdminBaseURL() : string
+    {
+        $oriole = new Oriole();
+        $adminDomain = $oriole->getConfig('app', 'adminDomain') ? : $this->getServer('HTTP_HOST') ? : '';
+        $adminRootPath = $oriole->getConfig('app', 'adminRootPath');
+        $adminRootPath = $adminRootPath === '/' ? '' : $adminRootPath;
+        $scheme = $this->getHttpScheme();
+        
+        return $scheme . '://' . $adminDomain . '/' . $adminRootPath;
+    }
+    
+    /**
+     * Get public base url or current base url
+     * of the current request if public domain
+     * is empty
+     *
+     * @return string
+     */
+    public function getPublicBaseURL() : string
+    {
+        $oriole = new Oriole();
+        $publicDomain = $oriole->getConfig('app', 'publicDomain') ? : $this->getServer('HTTP_HOST') ? : '';
+        $publicRootPath = $oriole->getConfig('app', 'publicRootPath');
+        $publicRootPath = $publicRootPath === '/' ? '' : $publicRootPath;
+        $scheme = $this->getHttpScheme();
+        
+        return $scheme . '://' . $publicDomain . '/' . $publicRootPath;
     }
 }
