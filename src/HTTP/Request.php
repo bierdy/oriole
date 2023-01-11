@@ -25,4 +25,21 @@ class Request
     {
         return $_SERVER[$name] ?? null;
     }
+    
+    /**
+     * Get base url of the current request
+     *
+     * @return string
+     */
+    public function getBaseURL() : string
+    {
+        $httpHost = $this->getServer('HTTP_HOST') ? : '';
+        $requestScheme = $this->getServer('REQUEST_SCHEME') ? : null;
+        $https = $this->getServer('HTTPS') ? : null;
+        $serverPort = $this->getServer('SERVER_PORT') ? : null;
+    
+        $scheme = $requestScheme ? : (($https === 'on') || ($serverPort == 443) ? 'https' : 'http');
+        
+        return $scheme . '://' . $httpHost . '/';
+    }
 }
