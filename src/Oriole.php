@@ -6,6 +6,7 @@ use Oriole\HTTP\Request;
 use Oriole\Router\Router;
 use Oriole\Router\Routes;
 use App\Config\App;
+use App\Config\Cookie;
 use LogicException;
 
 class Oriole
@@ -94,6 +95,11 @@ class Oriole
             throw new LogicException('App config class is not extended from Oriole app config class.');
         
         self::$configs['app'] = (new App)->getProperties();
+        
+        if (class_exists('\App\Config\Cookie'))
+            self::$configs['cookie'] = (new Cookie)->getProperties();
+        else
+            self::$configs['cookie'] = (new Config\Cookie)->getProperties();
     }
     
     public function getConfig(string $group, string $name = '') : mixed
