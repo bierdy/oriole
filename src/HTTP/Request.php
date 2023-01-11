@@ -19,10 +19,10 @@ class Request
      * Get value from $_SERVER
      *
      * @param string $name
-     * @return string
+     * @return string|null
      */
-    public function getServer(string $name) : string
+    public function getServer(string $name) : string|null
     {
-        return $_SERVER[$name];
+        return $_SERVER[$name] ?? null;
     }
 }
