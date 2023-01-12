@@ -4,9 +4,9 @@ namespace Oriole\Config;
 
 class App extends BaseConfig
 {
-    protected string $adminRootPath = 'admin';
+    protected string $adminBasePath = 'admin';
     
-    protected string $publicRootPath = '/';
+    protected string $publicBasePath = '/';
     
     protected string $adminDomain = '';
     

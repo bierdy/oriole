@@ -61,11 +61,11 @@ class Request
     {
         $oriole = new Oriole();
         $adminDomain = $oriole->getConfig('app', 'adminDomain') ? : $this->getServer('HTTP_HOST') ? : '';
-        $adminRootPath = $oriole->getConfig('app', 'adminRootPath');
-        $adminRootPath = $adminRootPath === '/' ? '' : $adminRootPath;
+        $adminBasePath = $oriole->getConfig('app', 'adminBasePath');
+        $adminBasePath = $adminBasePath === '/' ? '' : $adminBasePath;
         $scheme = $this->getHttpScheme();
         
-        return $scheme . '://' . $adminDomain . '/' . $adminRootPath;
+        return $scheme . '://' . $adminDomain . '/' . $adminBasePath;
     }
     
     /**
@@ -79,10 +79,10 @@ class Request
     {
         $oriole = new Oriole();
         $publicDomain = $oriole->getConfig('app', 'publicDomain') ? : $this->getServer('HTTP_HOST') ? : '';
-        $publicRootPath = $oriole->getConfig('app', 'publicRootPath');
-        $publicRootPath = $publicRootPath === '/' ? '' : $publicRootPath;
+        $publicBasePath = $oriole->getConfig('app', 'publicBasePath');
+        $publicBasePath = $publicBasePath === '/' ? '' : $publicBasePath;
         $scheme = $this->getHttpScheme();
         
-        return $scheme . '://' . $publicDomain . '/' . $publicRootPath;
+        return $scheme . '://' . $publicDomain . '/' . $publicBasePath;
     }
 }

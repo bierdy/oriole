@@ -25,8 +25,8 @@ class Oriole
      *
      * [
      *     'app' => [
-     *         'adminRootPath' => 'admin',
-     *         'publicRootPath' => '/',
+     *         'adminBasePath' => 'admin',
+     *         'publicBasePath' => '/',
      *         'adminDomain' => '',
      *     ],
      * ]

@@ -9,7 +9,7 @@ class Routes extends AbstractRoutes
         $appConfig = $this->appConfig;
         $routes = $this->routes;
         
-        $routes->group($appConfig['adminRootPath'], ['namespace' => 'Oriole\Controllers', 'domains' => $appConfig['adminDomain']], function($routes)
+        $routes->group($appConfig['adminBasePath'], ['namespace' => 'Oriole\Controllers', 'domains' => $appConfig['adminDomain']], function($routes)
         {
             $routes->get('', 'Home::index');
             
