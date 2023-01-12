@@ -23,6 +23,7 @@ class BaseModel
             $port = $databaseConfig['port'];
             $dsn = "mysql:host={$hostname};port={$port};dbname={$database};charset={$charset}";
             $options = [
+                \PDO::ATTR_ERRMODE => \PDO::ERRMODE_EXCEPTION,
                 \PDO::MYSQL_ATTR_INIT_COMMAND => "SET NAMES '{$charset}' COLLATE '{$collation}'"
             ];
             
@@ -32,5 +33,19 @@ class BaseModel
                 throw new \PDOException($e->getMessage(), (int) $e->getCode());
             }
         }
+    }
+    
+    public function execute(string $statement, $data = null, $fetch_mode = \PDO::FETCH_ASSOC): bool|\PDOStatement
+    {
+        $this->sth = self::$dbh->prepare($statement);
+        
+        if (! is_null($data))
+            $this->sth->execute($data);
+        else
+            $this->sth->execute();
+        
+        $this->sth->setFetchMode($fetch_mode);
+        
+        return $this->sth;
     }
 }
