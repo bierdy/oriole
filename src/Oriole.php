@@ -6,6 +6,7 @@ use Oriole\HTTP\Request;
 use Oriole\Router\Router;
 use Oriole\Router\Routes;
 use App\Config\App;
+use App\Config\Database;
 use App\Config\Cookie;
 use LogicException;
 
@@ -92,9 +93,21 @@ class Oriole
             throw new LogicException('App config class is not defined.');
         
         if (! is_subclass_of('\App\Config\App', '\Oriole\Config\App'))
-            throw new LogicException('App config class is not extended from Oriole app config class.');
+            throw new LogicException('App config class is not extended from Oriole App config class.');
         
         self::$configs['app'] = (new App)->getProperties();
+        
+        
+        
+        if (! class_exists('\App\Config\Database'))
+            throw new LogicException('Database config class is not defined.');
+        
+        if (! is_subclass_of('\App\Config\Database', '\Oriole\Config\Database'))
+            throw new LogicException('Database config class is not extended from Oriole Database config class.');
+        
+        self::$configs['database'] = (new Database)->getProperties();
+        
+        
         
         if (class_exists('\App\Config\Cookie'))
             self::$configs['cookie'] = (new Cookie)->getProperties();
