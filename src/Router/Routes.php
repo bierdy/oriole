@@ -3,6 +3,7 @@
 namespace Oriole\Router;
 
 use Closure;
+use Exception;
 use InvalidArgumentException;
 
 class Routes
@@ -87,18 +88,22 @@ class Routes
     {
     
     }
+    
+    /**
+     * @throws Exception
+     */
     final public function __wakeup()
     {
-    
+        throw new Exception('Cannot unserialize a singleton.');
     }
     
-    public static function getInstance() : static
+    public static function getInstance() : self
     {
-        if (static::$instance === null) {
-            static::$instance = new static;
+        if (self::$instance === null) {
+            self::$instance = new self;
         }
         
-        return static::$instance;
+        return self::$instance;
     }
     
     /**
