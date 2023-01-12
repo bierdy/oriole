@@ -17,6 +17,8 @@
         "ext-libxml": "*",
         "ext-simplexml": "*",
         "ext-imagick": "*",
+        "ext-pdo": "*",
+        "ext-curl": "*",
         "laminas/laminas-escaper": "^2.12.0"
     },
     "autoload": {
