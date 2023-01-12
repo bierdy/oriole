@@ -55,7 +55,7 @@ class Router
         $httpHost = strtolower($httpHost);
         
         $requestURI = $this->request->getServer('REQUEST_URI');
-        $requestURI = urldecode($requestURI);
+        $requestURI = urldecode(parse_url($requestURI, PHP_URL_PATH));
         $requestURI = $requestURI === '/' ? $requestURI : trim($requestURI, '/ ');
         
         if (
