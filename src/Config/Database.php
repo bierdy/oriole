@@ -10,6 +10,6 @@ class Database extends BaseConfig
     protected string $database = '';
     protected string $prefix = 'oriole_';
     protected string $charset = 'utf8mb4';
-    protected string $collat = 'utf8mb4_unicode_ci';
+    protected string $collation = 'utf8mb4_unicode_ci';
     protected int $port = 3306;
 }
