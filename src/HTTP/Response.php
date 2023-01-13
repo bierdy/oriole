@@ -2,6 +2,7 @@
 
 namespace Oriole\HTTP;
 
+use Oriole\Oriole;
 use Exception;
 
 /**
@@ -12,6 +13,8 @@ class Response
     protected static self|null $instance = null;
     
     protected array $headers = [];
+    
+    protected array $cookieConfig;
     
     /**
      * HTTP status codes
@@ -106,7 +109,7 @@ class Response
      */
     final private function __construct()
     {
-    
+        $this->cookieConfig = (new Oriole)->getConfig('cookie');
     }
     final protected function __clone()
     {
