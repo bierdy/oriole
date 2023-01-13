@@ -11,6 +11,8 @@ class Response
 {
     protected static self|null $instance = null;
     
+    protected array $headers = [];
+    
     /**
      * Constructor
      */
@@ -38,5 +40,14 @@ class Response
         }
         
         return self::$instance;
+    }
+    
+    protected function setHeader($name, $value, $replace) : void
+    {
+        $this->headers[] = [
+            'name' => $name,
+            'value' => $value,
+            'replace' => $replace,
+        ];
     }
 }
