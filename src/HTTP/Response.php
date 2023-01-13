@@ -143,16 +143,12 @@ class Response
     {
         if (is_null($value)) {
             foreach ($this->headers as $key => $header)
-                if ($header['name'] === $name) {
+                if ($header['name'] === $name)
                     unset($this->headers[$key]);
-                    return;
-                }
         } else {
             foreach ($this->headers as $key => $header)
-                if ($header['name'] === $name && $header['value'] === $value) {
+                if ($header['name'] === $name && $header['value'] === $value)
                     unset($this->headers[$key]);
-                    return;
-                }
         }
     }
     
