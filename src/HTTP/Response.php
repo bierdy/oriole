@@ -130,13 +130,30 @@ class Response
         return self::$instance;
     }
     
-    protected function setHeader($name, $value, $replace) : void
+    protected function setHeader(string $name, string|int|float $value, bool $replace = true) : void
     {
         $this->headers[] = [
             'name' => $name,
             'value' => $value,
             'replace' => $replace,
         ];
+    }
+    
+    protected function removeHeader(string $name, string|int|float $value = null) : void
+    {
+        if (is_null($value)) {
+            foreach ($this->headers as $key => $header)
+                if ($header['name'] === $name) {
+                    unset($this->headers[$key]);
+                    return;
+                }
+        } else {
+            foreach ($this->headers as $key => $header)
+                if ($header['name'] === $name && $header['value'] === $value) {
+                    unset($this->headers[$key]);
+                    return;
+                }
+        }
     }
     
     protected function setStatusCode(int $statusCode) : void
