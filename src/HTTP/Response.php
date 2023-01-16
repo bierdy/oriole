@@ -135,7 +135,7 @@ class Response
         return self::$instance;
     }
     
-    protected function setHeader(string $name, string|int|float $value, bool $replace = true) : void
+    public function setHeader(string $name, string|int|float $value, bool $replace = true) : void
     {
         $this->headers[] = [
             'name' => $name,
@@ -144,7 +144,7 @@ class Response
         ];
     }
     
-    protected function removeHeader(string $name, string|int|float $value = null) : void
+    public function removeHeader(string $name, string|int|float $value = null) : void
     {
         foreach ($this->headers as $key => $header)
             if (
@@ -179,7 +179,7 @@ class Response
         ];
     }
     
-    protected function removeCookie(string $name, string $path = null, string $domain = null) : void
+    public function removeCookie(string $name, string $path = null, string $domain = null) : void
     {
         $name = $this->cookieConfig['prefix'] . $name;
         
