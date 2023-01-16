@@ -18,6 +18,8 @@ class Response
     
     protected array $cookies = [];
     
+    protected mixed $body = null;
+    
     protected int $statusCode = 200;
     
     /**
@@ -68,7 +70,13 @@ class Response
                 unset($this->headers[$key]);
     }
     
-    protected function setCookie(string $name, string $value, int $expires = null, string $path = null, string $domain = null, bool $secure = null, bool $httpOnly = null, string $sameSite = null) : void
+    protected function sendHeaders() : void
+    {
+        foreach ($this->headers as $header)
+            header($header['name'] . ': ' . $header['value'], $header['replace']);
+    }
+    
+    public function setCookie(string $name, string $value, int $expires = null, string $path = null, string $domain = null, bool $secure = null, bool $httpOnly = null, string $sameSite = null) : void
     {
         $name = $this->cookieConfig['prefix'] . $name;
         
@@ -112,8 +120,32 @@ class Response
         $this->setCookie($name, '', time() - 3600, $path, $domain);
     }
     
-    protected function setStatusCode(int $statusCode) : void
+    protected function sendCookies() : void
+    {
+        foreach ($this->cookies as $cookie)
+            setcookie($cookie['name'], $cookie['value'], $cookie['options']);
+    }
+    
+    public function setStatusCode(int $statusCode) : void
     {
         $this->statusCode = $statusCode;
+    }
+    
+    public function setBody($body) : void
+    {
+        $this->body = $body;
+    }
+    
+    protected function sendBody() : void
+    {
+        echo $this->body;
+    }
+    
+    public function send() : void
+    {
+        http_response_code($this->statusCode);
+        $this->sendHeaders();
+        $this->sendCookies();
+        $this->sendBody();
     }
 }
