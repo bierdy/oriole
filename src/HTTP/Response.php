@@ -12,9 +12,11 @@ class Response
 {
     protected static self|null $instance = null;
     
+    protected array $cookieConfig;
+    
     protected array $headers = [];
     
-    protected array $cookieConfig;
+    protected array $cookies = [];
     
     /**
      * HTTP status codes
@@ -150,6 +152,50 @@ class Response
                 && (is_null($value) || $header['value'] === $value)
             )
                 unset($this->headers[$key]);
+    }
+    
+    protected function setCookie(string $name, string $value, int $expires = null, string $path = null, string $domain = null, bool $secure = null, bool $httpOnly = null, string $sameSite = null) : void
+    {
+        $name = $this->cookieConfig['prefix'] . $name;
+        
+        $expires =  ! is_null($expires) ?  $expires :  $this->cookieConfig['expires'];
+        $path =     ! is_null($path) ?     $path :     $this->cookieConfig['path'];
+        $domain =   ! is_null($domain) ?   $domain :   $this->cookieConfig['domain'];
+        $secure =   ! is_null($secure) ?   $secure :   $this->cookieConfig['secure'];
+        $httpOnly = ! is_null($httpOnly) ? $httpOnly : $this->cookieConfig['httpOnly'];
+        $sameSite = ! is_null($sameSite) ? $sameSite : $this->cookieConfig['sameSite'];
+        
+        $this->cookies[] = [
+            'name' => $name,
+            'value' => $value,
+            'options' => [
+                'expires' => $expires,
+                'path' => $path,
+                'domain' => $domain,
+                'secure' => $secure,
+                'httponly' => $httpOnly,
+                'samesite' => $sameSite,
+            ],
+        ];
+    }
+    
+    protected function removeCookie(string $name, string $path = null, string $domain = null) : void
+    {
+        $name = $this->cookieConfig['prefix'] . $name;
+        
+        $path =   ! is_null($path) ?   $path :   $this->cookieConfig['path'];
+        $domain = ! is_null($domain) ? $domain : $this->cookieConfig['domain'];
+        
+        foreach ($this->cookies as $key => $cookie) {
+            if (
+                $cookie['name'] === $name
+                && $cookie['options']['path'] === $path
+                && $cookie['options']['domain'] === $domain
+            )
+                unset($this->cookies[$key]);
+        }
+        
+        $this->setCookie($name, '', time() - 3600, $path, $domain);
     }
     
     protected function setStatusCode(int $statusCode) : void
