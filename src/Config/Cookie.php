@@ -9,6 +9,6 @@ class Cookie extends BaseConfig
     protected string $path = '/';
     protected string $domain = '';
     protected bool $secure = false;
-    protected string $sameSite = 'Lax';
     protected bool $httpOnly = false;
+    protected string $sameSite = 'Lax';
 }
