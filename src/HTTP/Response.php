@@ -144,15 +144,12 @@ class Response
     
     protected function removeHeader(string $name, string|int|float $value = null) : void
     {
-        if (is_null($value)) {
-            foreach ($this->headers as $key => $header)
-                if ($header['name'] === $name)
-                    unset($this->headers[$key]);
-        } else {
-            foreach ($this->headers as $key => $header)
-                if ($header['name'] === $name && $header['value'] === $value)
-                    unset($this->headers[$key]);
-        }
+        foreach ($this->headers as $key => $header)
+            if (
+                $header['name'] === $name
+                && (is_null($value) || $header['value'] === $value)
+            )
+                unset($this->headers[$key]);
     }
     
     protected function setStatusCode(int $statusCode) : void
