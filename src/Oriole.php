@@ -3,6 +3,7 @@
 namespace Oriole;
 
 use Oriole\HTTP\Request;
+use Oriole\HTTP\Response;
 use Oriole\Router\Router;
 use Oriole\Router\Routes;
 use App\Config\App;
@@ -60,15 +61,27 @@ class Oriole
      */
     public function run() : void
     {
+        ob_start();
+        
         $routes = Routes::getInstance();
         $request = new Request();
-    
+        $response = Response::getInstance();
+        
         $router = new Router($routes, $request);
-    
+        
         if (! $router->defineRoute())
             throw new LogicException('Can\'t find current route.');
         
-        $router->runHandler();
+        $body = $router->runHandler();
+        
+        if (! is_null($body))
+            $response->setBody($body);
+        else
+            $response->setBody(ob_get_contents());
+    
+        ob_end_clean();
+        
+        $response->send();
     }
     
     /**
