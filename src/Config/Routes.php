@@ -11,63 +11,63 @@ class Routes extends AbstractRoutes
         
         $routes->group($appConfig['adminBasePath'], ['namespace' => 'Oriole\Controllers', 'domains' => $appConfig['adminDomain']], function($routes)
         {
-            $routes->get('', 'Home::index');
+            $routes->get('', 'HomeController::index');
             
             $routes->group('templates', function($routes)
             {
-                $routes->get('', 'Templates::list');
-                $routes->match(['get', 'post'], 'add', 'Templates::add');
-                $routes->match(['get', 'post'], 'edit/(:num)', 'Templates::edit/$0');
-                $routes->get('activate/(:num)', 'Templates::activate/$0');
-                $routes->get('deactivate/(:num)', 'Templates::deactivate/$0');
-                $routes->get('delete/(:num)', 'Templates::delete/$0');
-                $routes->get('delete-all', 'Templates::deleteAll');
+                $routes->get('', 'TemplatesController::list');
+                $routes->match(['get', 'post'], 'add', 'TemplatesController::add');
+                $routes->match(['get', 'post'], 'edit/(:num)', 'TemplatesController::edit/$0');
+                $routes->get('activate/(:num)', 'TemplatesController::activate/$0');
+                $routes->get('deactivate/(:num)', 'TemplatesController::deactivate/$0');
+                $routes->get('delete/(:num)', 'TemplatesController::delete/$0');
+                $routes->get('delete-all', 'TemplatesController::deleteAll');
             });
             
             $routes->group('variables', function($routes)
             {
-                $routes->get('', 'Variables::list');
-                $routes->match(['get', 'post'], 'add', 'Variables::add');
-                $routes->match(['get', 'post'], 'edit/(:num)', 'Variables::edit/$0');
-                $routes->get('activate/(:num)', 'Variables::activate/$0');
-                $routes->get('deactivate/(:num)', 'Variables::deactivate/$0');
-                $routes->get('delete/(:num)', 'Variables::delete/$0');
-                $routes->get('delete-all', 'Variables::deleteAll');
-                $routes->get('delete-value/(:num)', 'Variables::deleteValue/$0');
+                $routes->get('', 'VariablesController::list');
+                $routes->match(['get', 'post'], 'add', 'VariablesController::add');
+                $routes->match(['get', 'post'], 'edit/(:num)', 'VariablesController::edit/$0');
+                $routes->get('activate/(:num)', 'VariablesController::activate/$0');
+                $routes->get('deactivate/(:num)', 'VariablesController::deactivate/$0');
+                $routes->get('delete/(:num)', 'VariablesController::delete/$0');
+                $routes->get('delete-all', 'VariablesController::deleteAll');
+                $routes->get('delete-value/(:num)', 'VariablesController::deleteValue/$0');
             });
             
             $routes->group('resources', function($routes)
             {
-                $routes->match(['get', 'post'], 'add/(:num)', 'Resources::add/$0');
-                $routes->match(['get', 'post'], 'edit/(:num)', 'Resources::edit/$0');
-                $routes->get('activate/(:num)', 'Resources::activate/$0');
-                $routes->get('deactivate/(:num)', 'Resources::deactivate/$0');
-                $routes->get('delete/(:num)', 'Resources::delete/$0');
-                $routes->get('set-template/(:num)/(:num)', 'Resources::setTemplate/$0/$1');
-                $routes->get('set-parent/(:num)/(:num)', 'Resources::setParent/$0/$1');
-                $routes->get('set-order/(:num)/(:num)', 'Resources::setOrder/$0/$1');
+                $routes->match(['get', 'post'], 'add/(:num)', 'ResourcesController::add/$0');
+                $routes->match(['get', 'post'], 'edit/(:num)', 'ResourcesController::edit/$0');
+                $routes->get('activate/(:num)', 'ResourcesController::activate/$0');
+                $routes->get('deactivate/(:num)', 'ResourcesController::deactivate/$0');
+                $routes->get('delete/(:num)', 'ResourcesController::delete/$0');
+                $routes->get('set-template/(:num)/(:num)', 'ResourcesController::setTemplate/$0/$1');
+                $routes->get('set-parent/(:num)/(:num)', 'ResourcesController::setParent/$0/$1');
+                $routes->get('set-order/(:num)/(:num)', 'ResourcesController::setOrder/$0/$1');
             });
             
             $routes->group('languages', function($routes)
             {
-                $routes->get('', 'Languages::list');
-                $routes->match(['get', 'post'], 'add', 'Languages::add');
-                $routes->match(['get', 'post'], 'edit/(:num)', 'Languages::edit/$0');
-                $routes->get('activate/(:num)', 'Languages::activate/$0');
-                $routes->get('deactivate/(:num)', 'Languages::deactivate/$0');
-                $routes->get('delete/(:num)', 'Languages::delete/$0');
-                $routes->get('delete-all', 'Languages::deleteAll');
-                $routes->get('set-default/(:num)', 'Languages::setDefault/$0');
+                $routes->get('', 'LanguagesController::list');
+                $routes->match(['get', 'post'], 'add', 'LanguagesController::add');
+                $routes->match(['get', 'post'], 'edit/(:num)', 'LanguagesController::edit/$0');
+                $routes->get('activate/(:num)', 'LanguagesController::activate/$0');
+                $routes->get('deactivate/(:num)', 'LanguagesController::deactivate/$0');
+                $routes->get('delete/(:num)', 'LanguagesController::delete/$0');
+                $routes->get('delete-all', 'LanguagesController::deleteAll');
+                $routes->get('set-default/(:num)', 'LanguagesController::setDefault/$0');
             });
             
             $routes->group('variable-groups', function($routes)
             {
-                $routes->match(['get', 'post'], 'add/(:num)', 'VariableGroups::add/$0');
-                $routes->match(['get', 'post'], 'edit/(:num)', 'VariableGroups::edit/$0');
-                $routes->get('delete/(:num)', 'VariableGroups::delete/$0');
+                $routes->match(['get', 'post'], 'add/(:num)', 'VariableGroupsController::add/$0');
+                $routes->match(['get', 'post'], 'edit/(:num)', 'VariableGroupsController::edit/$0');
+                $routes->get('delete/(:num)', 'VariableGroupsController::delete/$0');
             });
             
-            $routes->get('get-assets', 'Assets::get');
+            $routes->get('get-assets', 'AssetsController::get');
         });
     }
 }
