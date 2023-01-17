@@ -32,8 +32,10 @@ class Routes
      * [
      *     verb => [
      *         domain => [
-     *             route => [
+     *             route => [                // original route
+     *                 'from' => from,       // route with replace placeholder
      *                 'handler' => handler,
+     *                 'args' => ['$0', '$1', 'some string', '$2'],
      *                 'alias' => alias,
      *             ],
      *         ],
@@ -56,9 +58,9 @@ class Routes
     /**
      * The name of the current group, if any.
      *
-     * @var string|null
+     * @var string
      */
-    protected ? string $group = null;
+    protected string $group = '';
     
     /**
      * Stores copy of current options being
@@ -114,17 +116,18 @@ class Routes
      */
     public function group(string $name, ...$params) : void
     {
-        $oldGroup        = $this->group;
+        $oldGroup = $this->group;
         $oldGroupOptions = $this->groupOptions;
-        
-        $this->group = $name ? trim($oldGroup . '/' . $name, '/') : $oldGroup;
+    
+        $name = trim($name, '/ ');
+        $this->group = ! empty($name) ? $oldGroup . '/' . $name : $oldGroup;
         
         $callback = array_pop($params);
         
         if (isset($params[0]) && is_array($params[0])) {
             $groupOptions = [
-                'namespace' => $params[0]['namespace'] ?? '',
-                'domains' => $params[0]['domains'] ?? [],
+                'namespace' => $params[0]['namespace'] ?? $this->groupOptions['namespace'] ?? '',
+                'domains' => $params[0]['domains'] ?? $this->groupOptions['domains'] ?? [],
             ];
             $this->groupOptions = $groupOptions;
         }
@@ -132,7 +135,7 @@ class Routes
         if (is_callable($callback))
             $callback($this);
         
-        $this->group        = $oldGroup;
+        $this->group = $oldGroup;
         $this->groupOptions = $oldGroupOptions;
     }
     
@@ -220,21 +223,33 @@ class Routes
      */
     protected function create(string $verb, string $from, string|Closure $to, ? array $options = null) : void
     {
-        $prefix = $this->group === null ? '' : $this->group . '/';
-        $from = esc(strip_tags($prefix . $from));
+        $prefix = $this->group;
         
-        if ($from !== '/')
-            $from = trim($from, '/');
+        $from = $from === '/' ? $from : trim($from, '/ ');
+        $from = esc(strip_tags($prefix . '/' . $from));
+        $from = $from === '/' ? $from : trim($from, '/ ');
         
-        $alias = $options['as'] ?? $from;
+        $from_ = $from;
+        foreach ($this->placeholders as $tag => $pattern)
+            $from_ = str_ireplace(':' . $tag, $pattern, $from_);
+        
+        $alias = $options['as'] ?? '';
         
         $options = array_merge($this->groupOptions ?? [], $options ?? []);
+    
+        $args = [];
         
-        foreach ($this->placeholders as $tag => $pattern)
-            $from = str_ireplace(':' . $tag, $pattern, $from);
-        
-        if (! empty($options['namespace']) && is_string($to))
-            $to = '\\' . trim($options['namespace'], '\\') . '\\' . ltrim($to, '\\');
+        if (is_string($to)) {
+            $to = trim($to, ' ');
+            
+            if (! empty($options['namespace']))
+                $to = '\\' . trim($options['namespace'], '\\ ') . '\\' . trim($to, '\\');
+            
+            $toArray = explode('/', $to);
+            $to = array_shift($toArray);
+    
+            $args = $toArray;
+        }
         
         if (! empty($options['domains']))
             $options['domains'] = is_string($options['domains']) ? [$options['domains']] : (is_array($options['domains']) ? $options['domains'] : ['*']);
@@ -243,7 +258,9 @@ class Routes
         
         foreach ($options['domains'] as $domain)
             $this->routes[$verb][$domain][$from] = [
+                'from' => $from_,
                 'handler' => $to,
+                'args' => $args,
                 'alias' => $alias,
             ];
     }

@@ -28,6 +28,13 @@ class Router
     protected string|Closure|null $handler = null;
     
     /**
+     * An array of handler arguments.
+     *
+     * @var array
+     */
+    protected array $args = [];
+    
+    /**
      * An array of binds that were collected,
      * so they can be sent to closure routes.
      *
@@ -74,13 +81,14 @@ class Router
         if (empty($routes[$requestMethod][$httpHost]))
             return false;
         
-        foreach ($routes[$requestMethod][$httpHost] as $routeKey => $routeValue) {
-            $routeKey = $routeKey === '/' ? $routeKey : trim($routeKey, '/ ');
+        foreach ($routes[$requestMethod][$httpHost] as $route) {
+            $from = $route['from'];
             
-            if (preg_match('#^' . $routeKey . '$#u', $requestURI, $matches)) {
+            if (preg_match('#^' . $from . '$#u', $requestURI, $matches)) {
                 array_shift($matches);
                 
-                $this->handler = $routeValue['handler'];
+                $this->handler = $route['handler'];
+                $this->args = $route['args'];
                 $this->params = $matches;
                 
                 return true;
@@ -93,6 +101,7 @@ class Router
     public function runHandler()
     {
         $handler = $this->handler;
+        $args = $this->args;
         $params = $this->params;
         
         // If it's a function let's run it
@@ -104,18 +113,16 @@ class Router
             throw new LogicException('$this->handler is not a string');
         
         $handlerArray = explode('::', $handler);
-        $controller = ! empty($handlerArray[0]) && is_string($handlerArray[0]) ? $handlerArray[0] : '';
+        $controller = ! empty($handlerArray[0]) ? $handlerArray[0] : '';
         
         if (! class_exists($controller))
             throw new LogicException("Class \"$controller\" is not exist");
         
-        $methodArray = explode('/', $handlerArray[1]);
-        $method = ! empty($methodArray[0]) && is_string($methodArray[0]) ? array_shift($methodArray) : '';
+        $method = ! empty($handlerArray[1]) ? $handlerArray[1] : '';
         
         if (! method_exists($controller, $method))
             throw new LogicException("Method \"$method\" does not exist in the class \"$controller\"");
         
-        $args = $methodArray;
         foreach ($args as &$arg)
             if (preg_match('#^\$(\d*)$#u', $arg, $matches)) {
                 array_shift($matches);
