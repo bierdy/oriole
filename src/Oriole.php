@@ -6,9 +6,9 @@ use Oriole\HTTP\Request;
 use Oriole\HTTP\Response;
 use Oriole\Router\Router;
 use Oriole\Router\Routes;
-use App\Config\App;
-use App\Config\Database;
-use App\Config\Cookie;
+use App\Config\AppConfig;
+use App\Config\DatabaseConfig;
+use App\Config\CookieConfig;
 use LogicException;
 
 class Oriole
@@ -90,30 +90,30 @@ class Oriole
      */
     protected function setConfigs(): void
     {
-        if (! class_exists('\App\Config\App'))
-            throw new LogicException('App config class is not defined.');
+        if (! class_exists('\App\Config\AppConfig'))
+            throw new LogicException('AppConfig class is not defined.');
         
-        if (! is_subclass_of('\App\Config\App', '\Oriole\Config\App'))
-            throw new LogicException('App config class is not extended from Oriole App config class.');
+        if (! is_subclass_of('\App\Config\AppConfig', '\Oriole\Config\AppConfig'))
+            throw new LogicException('AppConfig class is not extended from Oriole AppConfig class.');
         
-        self::$configs['app'] = (new App)->getProperties();
-        
-        
-        
-        if (! class_exists('\App\Config\Database'))
-            throw new LogicException('Database config class is not defined.');
-        
-        if (! is_subclass_of('\App\Config\Database', '\Oriole\Config\Database'))
-            throw new LogicException('Database config class is not extended from Oriole Database config class.');
-        
-        self::$configs['database'] = (new Database)->getProperties();
+        self::$configs['app'] = (new AppConfig)->getProperties();
         
         
         
-        if (class_exists('\App\Config\Cookie'))
-            self::$configs['cookie'] = (new Cookie)->getProperties();
+        if (! class_exists('\App\Config\DatabaseConfig'))
+            throw new LogicException('DatabaseConfig class is not defined.');
+        
+        if (! is_subclass_of('\App\Config\DatabaseConfig', '\Oriole\Config\DatabaseConfig'))
+            throw new LogicException('DatabaseConfig class is not extended from Oriole DatabaseConfig class.');
+        
+        self::$configs['database'] = (new DatabaseConfig)->getProperties();
+        
+        
+        
+        if (class_exists('\App\Config\CookieConfig'))
+            self::$configs['cookie'] = (new CookieConfig)->getProperties();
         else
-            self::$configs['cookie'] = (new Config\Cookie)->getProperties();
+            self::$configs['cookie'] = (new Config\CookieConfig)->getProperties();
     }
     
     public function getConfig(string $group, string $name = '') : mixed
@@ -131,13 +131,13 @@ class Oriole
      */
     protected function setRoutes(): void
     {
-        (new Config\Routes)->setRoutes();
+        (new Config\RoutesConfig)->setRoutes();
         
-        if (class_exists('\App\Config\Routes')) {
-            if (! is_subclass_of('\App\Config\Routes', '\Oriole\Config\AbstractRoutes'))
-                throw new LogicException('Routes config class is not extended from Oriole abstract routes config class.');
+        if (class_exists('\App\Config\RoutesConfig')) {
+            if (! is_subclass_of('\App\Config\RoutesConfig', '\Oriole\Config\AbstractRoutesConfig'))
+                throw new LogicException('RoutesConfig class is not extended from Oriole AbstractRoutesConfig class.');
             
-            (new \App\Config\Routes)->setRoutes();
+            (new \App\Config\RoutesConfig)->setRoutes();
         }
     }
 }

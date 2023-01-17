@@ -2,7 +2,7 @@
 
 namespace Oriole\Config;
 
-class Database extends BaseConfig
+class DatabaseConfig extends BaseConfig
 {
     protected string $hostname = '';
     protected string $username = '';

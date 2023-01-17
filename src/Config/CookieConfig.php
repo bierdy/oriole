@@ -2,7 +2,7 @@
 
 namespace Oriole\Config;
 
-class Cookie extends BaseConfig
+class CookieConfig extends BaseConfig
 {
     protected string $prefix = 'oriole_';
     protected int $expires = 0;

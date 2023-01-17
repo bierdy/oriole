@@ -2,7 +2,7 @@
 
 namespace Oriole\Config;
 
-class Routes extends AbstractRoutes
+class RoutesConfig extends AbstractRoutesConfig
 {
     public function setRoutes() : void
     {

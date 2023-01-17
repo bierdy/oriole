@@ -2,7 +2,7 @@
 
 namespace Oriole\Config;
 
-class App extends BaseConfig
+class AppConfig extends BaseConfig
 {
     protected string $adminBasePath = 'admin';
     

@@ -3,18 +3,18 @@
 namespace Oriole\Config;
 
 use Oriole\Oriole;
-use Oriole\Router\Routes as RouterRoutes;
+use Oriole\Router\Routes;
 
-abstract class AbstractRoutes extends BaseConfig
+abstract class AbstractRoutesConfig extends BaseConfig
 {
     protected array $appConfig;
     
-    protected RouterRoutes $routes;
+    protected Routes $routes;
     
     final public function __construct()
     {
         $this->appConfig = (new Oriole)->getConfig('app');
-        $this->routes = RouterRoutes::getInstance();
+        $this->routes = Routes::getInstance();
     }
     
     abstract public function setRoutes() : void;
