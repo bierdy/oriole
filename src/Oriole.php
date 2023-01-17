@@ -47,7 +47,6 @@ class Oriole
         
         require_once 'Common.php';
         
-        $this->defineConstants();
         $this->setConfigs();
         $this->setRoutes();
         
@@ -82,17 +81,6 @@ class Oriole
         ob_end_clean();
         
         $response->send();
-    }
-    
-    /**
-     * Define constants
-     *
-     * @return void
-     */
-    protected function defineConstants() : void
-    {
-        define('ORIOLE_PATH', __DIR__ . DIRECTORY_SEPARATOR);
-        define('ORIOLE_CONFIG_PATH', ORIOLE_PATH . 'Config' . DIRECTORY_SEPARATOR);
     }
     
     /**

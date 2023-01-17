@@ -19,4 +19,10 @@ class App extends BaseConfig
     protected string $resourceUrlEmpty = 'empty';
     
     protected int|null $resource404Id = null;
+    
+    protected string $oriolePath = __DIR__ . '/../';
+    
+    protected string $configPath = __DIR__ . '/../Config/';
+    
+    protected string $viewsPath = __DIR__ . '/../Views/';
 }
