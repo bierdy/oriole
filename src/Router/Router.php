@@ -86,9 +86,8 @@ class Router
         $httpHost = self::$request->getServer('HTTP_HOST');
         $httpHost = strtolower($httpHost);
         
-        $requestURI = self::$request->getServer('REQUEST_URI');
-        $requestURI = urldecode(parse_url($requestURI, PHP_URL_PATH));
-        $requestURI = $requestURI === '/' ? $requestURI : trim($requestURI, '/ ');
+        $requestURI = self::$request->getCurrentURI();
+        $requestURI = strtolower($requestURI);
         
         if (
             $this->findRoute($routes, $requestMethod, $httpHost, $requestURI)
