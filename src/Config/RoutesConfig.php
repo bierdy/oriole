@@ -67,7 +67,7 @@ class RoutesConfig extends AbstractRoutesConfig
                 $routes->get('delete/(:num)', 'VariableGroupsController::delete/$0');
             });
             
-            $routes->get('get-assets', 'AssetsController::get');
+            $routes->get('get-assets/(:any)/(:segment)/(:segment)', 'AssetsController::get/$0/$1/$2', ['as' => 'get_assets']);
         });
     }
 }
