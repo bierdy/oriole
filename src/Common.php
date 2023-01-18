@@ -1,5 +1,6 @@
 <?php
 
+use Oriole\Router\Router;
 use Laminas\Escaper\Escaper;
 
 // Common functions
@@ -61,5 +62,29 @@ if (! function_exists('esc')) {
         }
         
         return $data;
+    }
+}
+
+if (! function_exists('route_by_route')) {
+    /**
+     * @param string $route
+     * @param int|string ...$params One or more parameters to be passed to the route
+     * @return string
+     */
+    function route_by_route(string $route, ...$params) : string
+    {
+        return Router::getInstance()->getReverseRoute('froms', $route, ...$params);
+    }
+}
+
+if (! function_exists('route_by_alias')) {
+    /**
+     * @param string $route
+     * @param int|string ...$params One or more parameters to be passed to the route
+     * @return string
+     */
+    function route_by_alias(string $route, ...$params) : string
+    {
+        return Router::getInstance()->getReverseRoute('aliases', $route, ...$params);
     }
 }
