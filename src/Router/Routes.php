@@ -55,26 +55,16 @@ class Routes
     ];
     
     /**
-     * An array of all reverse routes and their mappings.
+     * An array of all reverse routes.
      *
      * @var array
      *
      * [
      *     froms => [
-     *         verb::domain::from => [                              // original route
-     *             [
-     *                 'from' => from,                              // route with replaced placeholder
-     *                 'args' => ['$0', '$1', 'some string', '$2'],
-     *             ],
-     *         ],
+     *         verb::domain::from => from   // "from" in key = original route, "from" in value = route with replaced placeholder
      *     ],
      *     aliases => [
-     *         verb::domain::alias => [                             // alias
-     *             [
-     *                 'from' => from,                              // route with replaced placeholder
-     *                 'args' => ['$0', '$1', 'some string', '$2'],
-     *             ],
-     *         ],
+     *         verb::domain::alias => from  // "from" in key = alias, "from" in value = route with replaced placeholder
      *     ],
      * ]
      */
@@ -292,19 +282,13 @@ class Routes
                 'alias' => $alias,
             ];
             
-            $this->reverseRoutes['froms']["$verb::$domain::$from"] = [
-                'from' => $from_,
-                'args' => $args,
-            ];
+            $this->reverseRoutes['froms']["$verb::$domain::$from"] = $from_;
             
             if (! empty($alias)) {
                 if (isset($this->reverseRoutes['aliases']["$verb::$domain::$alias"]))
                     throw new LogicException("Alias \"$alias\" is already in use.");
                 
-                $this->reverseRoutes['aliases']["$verb::$domain::$alias"] = [
-                    'from' => $from_,
-                    'args' => $args,
-                ];
+                $this->reverseRoutes['aliases']["$verb::$domain::$alias"] = $from_;
             }
         }
     }
@@ -312,5 +296,10 @@ class Routes
     public function getRoutes() : array
     {
         return $this->routes;
+    }
+    
+    public function getReverseRoutes() : array
+    {
+        return $this->reverseRoutes;
     }
 }
