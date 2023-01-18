@@ -9,10 +9,10 @@
             </button>
             <div class="collapse navbar-collapse order-4 order-lg-3" id="header-menu">
                 <ul class="navbar-nav me-auto mb-0 pt-3 pb-2 py-lg-0 text-center">
-                    <?php if (! empty($back_header_menu)) : ?>
-                        <?php foreach($back_header_menu as $back_header_menu_item) : ?>
+                    <?php if (! empty($headerMenu)) : ?>
+                        <?php foreach($headerMenu as $headerMenuItem) : ?>
                             <li class="nav-item">
-                                <a class="nav-link<?= $back_header_menu_item['active'] ? ' active text-decoration-underline' : ''; ?>" href="<?= $back_header_menu_item['link']; ?>"><?= $back_header_menu_item['title']; ?></a>
+                                <a class="nav-link<?= $headerMenuItem['active'] ? ' active text-decoration-underline' : ''; ?>" href="<?= $headerMenuItem['link']; ?>"><?= $headerMenuItem['title']; ?></a>
                             </li>
                         <?php endforeach; ?>
                     <?php endif; ?>

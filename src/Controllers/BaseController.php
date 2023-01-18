@@ -32,14 +32,29 @@ class BaseController
         $this->baseModel = new BaseModel();
         $this->baseView = new BaseView();
         
-        $this->default_data =
-            [
+        $this->default_data = [
                 'title' => '',
                 //'resources_tree' => $this->resourceModel->getResourcesTree(),
                 'appConfig' => json_encode(array_merge($this->appConfig, ['currentBaseURL' => $this->request->getCurrentBaseURL()])),
                 'cookieConfig' => json_encode($this->cookieConfig),
                 'publicBaseURL' => $this->request->getPublicBaseURL(),
-                //'back_header_menu' => $this->wagtail_admin_config->headerMenu,
+                'headerMenu' => [
+                    'templates' => [
+                            'title' => 'Templates',
+                            'link' => route_by_alias('templates_list'),
+                            'active' => false /*url_is(route_by_alias('templates_list') . '*')*/,
+                        ],
+                    'variables' => [
+                            'title' => 'Variables',
+                            'link' => route_by_alias('variables_list'),
+                            'active' => false /*url_is(route_by_alias('variables_list') . '*')*/,
+                        ],
+                    'languages' => [
+                            'title' => 'Languages',
+                            'link' => route_by_alias('languages_list'),
+                            'active' => false /*url_is(route_by_alias('languages_list') . '*')*/,
+                        ],
+                    ],
             ];
     }
 }
