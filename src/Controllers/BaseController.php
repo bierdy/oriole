@@ -38,7 +38,7 @@ class BaseController
                 //'resources_tree' => $this->resourceModel->getResourcesTree(),
                 'appConfig' => json_encode(array_merge($this->appConfig, ['currentBaseURL' => $this->request->getCurrentBaseURL()])),
                 'cookieConfig' => json_encode($this->cookieConfig),
-                'front_root_url' => $this->request->getPublicBaseURL(),
+                'publicBaseURL' => $this->request->getPublicBaseURL(),
                 //'back_header_menu' => $this->wagtail_admin_config->headerMenu,
             ];
     }
