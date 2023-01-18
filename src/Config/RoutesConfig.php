@@ -15,7 +15,7 @@ class RoutesConfig extends AbstractRoutesConfig
             
             $routes->group('templates', function($routes)
             {
-                $routes->get('', 'TemplatesController::list');
+                $routes->get('', 'TemplatesController::list', ['as' => 'templates_list']);
                 $routes->match(['get', 'post'], 'add', 'TemplatesController::add');
                 $routes->match(['get', 'post'], 'edit/(:num)', 'TemplatesController::edit/$0');
                 $routes->get('activate/(:num)', 'TemplatesController::activate/$0');
@@ -26,7 +26,7 @@ class RoutesConfig extends AbstractRoutesConfig
             
             $routes->group('variables', function($routes)
             {
-                $routes->get('', 'VariablesController::list');
+                $routes->get('', 'VariablesController::list', ['as' => 'variables_list']);
                 $routes->match(['get', 'post'], 'add', 'VariablesController::add');
                 $routes->match(['get', 'post'], 'edit/(:num)', 'VariablesController::edit/$0');
                 $routes->get('activate/(:num)', 'VariablesController::activate/$0');
@@ -50,7 +50,7 @@ class RoutesConfig extends AbstractRoutesConfig
             
             $routes->group('languages', function($routes)
             {
-                $routes->get('', 'LanguagesController::list');
+                $routes->get('', 'LanguagesController::list', ['as' => 'languages_list']);
                 $routes->match(['get', 'post'], 'add', 'LanguagesController::add');
                 $routes->match(['get', 'post'], 'edit/(:num)', 'LanguagesController::edit/$0');
                 $routes->get('activate/(:num)', 'LanguagesController::activate/$0');
