@@ -42,17 +42,17 @@ class BaseController
                     'templates' => [
                             'title' => 'Templates',
                             'link' => route_by_alias('templates_list'),
-                            'active' => false /*url_is(route_by_alias('templates_list') . '*')*/,
+                            'active' => url_is(route_by_alias('templates_list') . '*'),
                         ],
                     'variables' => [
                             'title' => 'Variables',
                             'link' => route_by_alias('variables_list'),
-                            'active' => false /*url_is(route_by_alias('variables_list') . '*')*/,
+                            'active' => url_is(route_by_alias('variables_list') . '*'),
                         ],
                     'languages' => [
                             'title' => 'Languages',
                             'link' => route_by_alias('languages_list'),
-                            'active' => false /*url_is(route_by_alias('languages_list') . '*')*/,
+                            'active' => url_is(route_by_alias('languages_list') . '*'),
                         ],
                     ],
             ];
