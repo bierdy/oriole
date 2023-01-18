@@ -11,7 +11,7 @@ class RoutesConfig extends AbstractRoutesConfig
         
         $routes->group($appConfig['adminBasePath'], ['namespace' => 'Oriole\Controllers', 'domains' => $appConfig['adminDomain']], function($routes)
         {
-            $routes->get('', 'HomeController::index');
+            $routes->get('', 'HomeController::index', ['as' => 'admin_home']);
             
             $routes->group('templates', function($routes)
             {
