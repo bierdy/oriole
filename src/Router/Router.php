@@ -2,23 +2,26 @@
 
 namespace Oriole\Router;
 
-use Closure;
-use LogicException;
 use Oriole\HTTP\Request;
+use Closure;
+use Exception;
+use LogicException;
 
 class Router
 {
+    protected static self|null $instance = null;
+    
     /**
      * A Routes instance.
      *
      * @var Routes
      */
-    protected Routes $routes;
+    protected static Routes $routes;
     
     /**
      * A Request instance.
      */
-    protected Request $request;
+    protected static Request $request;
     
     /**
      * The handler that was matched for this request.
@@ -45,23 +48,48 @@ class Router
     /**
      * Constructor
      */
-    public function __construct(Routes $routes, Request $request)
+    final private function __construct()
     {
-        $this->routes = $routes;
-        $this->request = $request;
+    
+    }
+    final protected function __clone()
+    {
+    
+    }
+    
+    /**
+     * @throws Exception
+     */
+    final public function __wakeup()
+    {
+        throw new Exception('Cannot unserialize a singleton.');
+    }
+    
+    public static function getInstance(Routes $routes = null, Request $request = null) : self
+    {
+        if (! is_null($routes))
+            self::$routes = $routes;
+        
+        if (! is_null($request))
+            self::$request = $request;
+        
+        if (self::$instance === null)
+            self::$instance = new self;
+        
+        return self::$instance;
     }
     
     public function defineRoute() : bool
     {
-        $routes = $this->routes->getRoutes();
+        $routes = self::$routes->getRoutes();
         
-        $requestMethod = $this->request->getServer('REQUEST_METHOD');
+        $requestMethod = self::$request->getServer('REQUEST_METHOD');
         $requestMethod = strtolower($requestMethod);
         
-        $httpHost = $this->request->getServer('HTTP_HOST');
+        $httpHost = self::$request->getServer('HTTP_HOST');
         $httpHost = strtolower($httpHost);
         
-        $requestURI = $this->request->getServer('REQUEST_URI');
+        $requestURI = self::$request->getServer('REQUEST_URI');
         $requestURI = urldecode(parse_url($requestURI, PHP_URL_PATH));
         $requestURI = $requestURI === '/' ? $requestURI : trim($requestURI, '/ ');
         

@@ -6,6 +6,7 @@ use Oriole\HTTP\Request;
 use Oriole\HTTP\Response;
 use Oriole\Router\Router;
 use Oriole\Router\Routes;
+use App\Config\RoutesConfig;
 use App\Config\AppConfig;
 use App\Config\DatabaseConfig;
 use App\Config\CookieConfig;
@@ -65,8 +66,7 @@ class Oriole
         $routes = Routes::getInstance();
         $request = new Request();
         $response = Response::getInstance();
-        
-        $router = new Router($routes, $request);
+        $router = Router::getInstance($routes, $request);
         
         if (! $router->defineRoute())
             throw new LogicException('Can\'t find current route.');
@@ -137,7 +137,7 @@ class Oriole
             if (! is_subclass_of('\App\Config\RoutesConfig', '\Oriole\Config\AbstractRoutesConfig'))
                 throw new LogicException('RoutesConfig class is not extended from Oriole AbstractRoutesConfig class.');
             
-            (new \App\Config\RoutesConfig)->setRoutes();
+            (new RoutesConfig)->setRoutes();
         }
     }
 }
