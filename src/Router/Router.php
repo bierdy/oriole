@@ -6,6 +6,8 @@ use Oriole\HTTP\Request;
 use Closure;
 use Exception;
 use LogicException;
+use InvalidArgumentException;
+use ArgumentCountError;
 
 class Router
 {
@@ -156,5 +158,46 @@ class Router
             }
         
         return (new $controller)->{$method}(...$args);
+    }
+    
+    public function getReverseRoute(string $type, string $key, ...$params) : string
+    {
+        $verb = ! empty($params['verb']) ? strtolower($params['verb']) : 'get';
+        $domain = ! empty($params['domain']) ? strtolower($params['domain']) : strtolower(self::$request->getServer('HTTP_HOST'));
+        $domains = [$domain, '*'];
+        
+        unset($params['verb'], $params['domain']);
+    
+        $reverseRoutes = self::$routes->getReverseRoutes();
+        
+        foreach ($domains as $domain) {
+            if (is_null($from = $reverseRoutes[$type]["$verb::$domain::$key"] ?? null))
+                continue;
+    
+            return $this->fillReverseRouteParams($from, $params);
+        }
+        
+        return '';
+    }
+    
+    protected function fillReverseRouteParams(string $from, ? array $params = null) : string
+    {
+        preg_match_all('/\(([^)]+)\)/', $from, $matches);
+        
+        if (empty($matches[0]))
+            return '/' . $from;
+        
+        foreach ($matches[0] as $index => $pattern) {
+            if (! isset($params[$index]))
+                throw new ArgumentCountError('Too few arguments to method fillReverseRouteParams.');
+            
+            if (! preg_match('#^' . $pattern . '$#u', $params[$index]))
+                throw new InvalidArgumentException('A parameter does not match the expected type.');
+            
+            $pos = strpos($from, $pattern);
+            $from = substr_replace($from, $params[$index], $pos, strlen($pattern));
+        }
+        
+        return '/' . $from;
     }
 }
