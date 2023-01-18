@@ -52,7 +52,8 @@ class Router
      */
     final private function __construct()
     {
-    
+        self::$routes = Routes::getInstance();
+        self::$request = new Request();
     }
     final protected function __clone()
     {
@@ -67,14 +68,8 @@ class Router
         throw new Exception('Cannot unserialize a singleton.');
     }
     
-    public static function getInstance(Routes $routes = null, Request $request = null) : self
+    public static function getInstance() : self
     {
-        if (! is_null($routes))
-            self::$routes = $routes;
-        
-        if (! is_null($request))
-            self::$request = $request;
-        
         if (self::$instance === null)
             self::$instance = new self;
         

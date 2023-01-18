@@ -62,11 +62,9 @@ class Oriole
     public function run() : void
     {
         ob_start();
-        
-        $routes = Routes::getInstance();
-        $request = new Request();
+    
+        $router = Router::getInstance();
         $response = Response::getInstance();
-        $router = Router::getInstance($routes, $request);
         
         if (! $router->defineRoute())
             throw new LogicException('Can\'t find current route.');
