@@ -46,11 +46,46 @@ class Request
      * Get value from $_SERVER
      *
      * @param string $name
+     * @param int|null $filter
+     * @param null $flags
      * @return string|null
      */
-    public function getServer(string $name) : string|null
+    public function getServer(string $name, ? int $filter = null, $flags = null) : ? string
     {
-        return $_SERVER[$name] ?? null;
+        return $this->getGlobal('server', $name, $filter, $flags);
+    }
+    
+    /**
+     * Get value from $_GET
+     *
+     * @param string $name
+     * @param int|null $filter
+     * @param null $flags
+     * @return string|null
+     */
+    public function getGet(string $name, ? int $filter = null, $flags = null) : ? string
+    {
+        return $this->getGlobal('get', $name, $filter, $flags);
+    }
+    
+    /**
+     * Get value from global variable (like $_GET or $_SERVER)
+     *
+     * @param string $type
+     * @param string $name
+     * @param int|null $filter
+     * @param $flags
+     * @return string|null
+     */
+    protected function getGlobal(string $type, string $name, ? int $filter = null, $flags = null) : ? string
+    {
+        if (is_null($value = self::$globals[$type][$name] ?? null))
+            return $value;
+    
+        $filter ??= FILTER_DEFAULT;
+        $flags = is_array($flags) ? $flags : (is_numeric($flags) ? (int) $flags : 0);
+    
+        return filter_var($value, $filter, $flags);
     }
     
     protected function getHttpScheme() : string
@@ -58,7 +93,7 @@ class Request
         $requestScheme = $this->getServer('REQUEST_SCHEME') ? : null;
         $https = $this->getServer('HTTPS') ? : null;
         $serverPort = $this->getServer('SERVER_PORT') ? : null;
-    
+        
         return $requestScheme ? : (($https === 'on') || ($serverPort == 443) ? 'https' : 'http');
     }
     
