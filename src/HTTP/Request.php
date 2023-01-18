@@ -145,4 +145,30 @@ class Request
         
         return $scheme . '://' . $publicDomain . '/' . $publicBasePath;
     }
+    
+    /**
+     * Get current uri of the current request (for example, admin/templates)
+     *
+     * @return string
+     */
+    public function getCurrentURI() : string
+    {
+        $requestURI = $this->getServer('REQUEST_URI');
+        $requestURI = urldecode(parse_url($requestURI, PHP_URL_PATH));
+        
+        return $requestURI === '/' ? $requestURI : trim($requestURI, '/ ');
+    }
+    
+    /**
+     * Get current url of the current request
+     *
+     * @return string
+     */
+    public function getCurrentURL() : string
+    {
+        $currentBaseURL = $this->getCurrentBaseURL();
+        $currentBaseURI = $this->getCurrentURI();
+        
+        return $currentBaseURL . $currentBaseURI;
+    }
 }
