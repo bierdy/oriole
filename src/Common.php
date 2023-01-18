@@ -1,5 +1,6 @@
 <?php
 
+use Oriole\HTTP\Request;
 use Oriole\Router\Router;
 use Laminas\Escaper\Escaper;
 
@@ -86,5 +87,26 @@ if (! function_exists('route_by_alias')) {
     function route_by_alias(string $route, ...$params) : string
     {
         return Router::getInstance()->getReverseRoute('aliases', $route, ...$params);
+    }
+}
+
+if (! function_exists('url_is')) {
+    /**
+     * Determines if current url path contains
+     * the given path. It may contain a wildcard (*)
+     * which will allow any valid character.
+     *
+     * Example:
+     *   if (url_is('admin*')) ...
+     */
+    function url_is(string $path) : bool
+    {
+        $request = new Request();
+        
+        // Set up our regex to allow wildcards
+        $path        = '/' . trim(str_replace('*', '(\S)*', $path), '/ ');
+        $currentPath = '/' . trim($request->getCurrentURI(), '/ ');
+        
+        return (bool) preg_match("|^{$path}$|", $currentPath, $matches);
     }
 }
