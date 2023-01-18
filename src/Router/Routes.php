@@ -4,7 +4,7 @@ namespace Oriole\Router;
 
 use Closure;
 use Exception;
-use InvalidArgumentException;
+use LogicException;
 
 class Routes
 {
@@ -33,7 +33,7 @@ class Routes
      *     verb => [
      *         domain => [
      *             route => [                // original route
-     *                 'from' => from,       // route with replace placeholder
+     *                 'from' => from,       // route with replaced placeholder
      *                 'handler' => handler,
      *                 'args' => ['$0', '$1', 'some string', '$2'],
      *                 'alias' => alias,
@@ -53,6 +53,32 @@ class Routes
         'connect' => [],
         'cli'     => [],
     ];
+    
+    /**
+     * An array of all reverse routes and their mappings.
+     *
+     * @var array
+     *
+     * [
+     *     froms => [
+     *         verb::domain::from => [                              // original route
+     *             [
+     *                 'from' => from,                              // route with replaced placeholder
+     *                 'args' => ['$0', '$1', 'some string', '$2'],
+     *             ],
+     *         ],
+     *     ],
+     *     aliases => [
+     *         verb::domain::alias => [                             // alias
+     *             [
+     *                 'from' => from,                              // route with replaced placeholder
+     *                 'args' => ['$0', '$1', 'some string', '$2'],
+     *             ],
+     *         ],
+     *     ],
+     * ]
+     */
+    protected array $reverseRoutes = [];
     
     /**
      * The name of the current group, if any.
@@ -117,7 +143,7 @@ class Routes
     {
         $oldGroup = $this->group;
         $oldGroupOptions = $this->groupOptions;
-    
+        
         $name = trim($name, '/ ');
         $this->group = ! empty($name) ? $oldGroup . '/' . $name : $oldGroup;
         
@@ -222,7 +248,7 @@ class Routes
     {
         if (! isset($this->routes[$verb]))
             return;
-    
+        
         $verb = strtolower($verb);
         
         $prefix = $this->group;
@@ -238,7 +264,7 @@ class Routes
         $alias = $options['as'] ?? '';
         
         $options = array_merge($this->groupOptions ?? [], $options ?? []);
-    
+        
         $args = [];
         
         if (is_string($to)) {
@@ -249,7 +275,7 @@ class Routes
             
             $toArray = explode('/', $to);
             $to = array_shift($toArray);
-    
+            
             $args = $toArray;
         }
         
@@ -258,13 +284,29 @@ class Routes
         else
             $options['domains'] = ['*'];
         
-        foreach ($options['domains'] as $domain)
+        foreach ($options['domains'] as $domain) {
             $this->routes[$verb][$domain][$from] = [
                 'from' => $from_,
                 'handler' => $to,
                 'args' => $args,
                 'alias' => $alias,
             ];
+            
+            $this->reverseRoutes['froms']["$verb::$domain::$from"] = [
+                'from' => $from_,
+                'args' => $args,
+            ];
+            
+            if (! empty($alias)) {
+                if (isset($this->reverseRoutes['aliases']["$verb::$domain::$alias"]))
+                    throw new LogicException("Alias \"$alias\" is already in use.");
+                
+                $this->reverseRoutes['aliases']["$verb::$domain::$alias"] = [
+                    'from' => $from_,
+                    'args' => $args,
+                ];
+            }
+        }
     }
     
     public function getRoutes() : array
