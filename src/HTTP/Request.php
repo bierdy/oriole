@@ -32,14 +32,14 @@ class Request
      */
     protected function populateGlobals() : void
     {
-        self::$globals['server']  = $_SERVER;
-        self::$globals['get']     = $_GET;
-        self::$globals['post']    = $_POST;
-        self::$globals['files']   = $_FILES;
-        self::$globals['cookie']  = $_COOKIE;
-        self::$globals['session'] = $_SESSION;
-        self::$globals['request'] = $_REQUEST;
-        self::$globals['env']     = $_ENV;
+        self::$globals['server']  = $_SERVER  ?? [];
+        self::$globals['get']     = $_GET     ?? [];
+        self::$globals['post']    = $_POST    ?? [];
+        self::$globals['files']   = $_FILES   ?? [];
+        self::$globals['cookie']  = $_COOKIE  ?? [];
+        self::$globals['session'] = $_SESSION ?? [];
+        self::$globals['request'] = $_REQUEST ?? [];
+        self::$globals['env']     = $_ENV     ?? [];
     }
     
     /**
