@@ -1,0 +1,235 @@
+body {
+    display: flex;
+    flex-direction: column;
+    min-height: 100vh;
+    height: 100%;
+}
+.header {
+
+}
+.main {
+    display: flex;
+    flex-grow: 1;
+}
+.left-sidebar {
+    width: 300px;
+}
+.resizer {
+    width: 1px;
+    height: 100%;
+    background-color: #dee2e6;
+    box-sizing: content-box;
+    background-clip: content-box;
+    cursor: col-resize;
+}
+.footer {
+
+}
+
+.resources-tree {
+
+}
+.resources-tree .tree {
+    display: none;
+    width: 100% !important;
+    padding: 0 0 0 27px !important;
+    opacity: 1 !important;
+    list-style-type: none;
+}
+.resources-tree .tree.show {
+    display: block;
+}
+.resources-tree > .tree {
+    margin: 0 0 0 0;
+    padding: 0 0 0 0 !important;
+}
+.resources-tree .tree .branch {
+
+}
+.resources-tree .tree .branch .content {
+    position: relative;
+}
+.resources-tree .tree .branch .content .main {
+    position: relative;
+    padding: 0 20px 0 20px;
+    overflow: hidden;
+}
+.resources-tree .tree .branch .content .main .arrow {
+    position: absolute;
+    top: 3px;
+    left: 0;
+    cursor: pointer;
+    transition: transform 0.3s ease 0s;
+    visibility: hidden;
+}
+.resources-tree .tree .branch.childs-exist > .content > .main > .arrow {
+    visibility: visible;
+}
+.resources-tree .tree .branch.open > .content > .main > .arrow {
+    transform: rotate(90deg);
+}
+.resources-tree .tree .branch .content .main .title {
+    display: flex;
+    padding: 2px 6px 2px 6px;
+    position: relative;
+    text-decoration: none;
+    border: 1px dotted transparent;
+}
+.resources-tree .tree .branch .content .main .title.selected {
+    opacity: 0.2;
+}
+.resources-tree .tree .branch .content .main .title:hover {
+    text-decoration: underline;
+}
+.resources-tree .tree .branch.active > .content > .main > .title {
+    font-weight: 600;
+}
+.resources-tree .tree .branch.deactivated > .content > .main > .title {
+    text-decoration: line-through;
+}
+.resources-tree .tree .branch.is-insertable-before > .content > .main > .title:before {
+    content: "";
+    display: block;
+    position: absolute;
+    left: 6px;
+    top: -2px;
+    width: 100%;
+    height: 2px;
+    background-color: #6c757d;
+}
+.resources-tree .tree .branch.is-insertable-inside > .content > .main > .title {
+    border: 1px dotted #6c757d;
+}
+.resources-tree .tree .branch.is-insertable-after > .content > .main > .title:before {
+    content: "";
+    display: block;
+    position: absolute;
+    left: 6px;
+    bottom: -2px;
+    width: 100%;
+    height: 2px;
+    background-color: #6c757d;
+}
+.resources-tree .tree .branch .content .main .title .template-icon {
+    padding: 0 6px 0 0;
+}
+.resources-tree .tree .branch .content .menu {
+    position: absolute;
+    top: 5px;
+    right: -4px;
+}
+.resources-tree .tree .branch .content .menu .button {
+    padding: 0 4px 0 4px;
+    cursor: pointer;
+    background-color: #fff;
+}
+.resources-tree .tree .branch .content .menu .dropdown-menu {
+
+}
+.resources-tree .tree .branch .content .menu .dropdown-menu .dropdown-menu {
+    top: -0.5rem !important;
+}
+
+.ck-editor__editable {
+    min-height: 254px;
+}
+
+.input-images {
+
+}
+.input-images .input-image {
+    display: inline-block;
+    margin: 0 0.5rem 0.5rem 0;
+    position: relative;
+    text-align: center;
+}
+.input-images .input-image .image {
+    display: block;
+}
+.input-images .input-image .delete-link {
+    display: block;
+    position: absolute;
+    top: 0;
+    right: 0;
+    transform: translate3d(50%, -50%, 0);
+    background-color: #fff;
+    line-height: 0;
+    border-radius: 50% 50% 50% 50%;
+}
+.input-images .input-image .delete-link i {
+    display: block;
+}
+.input-images .input-image .order {
+    display: inline-block;
+    width: 4.2rem;
+    text-align: center;
+}
+
+.form-template-variables {
+
+}
+.form-template-variables .card {
+    border: 1px solid rgba(38, 38, 38, 0.25);
+    background-color: #fff;
+}
+.form-template-variables .card.selected {
+    border-style: dashed;
+    opacity: 0.4;
+}
+.form-template-variables .card .card-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: start;
+}
+.form-template-variables .card .card-body {
+    padding-top: 0;
+    padding-bottom: 0;
+}
+.form-template-variables .card .card-body .card-item {
+    padding: 8px 16px 8px 16px;
+    border: 1px solid rgba(38, 38, 38, 0.25);
+    background-color: #fff;
+}
+.form-template-variables .card .card-body .card-item.selected {
+    border-style: dashed;
+    opacity: 0.4;
+}
+.form-template-variables .card .card-body .card-item .card-item-title {
+    display: inline-block;
+}
+.form-template-variables .card .card-body .card-item .card-item-name {
+    display: inline-block;
+    font-size: 0.72em;
+    opacity: 0.8;
+}
+.form-template-variables .card-placeholder,
+.form-template-variables .card-body-placeholder {
+    height: 16px;
+    position: relative;
+}
+.form-template-variables .card-body-placeholder:only-child {
+    height: 40px;
+}
+.form-template-variables .card-placeholder i,
+.form-template-variables .card-body-placeholder i {
+    display: none;
+    position: absolute;
+    left: 0;
+    top: 50%;
+    transform: translate3d(-80%, -50%, 0);
+    opacity: 0.6;
+}
+.form-template-variables .card-placeholder.is-insertable,
+.form-template-variables .card-body-placeholder.is-insertable {
+
+}
+.form-template-variables .card-placeholder.is-insertable i,
+.form-template-variables .card-body-placeholder.is-insertable i {
+    display: block;
+}
+
+@media all and (max-width: 991px) {
+    .left-sidebar {
+        width: 100% !important;
+    }
+}
