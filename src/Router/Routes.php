@@ -43,13 +43,12 @@ class Routes
      * ]
      */
     protected array $routes = [
-        '*'       => [],
-        'options' => [],
         'get'     => [],
-        'head'    => [],
         'post'    => [],
+        'head'    => [],
         'put'     => [],
         'delete'  => [],
+        'options' => [],
         'trace'   => [],
         'connect' => [],
         'cli'     => [],
@@ -126,8 +125,8 @@ class Routes
         
         if (isset($params[0]) && is_array($params[0])) {
             $groupOptions = [
-                'namespace' => $params[0]['namespace'] ?? $this->groupOptions['namespace'] ?? '',
-                'domains' => $params[0]['domains'] ?? $this->groupOptions['domains'] ?? [],
+                'namespace' => $params[0]['namespace'] ?? $oldGroupOptions['namespace'] ?? '',
+                'domains' => $params[0]['domains'] ?? $oldGroupOptions['domains'] ?? [],
             ];
             $this->groupOptions = $groupOptions;
         }
@@ -140,7 +139,7 @@ class Routes
     }
     
     /**
-     * Adds a single route to the collection.
+     * Add a single route to the collection for all HTTP Verbs.
      *
      * Example:
      *      $routes->add('news', 'Posts::index');
@@ -152,7 +151,10 @@ class Routes
      */
     public function add(string $from, string|Closure $to, ? array $options = null) : Routes
     {
-        $this->create('*', $from, $to, $options);
+        $verbs = array_keys($this->routes);
+        
+        foreach ($verbs as $verb)
+            $this->create($verb, $from, $to, $options);
         
         return $this;
     }
@@ -169,15 +171,10 @@ class Routes
      * @param array|null $options
      * @return Routes
      */
-    public function match(array $verbs = [], string $from = '', string|Closure $to = '', ? array $options = null) : Routes
+    public function match(array $verbs, string $from, string|Closure $to, ? array $options = null) : Routes
     {
-        if (empty($from) || empty($to))
-            throw new InvalidArgumentException('You must supply the parameters: from, to.');
-        
-        foreach ($verbs as $verb) {
-            $verb = strtolower($verb);
+        foreach ($verbs as $verb)
             $this->create($verb, $from, $to, $options);
-        }
         
         return $this;
     }
@@ -205,7 +202,7 @@ class Routes
      * @param array|null $options
      * @return Routes
      */
-    public function post(string $from, string|Closure $to, ?array $options = null): Routes
+    public function post(string $from, string|Closure $to, ? array $options = null): Routes
     {
         $this->create('post', $from, $to, $options);
         
@@ -223,6 +220,11 @@ class Routes
      */
     protected function create(string $verb, string $from, string|Closure $to, ? array $options = null) : void
     {
+        if (! isset($this->routes[$verb]))
+            return;
+    
+        $verb = strtolower($verb);
+        
         $prefix = $this->group;
         
         $from = $from === '/' ? $from : trim($from, '/ ');

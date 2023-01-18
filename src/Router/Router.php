@@ -68,20 +68,18 @@ class Router
         if (
             $this->findRoute($routes, $requestMethod, $httpHost, $requestURI)
             || $this->findRoute($routes, $requestMethod, '*', $requestURI)
-            || $this->findRoute($routes, '*', $httpHost, $requestURI)
-            || $this->findRoute($routes, '*', '*', $requestURI)
         )
             return true;
         
         return false;
     }
     
-    protected function findRoute(array $routes, string $requestMethod, string $httpHost, string $requestURI) : bool
+    protected function findRoute(array $routes, string $verb, string $domain, string $requestURI) : bool
     {
-        if (empty($routes[$requestMethod][$httpHost]))
+        if (empty($routes[$verb][$domain]))
             return false;
         
-        foreach ($routes[$requestMethod][$httpHost] as $route) {
+        foreach ($routes[$verb][$domain] as $route) {
             $from = $route['from'];
             
             if (preg_match('#^' . $from . '$#u', $requestURI, $matches)) {
