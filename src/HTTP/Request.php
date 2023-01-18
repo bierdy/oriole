@@ -10,11 +10,36 @@ use Oriole\Oriole;
 class Request
 {
     /**
+     * Stores values we've retrieved from
+     * PHP globals.
+     *
+     * @var array
+     */
+    protected static array $globals = [];
+    
+    /**
      * Constructor
      */
     public function __construct()
     {
+        if (empty(self::$globals))
+            $this->populateGlobals();
+    }
     
+    /**
+     * Saves a copy of the current state of one of several PHP globals,
+     * so we can retrieve them later.
+     */
+    protected function populateGlobals() : void
+    {
+        self::$globals['server']  = $_SERVER;
+        self::$globals['get']     = $_GET;
+        self::$globals['post']    = $_POST;
+        self::$globals['files']   = $_FILES;
+        self::$globals['cookie']  = $_COOKIE;
+        self::$globals['session'] = $_SESSION;
+        self::$globals['request'] = $_REQUEST;
+        self::$globals['env']     = $_ENV;
     }
     
     /**
