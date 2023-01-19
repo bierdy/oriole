@@ -134,7 +134,7 @@ class Routes
         $oldGroup = $this->group;
         $oldGroupOptions = $this->groupOptions;
         
-        $name = trim($name, '/ ');
+        $name = trim(strtolower($name), '/ ');
         $this->group = ! empty($name) ? $oldGroup . '/' . $name : $oldGroup;
         
         $callback = array_pop($params);
@@ -246,6 +246,7 @@ class Routes
         $from = $from === '/' ? $from : trim($from, '/ ');
         $from = esc(strip_tags($prefix . '/' . $from));
         $from = $from === '/' ? $from : trim($from, '/ ');
+        $from = strtolower($from);
         
         $from_ = $from;
         foreach ($this->placeholders as $tag => $pattern)
