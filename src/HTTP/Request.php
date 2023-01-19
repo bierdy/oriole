@@ -90,8 +90,8 @@ class Request
     
     protected function getHttpScheme() : string
     {
-        $requestScheme = $this->getServer('REQUEST_SCHEME') ? : null;
-        $https = $this->getServer('HTTPS') ? : null;
+        $requestScheme = strtolower($this->getServer('REQUEST_SCHEME') ? : '');
+        $https = strtolower($this->getServer('HTTPS') ? : '');
         $serverPort = $this->getServer('SERVER_PORT') ? : null;
         
         return $requestScheme ? : (($https === 'on') || ($serverPort == 443) ? 'https' : 'http');
@@ -100,14 +100,16 @@ class Request
     /**
      * Get current base url of the current request
      *
+     * for example, https://domain.com
+     *
      * @return string
      */
     public function getCurrentBaseURL() : string
     {
-        $httpHost = $this->getServer('HTTP_HOST') ? : '';
         $scheme = $this->getHttpScheme();
+        $httpHost = strtolower($this->getServer('HTTP_HOST') ? : '');
         
-        return $scheme . '://' . $httpHost . '/';
+        return $scheme . '://' . $httpHost;
     }
     
     /**
@@ -115,17 +117,19 @@ class Request
      * of the current request if admin domain
      * is empty
      *
+     * for example, https://domain.com/admin
+     *
      * @return string
      */
     public function getAdminBaseURL() : string
     {
         $oriole = new Oriole();
-        $adminDomain = $oriole->getConfig('app', 'adminDomain') ? : $this->getServer('HTTP_HOST') ? : '';
-        $adminBasePath = $oriole->getConfig('app', 'adminBasePath');
-        $adminBasePath = $adminBasePath === '/' ? '' : $adminBasePath;
         $scheme = $this->getHttpScheme();
+        $adminDomain = strtolower($oriole->getConfig('app', 'adminDomain') ? : $this->getServer('HTTP_HOST') ? : '');
+        $adminBasePath = strtolower($oriole->getConfig('app', 'adminBasePath'));
+        $adminBasePath = trim($adminBasePath, '/ ');
         
-        return $scheme . '://' . $adminDomain . '/' . $adminBasePath;
+        return rtrim($scheme . '://' . $adminDomain . '/' . $adminBasePath, '/');
     }
     
     /**
@@ -133,27 +137,31 @@ class Request
      * of the current request if public domain
      * is empty
      *
+     * for example, https://domain.com
+     *
      * @return string
      */
     public function getPublicBaseURL() : string
     {
         $oriole = new Oriole();
-        $publicDomain = $oriole->getConfig('app', 'publicDomain') ? : $this->getServer('HTTP_HOST') ? : '';
-        $publicBasePath = $oriole->getConfig('app', 'publicBasePath');
-        $publicBasePath = $publicBasePath === '/' ? '' : $publicBasePath;
         $scheme = $this->getHttpScheme();
+        $publicDomain = strtolower($oriole->getConfig('app', 'publicDomain') ? : $this->getServer('HTTP_HOST') ? : '');
+        $publicBasePath = strtolower($oriole->getConfig('app', 'publicBasePath'));
+        $publicBasePath = trim($publicBasePath, '/ ');
         
-        return $scheme . '://' . $publicDomain . '/' . $publicBasePath;
+        return rtrim($scheme . '://' . $publicDomain . '/' . $publicBasePath, '/');
     }
     
     /**
-     * Get current uri of the current request (for example, admin/templates)
+     * Get current uri of the current request
+     *
+     * for example, admin/templates/21
      *
      * @return string
      */
     public function getCurrentURI() : string
     {
-        $requestURI = $this->getServer('REQUEST_URI');
+        $requestURI = strtolower($this->getServer('REQUEST_URI') ? : '');
         $requestURI = urldecode(parse_url($requestURI, PHP_URL_PATH));
         
         return $requestURI === '/' ? $requestURI : trim($requestURI, '/ ');
@@ -162,6 +170,8 @@ class Request
     /**
      * Get current url of the current request
      *
+     * for example, https://domain.com/templates/21
+     *
      * @return string
      */
     public function getCurrentURL() : string
@@ -169,6 +179,6 @@ class Request
         $currentBaseURL = $this->getCurrentBaseURL();
         $currentBaseURI = $this->getCurrentURI();
         
-        return $currentBaseURL . $currentBaseURI;
+        return rtrim($currentBaseURL . '/' . $currentBaseURI, '/');
     }
 }
