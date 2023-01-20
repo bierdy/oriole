@@ -110,3 +110,31 @@ if (! function_exists('url_is')) {
         return (bool) preg_match("|^{$path}$|", $currentPath, $matches);
     }
 }
+
+if (! function_exists('stringify_attributes')) {
+    /**
+     * Stringify attributes for use in HTML tags.
+     *
+     * Helper function used to convert a string, array, or object
+     * of attributes to a string.
+     *
+     * @param object|array|string $attributes string, array, object that can be cast to array
+     */
+    function stringify_attributes(object|array|string $attributes, bool $js = false) : string
+    {
+        $atts = '';
+        
+        if (empty($attributes))
+            return $atts;
+        
+        if (is_string($attributes))
+            return ' ' . $attributes;
+        
+        $attributes = (array) $attributes;
+        
+        foreach ($attributes as $key => $val)
+            $atts .= ($js) ? $key . '=' . esc($val, 'js') . ',' : ' ' . $key . '="' . esc($val) . '"';
+        
+        return rtrim($atts, ',');
+    }
+}
