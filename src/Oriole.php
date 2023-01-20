@@ -86,7 +86,7 @@ class Oriole
      *
      * @return void
      */
-    protected function setConfigs(): void
+    protected function setConfigs() : void
     {
         if (! class_exists('\App\Config\AppConfig'))
             throw new LogicException('AppConfig class is not defined.');

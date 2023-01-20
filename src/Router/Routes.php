@@ -218,7 +218,7 @@ class Routes
      * @param array|null $options
      * @return Routes
      */
-    public function post(string $from, string|Closure $to, ? array $options = null): Routes
+    public function post(string $from, string|Closure $to, ? array $options = null) : Routes
     {
         $this->create('post', $from, $to, $options);
         
