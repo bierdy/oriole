@@ -138,3 +138,27 @@ if (! function_exists('stringify_attributes')) {
         return rtrim($atts, ',');
     }
 }
+
+if (! function_exists('anchor')) {
+    /**
+     * Anchor Link
+     *
+     * Creates an anchor based on the local URL.
+     *
+     * @param array|string        $uri        URI string or array of URI segments
+     * @param string              $title      The link title
+     * @param object|array|string $attributes Any attributes
+     */
+    function anchor(array|string $uri = '', string $title = '', object|array|string $attributes = '') : string
+    {
+        $uri = trim($uri);
+        $uri = $uri === '/' ? $uri : rtrim($uri, '/');
+    
+        $title = $title === '' ? $uri : $title;
+        
+        if ($attributes !== '')
+            $attributes = stringify_attributes($attributes);
+        
+        return '<a href="' . $uri . '"' . $attributes . '>' . $title . '</a>';
+    }
+}
