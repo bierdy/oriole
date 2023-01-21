@@ -26,6 +26,18 @@ class BaseModel
     
     protected int $bindCounter = 0;
     
+    
+    /**
+     * @var array
+     *
+     * [
+     *     [
+     *         'name' =>       name,       // firstName
+     *         'bindName' =>   bindName,   // :key_0
+     *         'value' =>      value,      // Mike
+     *     ],
+     * ]
+     */
     protected array $bindValues = [];
     
     protected array $errors = [];
@@ -75,7 +87,7 @@ class BaseModel
     {
         $bindName = self::BIND_KEY . $this->bindCounter;
         $this->sql .= " $logic WHERE $name $operator $bindName ";
-        $this->bindValues[$bindName] = $value;
+        $this->bindValues[] = ['name' => $name, 'bindName' => $bindName, 'value' => $value];
         
         $this->bindCounter++;
         
@@ -98,7 +110,7 @@ class BaseModel
         foreach ($values as $value) {
             $bindName = self::BIND_KEY . $this->bindCounter;
             $whereIn[] = $bindName;
-            $this->bindValues[$bindName] = $value;
+            $this->bindValues[] = ['name' => $name, 'bindName' => $bindName, 'value' => $value];
             
             $this->bindCounter++;
         }
@@ -163,8 +175,8 @@ class BaseModel
         try {
             $this->stmt = self::$dbh->prepare($this->sql);
             
-            foreach ($this->bindValues as $bindKey => $bindValue)
-                $this->stmt->bindValue(substr($bindKey, 1), $bindValue);
+            foreach ($this->bindValues as $bindValue)
+                $this->stmt->bindValue(substr($bindValue['bindName'], 1), $bindValue['value']);
             
             if (! is_null($this->fetchMode))
                 $this->stmt->setFetchMode($this->fetchMode);
