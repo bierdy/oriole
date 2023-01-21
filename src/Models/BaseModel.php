@@ -147,6 +147,15 @@ class BaseModel
         return $this;
     }
     
+    protected function reset() : void
+    {
+        $this->sth = false;
+        $this->fetchMode = null;
+        $this->sql = '';
+        $this->bindCounter = 0;
+        $this->bindValues = [];
+    }
+    
     public function execute() : void
     {
         $this->errors = [];
@@ -164,6 +173,8 @@ class BaseModel
         } catch (\PDOException $e) {
             $this->errors[] = $e->getMessage();
         }
+    
+        $this->reset();
     }
     
     public function findAll() : false|array
