@@ -8,7 +8,7 @@ class BaseModel
 {
     protected static \PDO|null $dbh = null;
     
-    protected \PDOStatement|false $sth = false;
+    protected \PDOStatement|false $stmt = false;
     
     public string $table = '';
     
@@ -149,7 +149,7 @@ class BaseModel
     
     protected function reset() : void
     {
-        $this->sth = false;
+        $this->stmt = false;
         $this->fetchMode = null;
         $this->sql = '';
         $this->bindCounter = 0;
@@ -161,15 +161,15 @@ class BaseModel
         $this->errors = [];
         
         try {
-            $this->sth = self::$dbh->prepare($this->sql);
+            $this->stmt = self::$dbh->prepare($this->sql);
             
             foreach ($this->bindValues as $bindKey => $bindValue)
-                $this->sth->bindValue(substr($bindKey, 1), $bindValue);
+                $this->stmt->bindValue(substr($bindKey, 1), $bindValue);
             
             if (! is_null($this->fetchMode))
-                $this->sth->setFetchMode($this->fetchMode);
+                $this->stmt->setFetchMode($this->fetchMode);
             
-            $this->sth->execute();
+            $this->stmt->execute();
         } catch (\PDOException $e) {
             $this->errors[] = $e->getMessage();
         }
@@ -181,14 +181,14 @@ class BaseModel
     {
         $this->execute();
         
-        return empty($this->errors) ? $this->sth->fetchAll() : false;
+        return empty($this->errors) ? $this->stmt->fetchAll() : false;
     }
     
     public function findOne()
     {
         $this->execute();
         
-        return empty($this->errors) ? $this->sth->fetch() : false;
+        return empty($this->errors) ? $this->stmt->fetch() : false;
     }
     
     public function getAll(array $values = []) : false|array
@@ -209,7 +209,7 @@ class BaseModel
         
         $this->execute();
         
-        return empty($this->errors) ? $this->sth->fetchAll() : false;
+        return empty($this->errors) ? $this->stmt->fetchAll() : false;
     }
     
     public function getOne(string|int|float $value)
@@ -227,6 +227,6 @@ class BaseModel
         
         $this->execute();
         
-        return empty($this->errors) ? $this->sth->fetch() : false;
+        return empty($this->errors) ? $this->stmt->fetch() : false;
     }
 }
