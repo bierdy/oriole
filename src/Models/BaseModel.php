@@ -26,19 +26,18 @@ class BaseModel
     
     protected int $bindCounter = 0;
     
-    
     /**
      * @var array
      *
      * [
      *     [
-     *         'name' =>       name,       // firstName
-     *         'bindName' =>   bindName,   // :key_0
-     *         'value' =>      value,      // Mike
+     *         'name' =>        name,         // firstName
+     *         'placeholder' => placeholder,  // :key_0
+     *         'value' =>       value,        // Mike
      *     ],
      * ]
      */
-    protected array $bindValues = [];
+    protected array $binds = [];
     
     protected array $errors = [];
     
@@ -85,9 +84,9 @@ class BaseModel
     
     public function where(string $name, string $operator, string|int|float $value, string $logic = '') : static
     {
-        $bindName = self::BIND_KEY . $this->bindCounter;
-        $this->sql .= " $logic WHERE $name $operator $bindName ";
-        $this->bindValues[] = ['name' => $name, 'bindName' => $bindName, 'value' => $value];
+        $placeholder = self::BIND_KEY . $this->bindCounter;
+        $this->sql .= " $logic WHERE $name $operator $placeholder ";
+        $this->binds[] = ['name' => $name, 'placeholder' => $placeholder, 'value' => $value];
         
         $this->bindCounter++;
         
@@ -108,9 +107,9 @@ class BaseModel
     {
         $whereIn = [];
         foreach ($values as $value) {
-            $bindName = self::BIND_KEY . $this->bindCounter;
-            $whereIn[] = $bindName;
-            $this->bindValues[] = ['name' => $name, 'bindName' => $bindName, 'value' => $value];
+            $placeholder = self::BIND_KEY . $this->bindCounter;
+            $whereIn[] = $placeholder;
+            $this->binds[] = ['name' => $name, 'placeholder' => $placeholder, 'value' => $value];
             
             $this->bindCounter++;
         }
@@ -165,7 +164,7 @@ class BaseModel
         $this->fetchMode = null;
         $this->sql = '';
         $this->bindCounter = 0;
-        $this->bindValues = [];
+        $this->binds = [];
     }
     
     public function execute() : void
@@ -175,8 +174,8 @@ class BaseModel
         try {
             $this->stmt = self::$dbh->prepare($this->sql);
             
-            foreach ($this->bindValues as $bindValue)
-                $this->stmt->bindValue(substr($bindValue['bindName'], 1), $bindValue['value']);
+            foreach ($this->binds as $bind)
+                $this->stmt->bindValue(substr($bind['placeholder'], 1), $bind['value']);
             
             if (! is_null($this->fetchMode))
                 $this->stmt->setFetchMode($this->fetchMode);
