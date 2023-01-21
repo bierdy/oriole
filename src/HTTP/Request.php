@@ -43,62 +43,70 @@ class Request
     }
     
     /**
-     * Get value from $_SERVER
+     * Get value/values from $_SERVER
      *
-     * @param string $name
+     * @param string|null $name
      * @param int|null $filter
      * @param null $flags
-     * @return string|null
+     * @return array|string|null
      */
-    public function getServer(string $name, ? int $filter = null, $flags = null) : ? string
+    public function getServer(? string $name = null, ? int $filter = null, $flags = null) : array|string|null
     {
         return $this->getGlobal('server', $name, $filter, $flags);
     }
     
     /**
-     * Get value from $_GET
+     * Get value/values from $_GET
      *
-     * @param string $name
+     * @param string|null $name
      * @param int|null $filter
      * @param null $flags
-     * @return string|null
+     * @return array|string|null
      */
-    public function getGet(string $name, ? int $filter = null, $flags = null) : ? string
+    public function getGet(? string $name = null, ? int $filter = null, $flags = null) : array|string|null
     {
         return $this->getGlobal('get', $name, $filter, $flags);
     }
     
     /**
-     * Get value from $_POST
+     * Get value/values from $_POST
      *
-     * @param string $name
+     * @param string|null $name
      * @param int|null $filter
      * @param null $flags
-     * @return string|null
+     * @return array|string|null
      */
-    public function getPost(string $name, ? int $filter = null, $flags = null) : ? string
+    public function getPost(? string $name = null, ? int $filter = null, $flags = null) : array|string|null
     {
         return $this->getGlobal('post', $name, $filter, $flags);
     }
     
     /**
-     * Get value from global variable (like $_GET or $_SERVER)
+     * Get value/values from global variables (like $_GET or $_SERVER)
      *
      * @param string $type
-     * @param string $name
+     * @param string|null $name
      * @param int|null $filter
-     * @param $flags
-     * @return string|null
+     * @param null $flags
+     * @return array|string|null
      */
-    protected function getGlobal(string $type, string $name, ? int $filter = null, $flags = null) : ? string
+    protected function getGlobal(string $type, ? string $name = null, ? int $filter = null, $flags = null) : array|string|null
     {
-        if (is_null($value = self::$globals[$type][$name] ?? null))
-            return $value;
-    
         $filter ??= FILTER_DEFAULT;
         $flags = is_array($flags) ? $flags : (is_numeric($flags) ? (int) $flags : 0);
-    
-        return filter_var($value, $filter, $flags);
+        
+        if (! is_null($name)) {
+            if (is_null($value = self::$globals[$type][$name] ?? null))
+                return null;
+            
+            return filter_var($value, $filter, $flags);
+        }
+        
+        $values = self::$globals[$type] ?? [];
+        foreach ($values as &$value)
+            $value = filter_var($value, $filter, $flags);
+        
+        return $values;
     }
     
     protected function getHttpScheme() : string
