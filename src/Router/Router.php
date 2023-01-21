@@ -80,14 +80,9 @@ class Router
     {
         $routes = self::$routes->getRoutes();
         
-        $requestMethod = self::$request->getServer('REQUEST_METHOD');
-        $requestMethod = strtolower($requestMethod);
-        
-        $httpHost = self::$request->getServer('HTTP_HOST');
-        $httpHost = strtolower($httpHost);
-        
+        $requestMethod = self::$request->getRequestMethod();
+        $httpHost = self::$request->getHttpHost();
         $requestURI = self::$request->getCurrentURI();
-        $requestURI = strtolower($requestURI);
         
         if (
             $this->findRoute($routes, $requestMethod, $httpHost, $requestURI)
@@ -157,7 +152,7 @@ class Router
     public function getReverseRoute(string $type, string $key, ...$params) : string
     {
         $verb = ! empty($params['verb']) ? strtolower($params['verb']) : 'get';
-        $domain = ! empty($params['domain']) ? strtolower($params['domain']) : strtolower(self::$request->getServer('HTTP_HOST'));
+        $domain = ! empty($params['domain']) ? strtolower($params['domain']) : self::$request->getHttpHost();
         $domains = [$domain, '*'];
         
         unset($params['verb'], $params['domain']);

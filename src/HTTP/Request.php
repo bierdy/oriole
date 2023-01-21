@@ -109,13 +109,27 @@ class Request
         return $values;
     }
     
-    protected function getHttpScheme() : string
+    public function getRequestScheme() : string
     {
         $requestScheme = strtolower($this->getServer('REQUEST_SCHEME') ? : '');
         $https = strtolower($this->getServer('HTTPS') ? : '');
         $serverPort = $this->getServer('SERVER_PORT') ? : null;
         
         return $requestScheme ? : (($https === 'on') || ($serverPort == 443) ? 'https' : 'http');
+    }
+    
+    public function getRequestMethod() : string
+    {
+        $requestMethod = $this->getServer('REQUEST_METHOD') ? : '';
+        
+        return strtolower($requestMethod);
+    }
+    
+    public function getHttpHost() : string
+    {
+        $httpHost = $this->getServer('HTTP_HOST') ? : '';
+        
+        return strtolower($httpHost);
     }
     
     /**
@@ -127,8 +141,8 @@ class Request
      */
     public function getCurrentBaseURL() : string
     {
-        $scheme = $this->getHttpScheme();
-        $httpHost = strtolower($this->getServer('HTTP_HOST') ? : '');
+        $scheme = $this->getRequestScheme();
+        $httpHost = $this->getHttpHost();
         
         return $scheme . '://' . $httpHost;
     }
@@ -145,8 +159,8 @@ class Request
     public function getAdminBaseURL() : string
     {
         $oriole = new Oriole();
-        $scheme = $this->getHttpScheme();
-        $adminDomain = strtolower($oriole->getConfig('app', 'adminDomain') ? : $this->getServer('HTTP_HOST') ? : '');
+        $scheme = $this->getRequestScheme();
+        $adminDomain = strtolower($oriole->getConfig('app', 'adminDomain') ? : $this->getHttpHost());
         $adminBasePath = strtolower($oriole->getConfig('app', 'adminBasePath'));
         $adminBasePath = trim($adminBasePath, '/ ');
         
@@ -165,8 +179,8 @@ class Request
     public function getPublicBaseURL() : string
     {
         $oriole = new Oriole();
-        $scheme = $this->getHttpScheme();
-        $publicDomain = strtolower($oriole->getConfig('app', 'publicDomain') ? : $this->getServer('HTTP_HOST') ? : '');
+        $scheme = $this->getRequestScheme();
+        $publicDomain = strtolower($oriole->getConfig('app', 'publicDomain') ? : $this->getHttpHost());
         $publicBasePath = strtolower($oriole->getConfig('app', 'publicBasePath'));
         $publicBasePath = trim($publicBasePath, '/ ');
         
