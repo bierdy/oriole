@@ -69,6 +69,19 @@ class Request
     }
     
     /**
+     * Get value from $_POST
+     *
+     * @param string $name
+     * @param int|null $filter
+     * @param null $flags
+     * @return string|null
+     */
+    public function getPost(string $name, ? int $filter = null, $flags = null) : ? string
+    {
+        return $this->getGlobal('post', $name, $filter, $flags);
+    }
+    
+    /**
      * Get value from global variable (like $_GET or $_SERVER)
      *
      * @param string $type
