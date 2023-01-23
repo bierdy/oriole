@@ -39,15 +39,17 @@ class Oriole
     /**
      * Init Oriole application
      *
+     * @param string $fcPath
      * @return void
      */
-    public function init() : void
+    public function init(string $fcPath) : void
     {
         if (self::$is_initiated === true)
             return;
         
         require_once 'Common.php';
         
+        $this->setConstants($fcPath);
         $this->setConfigs();
         $this->setRoutes();
         
@@ -79,6 +81,17 @@ class Oriole
         ob_end_clean();
         
         $response->send();
+    }
+    
+    /**
+     * Set constants
+     *
+     * @param string $fcPath
+     * @return void
+     */
+    protected function setConstants(string $fcPath) : void
+    {
+        defined('FCPATH') || define('FCPATH', '/' . trim($fcPath, '/ '));
     }
     
     /**
