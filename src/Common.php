@@ -197,6 +197,16 @@ if (! function_exists('form_open')) {
     }
 }
 
+if (! function_exists('form_close')) {
+    /**
+     * Form Close Tag
+     */
+    function form_close(string $extra = ''): string
+    {
+        return '</form>' . $extra;
+    }
+}
+
 if (! function_exists('form_hidden')) {
     /**
      * Hidden Input Field
