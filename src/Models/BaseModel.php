@@ -158,7 +158,6 @@ class BaseModel
     
     protected function reset() : void
     {
-        $this->stmt = false;
         $this->fetchMode = null;
         $this->sql = '';
         $this->bindCounter = 0;
