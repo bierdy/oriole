@@ -201,7 +201,7 @@ if (! function_exists('form_close')) {
     /**
      * Form Close Tag
      */
-    function form_close(string $extra = ''): string
+    function form_close(string $extra = '') : string
     {
         return '</form>' . $extra;
     }
@@ -304,5 +304,28 @@ if (! function_exists('parse_form_attributes')) {
         }
         
         return $att;
+    }
+}
+
+if (! function_exists('form_label')) {
+    /**
+     * Form Label Tag
+     *
+     * @param string $labelText  The text to appear onscreen
+     * @param string $id         The id the label applies to
+     * @param array  $attributes Additional attributes
+     */
+    function form_label(string $labelText = '', string $id = '', array $attributes = []) : string
+    {
+        $label = '<label';
+        
+        if ($id !== '')
+            $label .= ' for="' . $id . '"';
+        
+        if (is_array($attributes) && $attributes)
+            foreach ($attributes as $key => $val)
+                $label .= ' ' . $key . '="' . $val . '"';
+        
+        return $label . '>' . $labelText . '</label>';
     }
 }
