@@ -30,11 +30,9 @@ class BaseModel
      * @var array
      *
      * [
-     *     [
-     *         'name' =>        name,         // firstName
-     *         'placeholder' => placeholder,  // :key_0
-     *         'value' =>       value,        // Mike
-     *     ],
+     *     ':key_0' => 'Mike',
+     *     ':key_1' => 'Tim',
+     *     ':key_2' => 'Peter',
      * ]
      */
     protected array $binds = [];
@@ -84,9 +82,9 @@ class BaseModel
     
     public function where(string $name, string $operator, string|int|float $value, string $logic = '') : static
     {
-        $placeholder = self::BIND_KEY . $this->bindCounter;
-        $this->sql .= " $logic WHERE $name $operator $placeholder ";
-        $this->binds[] = ['name' => $name, 'placeholder' => $placeholder, 'value' => $value];
+        $key = self::BIND_KEY . $this->bindCounter;
+        $this->sql .= " $logic WHERE $name $operator $key ";
+        $this->binds[$key] = $value;
         
         $this->bindCounter++;
         
@@ -107,9 +105,9 @@ class BaseModel
     {
         $whereIn = [];
         foreach ($values as $value) {
-            $placeholder = self::BIND_KEY . $this->bindCounter;
-            $whereIn[] = $placeholder;
-            $this->binds[] = ['name' => $name, 'placeholder' => $placeholder, 'value' => $value];
+            $key = self::BIND_KEY . $this->bindCounter;
+            $whereIn[] = $key;
+            $this->binds[$key] = $value;
             
             $this->bindCounter++;
         }
@@ -174,8 +172,8 @@ class BaseModel
         try {
             $this->stmt = self::$dbh->prepare($this->sql);
             
-            foreach ($this->binds as $bind)
-                $this->stmt->bindValue(substr($bind['placeholder'], 1), $bind['value']);
+            foreach ($this->binds as $key => $value)
+                $this->stmt->bindValue(substr($key, 1), $value);
             
             if (! is_null($this->fetchMode))
                 $this->stmt->setFetchMode($this->fetchMode);
