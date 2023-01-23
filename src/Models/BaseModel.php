@@ -37,6 +37,25 @@ class BaseModel
      */
     protected array $binds = [];
     
+    
+    /**
+     * [
+     *     'data' => [
+     *         [
+     *             'name' => 'Field "name" is required field,
+     *             'surName' => 'Field "surName" is required field,
+     *         ],
+     *         [
+     *             'name' => 'Field "name" is required field,
+     *             'surName' => 'Field "surName" is required field,
+     *         ],
+     *     ],
+     *     'pdo' => [],
+     *     'logic' => [],
+     * ]
+     *
+     * @var array
+     */
     protected array $errors = [];
     
     public function __construct()
@@ -179,7 +198,7 @@ class BaseModel
             
             $this->stmt->execute();
         } catch (\PDOException $e) {
-            $this->errors[] = $e->getMessage();
+            $this->errors['pdo'][] = $e->getMessage();
         }
     
         $this->reset();
@@ -202,10 +221,10 @@ class BaseModel
     public function getAll(array $values = []) : false|array
     {
         if (empty($this->table))
-            $this->errors[] = 'Table key is empty';
+            $this->errors['logic'][] = 'Table key is empty';
         
         if (empty($this->primaryKey))
-            $this->errors[] = 'Primary key is empty';
+            $this->errors['logic'][] = 'Primary key is empty';
         
         if (! empty($this->errors))
             return false;
@@ -223,10 +242,10 @@ class BaseModel
     public function getOne(string|int|float $value)
     {
         if (empty($this->table))
-            $this->errors[] = 'Table key is empty';
+            $this->errors['logic'][] = 'Table key is empty';
         
         if (empty($this->primaryKey))
-            $this->errors[] = 'Primary key is empty';
+            $this->errors['logic'][] = 'Primary key is empty';
         
         if (! empty($this->errors))
             return false;
