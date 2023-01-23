@@ -329,3 +329,18 @@ if (! function_exists('form_label')) {
         return $label . '>' . $labelText . '</label>';
     }
 }
+
+if (! function_exists('form_submit')) {
+    /**
+     * Submit Button
+     *
+     * @param array|string $data
+     * @param string $value
+     * @param object|array|string $extra string, array, object that can be cast to array
+     * @return string
+     */
+    function form_submit(array|string $data = '', string $value = '', object|array|string $extra = '') : string
+    {
+        return form_input($data, $value, $extra, 'submit');
+    }
+}
