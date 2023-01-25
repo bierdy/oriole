@@ -17,11 +17,11 @@
                         <th>#</th>
                         <th>Icon</th>
                         <th>Title</th>
-                        <th>Code</th>
+                        <th>Alias</th>
                         <th>Default</th>
                         <th>Order</th>
-                        <th>Created at</th>
-                        <th>Updated at</th>
+                        <th>Created</th>
+                        <th>Updated</th>
                         <th>Actions</th>
                     </tr>
                 </thead>
@@ -41,21 +41,21 @@
                             <td>
                                 <?= anchor(route_by_alias('edit_language', $language->id), $language->title, ['class' => 'link-secondary text-decoration-none']); ?>
                             </td>
-                            <td><?= $language->code; ?></td>
+                            <td><?= $language->alias; ?></td>
                             <td>
-                                <?php if ($language->default) : ?>
+                                <?php if ($language->is_default) : ?>
                                     <i class="bi bi-check"></i>
                                 <?php endif ?>
                             </td>
-                            <td><?= $language->order; ?></td>
-                            <td><?= date('Y.m.d H:i:s', strtotime($language->created_at)); ?></td>
-                            <td><?= date('Y.m.d H:i:s', strtotime($language->updated_at)); ?></td>
+                            <td><?= $language->sort_order; ?></td>
+                            <td><?= ! empty($language->created_at) ? date('Y.m.d H:i:s', strtotime($language->created_at)) : ''; ?></td>
+                            <td><?= ! empty($language->updated_at) ? date('Y.m.d H:i:s', strtotime($language->updated_at)) : ''; ?></td>
                             <td>
                                 <div class="text-end">
-                                    <?php if (empty($language->default)) : ?>
+                                    <?php if (empty($language->is_default)) : ?>
                                         <?= anchor(route_by_alias('set_default_language', $language->id), 'Set default'); ?>
                                     <?php endif ?>
-                                    <?php if (empty($language->active)) : ?>
+                                    <?php if (empty($language->is_active)) : ?>
                                         <?= anchor(route_by_alias('activate_language', $language->id), '<i class="bi bi-toggle-off"></i>'); ?>
                                     <?php else : ?>
                                         <?= anchor(route_by_alias('deactivate_language', $language->id), '<i class="bi bi-toggle-on"></i>'); ?>
