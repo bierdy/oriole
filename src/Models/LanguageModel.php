@@ -9,10 +9,10 @@ class LanguageModel extends BaseModel
     public string $primaryKey = 'id';
     
     public array $validationRules = [
-        'title' => 'required|is_unique[languages.title,id,{id}]',
-        'code' => 'is_unique[languages.code,id,{id}]',
-        'icon' => 'required',
-        'order' => 'required|numeric',
+        'title'      => 'required|is_unique[languages.title,id,{id}]',
+        'alias'      => 'is_unique[languages.alias,id,{id}]',
+        'icon'       => 'required',
+        'sort_order' => 'required|numeric',
     ];
     
     public array $validationMessages = [];
