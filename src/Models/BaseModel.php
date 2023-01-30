@@ -168,6 +168,13 @@ class BaseModel
         return $this;
     }
     
+    public function limit(string|int $count, string|int $offset = null) : static
+    {
+        $this->sql .= " LIMIT $count " . ! is_null($offset) ? ", $offset " : '';
+        
+        return $this;
+    }
+    
     public function setFetchMode(int $fetchMode) : static
     {
         $this->fetchMode = $fetchMode;
