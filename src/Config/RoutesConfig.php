@@ -51,13 +51,13 @@ class RoutesConfig extends AbstractRoutesConfig
             $routes->group('languages', function($routes)
             {
                 $routes->get('', 'LanguagesController::list', ['as' => 'languages_list']);
-                $routes->match(['get', 'post'], 'add', 'LanguagesController::add');
-                $routes->match(['get', 'post'], 'edit/(:num)', 'LanguagesController::edit/$0');
-                $routes->get('activate/(:num)', 'LanguagesController::activate/$0');
-                $routes->get('deactivate/(:num)', 'LanguagesController::deactivate/$0');
-                $routes->get('delete/(:num)', 'LanguagesController::delete/$0');
-                $routes->get('delete-all', 'LanguagesController::deleteAll');
-                $routes->get('set-default/(:num)', 'LanguagesController::setDefault/$0');
+                $routes->match(['get', 'post'], 'add', 'LanguagesController::add', ['as' => 'add_language']);
+                $routes->match(['get', 'post'], 'edit/(:num)', 'LanguagesController::edit/$0', ['as' => 'edit_language']);
+                $routes->get('activate/(:num)', 'LanguagesController::activate/$0', ['as' => 'activate_language']);
+                $routes->get('deactivate/(:num)', 'LanguagesController::deactivate/$0', ['as' => 'deactivate_language']);
+                $routes->get('delete/(:num)', 'LanguagesController::delete/$0', ['as' => 'delete_language']);
+                $routes->get('delete-all', 'LanguagesController::deleteAll', ['as' => 'delete_all_languages']);
+                $routes->get('set-default/(:num)', 'LanguagesController::setDefault/$0', ['as' => 'set_default_language']);
             });
             
             $routes->group('variable-groups', function($routes)
