@@ -29,6 +29,16 @@ class BaseModel
     
     public array $validationMessages = [];
     
+    /**
+     * @var Rules|null
+     */
+    public ? Rules $validationRulesHandler = null;
+    
+    /**
+     * @var Messages|null
+     */
+    public ? Messages $validationMessagesHandler = null;
+    
     protected ? int $fetchMode = null;
     
     protected string $sql = '';
@@ -94,6 +104,9 @@ class BaseModel
                 throw new PDOException($e->getMessage(), (int) $e->getCode());
             }
         }
+        
+        $this->validationRulesHandler = new Rules();
+        $this->validationMessagesHandler = new Messages();
     }
     
     public function from(string $table) : static
