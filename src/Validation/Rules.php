@@ -83,7 +83,7 @@ class Rules
     
         $row = (new BaseModel())->select('1')->from($table)->where($field, '=', $str);
         
-        if (! empty($whereField) && ! empty($whereValue) && ! preg_match('/^\{(\w+)$/', $whereValue))
+        if (! empty($whereField) && ! empty($whereValue) && ! preg_match('/^\{(\w+)\}$/', $whereValue))
             $row = $row->andWhere($whereField, '=', $whereValue);
         
         return $row->limit(1)->findOne() !== false;
@@ -116,7 +116,7 @@ class Rules
         
         $row = (new BaseModel())->select('1')->from($table)->where($field, '=', $str);
         
-        if (! empty($ignoreField) && ! empty($ignoreValue) && ! preg_match('/^\{(\w+)$/', $ignoreValue))
+        if (! empty($ignoreField) && ! empty($ignoreValue) && ! preg_match('/^\{(\w+)\}$/', $ignoreValue))
             $row = $row->andWhere($ignoreField, '!=', $ignoreValue);
         
         return $row->limit(1)->findOne() === false;
@@ -310,27 +310,6 @@ class Rules
         return true;
     }
     
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
     /**
      * Alpha
      */
@@ -389,7 +368,7 @@ class Rules
             return false;
         }
         
-        return preg_match('/\A[A-Z0-9 ~!#$%\-_+=|:.]+\z/i', $str) === 1;
+        return preg_match('/\A[A-Z0-9 ~!#$%\&\*\-_+=|:.]+\z/i', $str) === 1;
     }
     
     /**
@@ -429,7 +408,7 @@ class Rules
     public function decimal(? string $str = null) : bool
     {
         // @see https://regex101.com/r/HULifl/2/
-        return (bool) preg_match('/\A[-+]?\d*\.?\d+\z/', $str ?? '');
+        return (bool) preg_match('/\A[-+]?\d{0,}\.?\d+\z/', $str ?? '');
     }
     
     /**
