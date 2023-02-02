@@ -78,7 +78,7 @@ class Response
     
     public function setCookie(string $name, string $value, int $expires = null, string $path = null, string $domain = null, bool $secure = null, bool $httpOnly = null, string $sameSite = null) : void
     {
-        $name = $this->cookieConfig['prefix'] . $name;
+        $prefixedName = $this->cookieConfig['prefix'] . $name;
         
         $expires =  ! is_null($expires) ?  $expires :  $this->cookieConfig['expires'];
         $path =     ! is_null($path) ?     $path :     $this->cookieConfig['path'];
@@ -88,7 +88,7 @@ class Response
         $sameSite = ! is_null($sameSite) ? $sameSite : $this->cookieConfig['sameSite'];
         
         $this->cookies[] = [
-            'name' => $name,
+            'name' => $prefixedName,
             'value' => $value,
             'options' => [
                 'expires' => $expires,
@@ -103,14 +103,14 @@ class Response
     
     public function removeCookie(string $name, string $path = null, string $domain = null) : void
     {
-        $name = $this->cookieConfig['prefix'] . $name;
+        $prefixedName = $this->cookieConfig['prefix'] . $name;
         
         $path =   ! is_null($path) ?   $path :   $this->cookieConfig['path'];
         $domain = ! is_null($domain) ? $domain : $this->cookieConfig['domain'];
         
         foreach ($this->cookies as $key => $cookie) {
             if (
-                $cookie['name'] === $name
+                $cookie['name'] === $prefixedName
                 && $cookie['options']['path'] === $path
                 && $cookie['options']['domain'] === $domain
             )
