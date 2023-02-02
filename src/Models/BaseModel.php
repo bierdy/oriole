@@ -21,6 +21,10 @@ class BaseModel
     
     public string $primaryKey = '';
     
+    public string $createdAtKey = 'created_at';
+    
+    public string $updatedAtKey = 'updated_at';
+    
     public array $validationRules = [];
     
     public array $validationMessages = [];
