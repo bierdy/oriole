@@ -148,4 +148,45 @@ class Response
         $this->sendCookies();
         $this->sendBody();
     }
+    
+    /**
+     * Perform a redirect to a new URL, in two flavors: header or location.
+     *
+     * @param string $uri The URI to redirect to
+     * @param string $method
+     * @param int $code The type of redirection, defaults to 302
+     *
+     * @return Response
+     */
+    public function redirect(string $uri, string $method = 'auto', int $code = 302) : self
+    {
+        $request = new Request();
+        $serverSoftware = strtolower($request->getServer('SERVER_SOFTWARE') ? : '');
+        $serverProtocol = strtolower($request->getServer('SERVER_PROTOCOL') ? : '');
+        $requestMethod = $request->getRequestMethod();
+        $method = strtolower($method);
+        
+        // IIS environment likely? Use 'refresh' for better compatibility
+        if ($method === 'auto' && ! empty($serverSoftware) && str_contains($serverSoftware, 'microsoft-iis'))
+            $method = 'refresh';
+        
+        // override status code for HTTP/1.1 & higher
+        // reference: http://en.wikipedia.org/wiki/Post/Redirect/Get
+        if (! empty($serverProtocol) && ! empty($requestMethod) && (float) $serverProtocol >= 1.1 && $method !== 'refresh')
+            $code = $requestMethod !== 'get' ? 303 : ($code === 302 ? 307 : $code);
+        
+        switch ($method) {
+            case 'refresh' :
+                $this->setHeader('Refresh', '0;url=' . $uri);
+                break;
+            
+            default :
+                $this->setHeader('Location', $uri);
+                break;
+        }
+        
+        $this->setStatusCode($code);
+    
+        return $this;
+    }
 }
