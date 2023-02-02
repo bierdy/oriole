@@ -127,7 +127,7 @@ class BaseModel
     public function where(string $name, string $operator, string|int|float $value, string $logic = '') : static
     {
         $key = self::BIND_KEY . $this->bindCounter;
-        $this->sql .= " $logic WHERE $name $operator $key ";
+        $this->sql .= ' ' . ($logic ? : 'WHERE') . " $name $operator $key ";
         $this->binds[$key] = $value;
         
         $this->bindCounter++;
@@ -156,7 +156,7 @@ class BaseModel
             $this->bindCounter++;
         }
         
-        $this->sql .= " $logic WHERE $name IN (" . implode(',', $whereIn) . ") ";
+        $this->sql .= ' ' . ($logic ? : 'WHERE') . " $name IN (" . implode(',', $whereIn) . ") ";
         
         return $this;
     }
@@ -195,7 +195,7 @@ class BaseModel
     
     public function limit(string|int $count, string|int $offset = null) : static
     {
-        $this->sql .= " LIMIT $count " . ! is_null($offset) ? ", $offset " : '';
+        $this->sql .= " LIMIT $count" . (! is_null($offset) ? ", $offset " : ' ');
         
         return $this;
     }
@@ -517,7 +517,7 @@ class BaseModel
         $replacements = [];
         
         foreach ($data as $key => $value)
-            $replacements["{{$key}"] = $value;
+            $replacements["{{$key}}"] = $value;
         
         foreach ($rules as &$rule)
             $rule = strtr($rule, $replacements);
@@ -584,20 +584,20 @@ class BaseModel
         
         foreach ($rules as $rule) {
             $isRuleMethodExist = method_exists($this->validationRulesHandler, $rule);
-            $param  = false;
+            $param = false;
             
-            if (! $isRuleMethodExist && preg_match('/(.*?)\[(.*)/', $rule, $match)) {
+            if (! $isRuleMethodExist && preg_match('/(.*?)\[(.*)\]/', $rule, $match)) {
                 $rule  = $match[1];
                 $param = $match[2];
+                
+                $isRuleMethodExist = method_exists($this->validationRulesHandler, $rule);
             }
-    
-            $isRuleMethodExist = method_exists($this->validationRulesHandler, $rule);
             
             // If it's a callable, call and get out of here.
             if ($isRuleMethodExist)
                 $passed = $param === false ? $this->validationRulesHandler->$rule($value) : $this->validationRulesHandler->$rule($value, $param, $data);
             else
-                throw new Exception("'$rule' is not a valid rule.");
+                throw new Exception("$rule is not a valid rule.");
             
             // Set the error message if we didn't survive.
             if ($passed === false) {
