@@ -1,6 +1,7 @@
 <?php
 
 use Oriole\HTTP\Request;
+use Oriole\HTTP\Response;
 use Oriole\Router\Router;
 use Laminas\Escaper\Escaper;
 
@@ -453,5 +454,31 @@ if (! function_exists('_array_search_dot')) {
         
         // Otherwise, not found.
         return null;
+    }
+}
+
+if (! function_exists('setOrioleCookie')) {
+    function setOrioleCookie() : void
+    {
+        Response::getInstance()->setCookie(...func_get_args());
+    }
+}
+
+if (! function_exists('getOrioleCookie')) {
+    function getOrioleCookie(string $name = '', bool $delete = false) : ? string
+    {
+        $value = (new Request())->getCookie($name);
+        
+        if (! is_null($value) && $delete)
+            removeOrioleCookie($name);
+        
+        return $value;
+    }
+}
+
+if (! function_exists('removeOrioleCookie')) {
+    function removeOrioleCookie(string $name = '') : void
+    {
+        Response::getInstance()->removeCookie(...func_get_args());
     }
 }
