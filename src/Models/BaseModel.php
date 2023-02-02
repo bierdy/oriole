@@ -392,6 +392,56 @@ class BaseModel
     /**
      * @throws Exception
      */
+    public function updateMany(array $primaryKeys, array|object $values) : bool
+    {
+        if (empty($this->table))
+            $this->errors['logic'][] = 'Table key is empty';
+        
+        if (empty($this->primaryKey))
+            $this->errors['logic'][] = 'Primary key is empty';
+        
+        if (! empty($this->errors))
+            return false;
+        
+        $this->sql .= " UPDATE {$this->table} ";
+        $this->set($values)->whereIn($this->primaryKey, $primaryKeys);
+        
+        if (! empty($this->errors))
+            return false;
+        
+        $this->execute();
+        
+        return empty($this->errors);
+    }
+    
+    /**
+     * @throws Exception
+     */
+    public function updateOne(string|int|float $primaryKey, array|object $values) : bool
+    {
+        if (empty($this->table))
+            $this->errors['logic'][] = 'Table key is empty';
+        
+        if (empty($this->primaryKey))
+            $this->errors['logic'][] = 'Primary key is empty';
+        
+        if (! empty($this->errors))
+            return false;
+        
+        $this->sql .= " UPDATE {$this->table} ";
+        $this->set($values)->where($this->primaryKey, '=', $primaryKey);
+        
+        if (! empty($this->errors))
+            return false;
+        
+        $this->execute();
+        
+        return empty($this->errors);
+    }
+    
+    /**
+     * @throws Exception
+     */
     protected function validate(array $data, bool $onlyPassedData = true) : void
     {
         $this->errorDataCounter++;
