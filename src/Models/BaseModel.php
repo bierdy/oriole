@@ -299,9 +299,8 @@ class BaseModel
             $this->errors['logic'][] = 'There are no data to add';
             return false;
         }
-        
-        $insertStmt = '';
-        
+    
+        $keysArray = [];
         foreach ($data as $values) {
             $values = is_object($values) ? (array) $values : $values;
             $this->validate($values, false);
@@ -316,8 +315,8 @@ class BaseModel
                 
                 $this->bindCounter++;
             }
-            
-            $insertStmt .= " (" . implode(',', $keys) . ") ";
+    
+            $keysArray[] = " (" . implode(',', $keys) . ")";
         }
         
         if (! empty($this->errors))
@@ -325,7 +324,7 @@ class BaseModel
         
         $names = array_keys(array_slice($data, 0, 1));
         
-        $this->sql .= " INSERT INTO {$this->table} (" . implode(',', $names) . ") VALUES $insertStmt ";
+        $this->sql .= " INSERT INTO {$this->table} (" . implode(',', $names) . ") VALUES " . implode(',', $keysArray) . " ";
         
         $this->execute();
         
