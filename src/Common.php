@@ -477,7 +477,7 @@ if (! function_exists('getOrioleCookie')) {
 }
 
 if (! function_exists('removeOrioleCookie')) {
-    function removeOrioleCookie(string $name = '') : void
+    function removeOrioleCookie() : void
     {
         Response::getInstance()->removeCookie(...func_get_args());
     }
