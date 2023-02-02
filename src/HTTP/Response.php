@@ -158,7 +158,7 @@ class Response
      *
      * @return Response
      */
-    public function redirect(string $uri, string $method = 'auto', int $code = 302) : self
+    public function redirect(string $uri, string $method = 'auto', int $code = 302) : static
     {
         $request = new Request();
         $serverSoftware = strtolower($request->getServer('SERVER_SOFTWARE') ? : '');
