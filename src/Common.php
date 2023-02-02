@@ -344,3 +344,114 @@ if (! function_exists('form_submit')) {
         return form_input($data, $value, $extra, 'submit');
     }
 }
+
+if (! function_exists('array_flatten_with_dots')) {
+    /**
+     * Flatten a multidimensional array using dots as separators.
+     *
+     * @param iterable $array The multi-dimensional array
+     * @param string   $id    Something to initially prepend to the flattened keys
+     *
+     * @return array The flattened array
+     */
+    function array_flatten_with_dots(iterable $array, string $id = '') : array
+    {
+        $flattened = [];
+        
+        foreach ($array as $key => $value) {
+            $newKey = $id . $key;
+            
+            if (is_array($value) && $value !== [])
+                $flattened = array_merge($flattened, array_flatten_with_dots($value, $newKey . '.'));
+            else
+                $flattened[$newKey] = $value;
+        }
+        
+        return $flattened;
+    }
+}
+
+if (! function_exists('dot_array_search')) {
+    /**
+     * Searches an array through dot syntax. Supports
+     * wildcard searches, like foo.*.bar
+     *
+     * @return array|bool|int|object|string|null
+     */
+    function dot_array_search(string $index, array $array) : mixed
+    {
+        // See https://regex101.com/r/44Ipql/1
+        $segments = preg_split(
+            '/(?<!\\\\)\./',
+            rtrim($index, '* '),
+            0,
+            PREG_SPLIT_NO_EMPTY
+        );
+        
+        $segments = array_map(static fn ($key) => str_replace('\.', '.', $key), $segments);
+        
+        return _array_search_dot($segments, $array);
+    }
+}
+
+if (! function_exists('_array_search_dot')) {
+    /**
+     * Used by 'dot_array_search' to recursively search the
+     * array with wildcards.
+     *
+     * @param array $indexes
+     * @param array $array
+     * @return mixed
+     * @internal This should not be used on its own.
+     *
+     */
+    function _array_search_dot(array $indexes, array $array) : mixed
+    {
+        // If index is empty, returns null.
+        if ($indexes === [])
+            return null;
+        
+        // Grab the current index
+        $currentIndex = array_shift($indexes);
+        
+        if (! isset($array[$currentIndex]) && $currentIndex !== '*')
+            return null;
+        
+        // Handle Wildcard (*)
+        if ($currentIndex === '*') {
+            $answer = [];
+            
+            foreach ($array as $value) {
+                if (! is_array($value))
+                    return null;
+                
+                $answer[] = _array_search_dot($indexes, $value);
+            }
+            
+            $answer = array_filter($answer, static fn ($value) => $value !== null);
+            
+            if ($answer !== []) {
+                if (count($answer) === 1) {
+                    // If array only has one element, we return that element for BC.
+                    return current($answer);
+                }
+                
+                return $answer;
+            }
+            
+            return null;
+        }
+        
+        // If this is the last index, make sure to return it now,
+        // and not try to recurse through things.
+        if (empty($indexes))
+            return $array[$currentIndex];
+        
+        // Do we need to recursively search this value?
+        if (is_array($array[$currentIndex]) && $array[$currentIndex] !== [])
+            return _array_search_dot($indexes, $array[$currentIndex]);
+        
+        // Otherwise, not found.
+        return null;
+    }
+}
