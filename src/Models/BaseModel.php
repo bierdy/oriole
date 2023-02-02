@@ -251,7 +251,7 @@ class BaseModel
         return empty($this->errors) ? $this->stmt->fetch() : false;
     }
     
-    public function getAll(array $values = []) : false|array
+    public function getAll(array $primaryKeys = []) : false|array
     {
         if (empty($this->table))
             $this->errors['logic'][] = 'Table key is empty';
@@ -264,15 +264,15 @@ class BaseModel
         
         $this->select('*')->from($this->table);
         
-        if (! empty($values))
-            $this->whereIn($this->primaryKey, $values);
+        if (! empty($primaryKeys))
+            $this->whereIn($this->primaryKey, $primaryKeys);
         
         $this->execute();
         
         return empty($this->errors) ? $this->stmt->fetchAll() : false;
     }
     
-    public function getOne(string|int|float $value)
+    public function getOne(string|int|float $primaryKey)
     {
         if (empty($this->table))
             $this->errors['logic'][] = 'Table key is empty';
@@ -283,7 +283,7 @@ class BaseModel
         if (! empty($this->errors))
             return false;
         
-        $this->select('*')->from($this->table)->where($this->primaryKey, '=', $value);
+        $this->select('*')->from($this->table)->where($this->primaryKey, '=', $primaryKey);
         
         $this->execute();
         
