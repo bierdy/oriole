@@ -91,6 +91,10 @@ class Request
      */
     public function getCookie(? string $name = null, ? int $filter = null, $flags = null) : array|string|null
     {
+        $oriole = new Oriole();
+        $prefix = $oriole->getConfig('cookie', 'prefix');
+        $name = ! is_null($name) ? $prefix . $name : null;
+        
         return $this->getGlobal('cookie', $name, $filter, $flags);
     }
     
