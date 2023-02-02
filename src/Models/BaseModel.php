@@ -200,6 +200,33 @@ class BaseModel
         return $this;
     }
     
+    /**
+     * @throws Exception
+     */
+    public function set(array|object $values) : static
+    {
+        $values = is_object($values) ? (array) $values : $values;
+        $this->validate($values);
+        
+        if (! empty($this->errors))
+            return $this;
+        
+        unset($values[$this->primaryKey], $values[$this->createdAtKey], $values[$this->updatedAtKey]);
+        
+        $keys = [];
+        foreach ($values as $name => $value) {
+            $key = self::BIND_KEY . $this->bindCounter;
+            $keys[] = " $name = $key";
+            $this->binds[$key] = $value;
+            
+            $this->bindCounter++;
+        }
+        
+        $this->sql .= " SET " . implode(',', $keys) . " ";
+        
+        return $this;
+    }
+    
     public function setFetchMode(int $fetchMode) : static
     {
         $this->fetchMode = $fetchMode;
