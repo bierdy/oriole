@@ -119,7 +119,7 @@ class Rules
         if (! empty($ignoreField) && ! empty($ignoreValue) && ! preg_match('/^\{(\w+)\}$/', $ignoreValue))
             $row = $row->andWhere($ignoreField, '!=', $ignoreValue);
         
-        return $row->limit(1)->findOne() === false;
+        return $row->findOne() === false;
     }
     
     /**
