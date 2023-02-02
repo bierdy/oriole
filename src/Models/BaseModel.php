@@ -2,13 +2,15 @@
 
 namespace Oriole\Models;
 
+use PDO;
+use PDOStatement;
 use Oriole\Oriole;
 
 class BaseModel
 {
-    protected static \PDO|null $dbh = null;
+    protected static PDO|null $dbh = null;
     
-    protected \PDOStatement|false $stmt = false;
+    protected PDOStatement|false $stmt = false;
     
     public string $table = '';
     
@@ -70,17 +72,17 @@ class BaseModel
             $charset = $databaseConfig['charset'];
             $collation = $databaseConfig['collation'];
             $port = $databaseConfig['port'];
-            $dsn = "mysql:host={$hostname};port={$port};dbname={$database};charset={$charset}";
+            $dsn = "mysql:host=$hostname;port=$port;dbname=$database;charset=$charset";
             $options = [
-                \PDO::ATTR_ERRMODE => \PDO::ERRMODE_EXCEPTION,
-                \PDO::ATTR_DEFAULT_FETCH_MODE => \PDO::FETCH_OBJ,
-                \PDO::MYSQL_ATTR_INIT_COMMAND => "SET NAMES '{$charset}' COLLATE '{$collation}'"
+                PDO::ATTR_ERRMODE => PDO::ERRMODE_EXCEPTION,
+                PDO::ATTR_DEFAULT_FETCH_MODE => PDO::FETCH_OBJ,
+                PDO::MYSQL_ATTR_INIT_COMMAND => "SET NAMES '$charset' COLLATE '$collation'"
             ];
             
             try {
-                self::$dbh = new \PDO($dsn, $username, $password, $options);
-            } catch(\PDOException $e) {
-                throw new \PDOException($e->getMessage(), (int) $e->getCode());
+                self::$dbh = new PDO($dsn, $username, $password, $options);
+            } catch(PDOException $e) {
+                throw new PDOException($e->getMessage(), (int) $e->getCode());
             }
         }
     }
@@ -204,7 +206,7 @@ class BaseModel
                 $this->stmt->setFetchMode($this->fetchMode);
             
             $this->stmt->execute();
-        } catch (\PDOException $e) {
+        } catch (PDOException $e) {
             $this->errors['pdo'][] = $e->getMessage();
         }
     
