@@ -82,6 +82,19 @@ class Request
     }
     
     /**
+     * Get value/values from $_COOKIE
+     *
+     * @param string|null $name
+     * @param int|null $filter
+     * @param null $flags
+     * @return array|string|null
+     */
+    public function getCookie(? string $name = null, ? int $filter = null, $flags = null) : array|string|null
+    {
+        return $this->getGlobal('cookie', $name, $filter, $flags);
+    }
+    
+    /**
      * Get value/values from global variables (like $_GET or $_SERVER)
      *
      * @param string $type
