@@ -2,6 +2,8 @@
 
 namespace Oriole\Controllers;
 
+use Exception;
+
 class LanguagesController extends BaseController
 {
     public function list()
@@ -24,5 +26,36 @@ class LanguagesController extends BaseController
         $data = array_merge($this->default_data, $custom_data);
         
         return $this->baseView->render('templates/languages/list.php', $data);
+    }
+    
+    /**
+     * @throws Exception
+     */
+    public function add()
+    {
+        $requestMethod = $this->request->getRequestMethod();
+        $post = $this->request->getPost();
+        
+        unset($post['submit']);
+        
+        if ($requestMethod === 'post') {
+            if (($id = $this->languageModel->addOne($post)) === false) {
+                $message = 'Validation errors:';
+                $errors = $this->languageModel->errors();
+            } else {
+                setOrioleCookie('message', 'The language was successfully created.');
+                return $this->response->redirect(route_by_alias('edit_language', $id));
+            }
+        }
+        
+        $custom_data = [
+            'title' => 'Add language',
+            'post' => $post,
+            'message' => $message ?? '',
+            'errors' => $errors ?? [],
+        ];
+        $data = array_merge($this->default_data, $custom_data);
+        
+        return $this->baseView->render('templates/languages/add.php', $data);
     }
 }
