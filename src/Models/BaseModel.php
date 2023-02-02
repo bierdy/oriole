@@ -78,7 +78,7 @@ class BaseModel
      */
     protected array $errors = [];
     
-    protected int $errorDataCounter = 0;
+    protected int $errorDataCounter = -1;
     
     public function __construct()
     {
@@ -213,7 +213,7 @@ class BaseModel
         $this->sql = '';
         $this->bindCounter = 0;
         $this->binds = [];
-        $this->errorDataCounter = 0;
+        $this->errorDataCounter = -1;
     }
     
     public function execute() : void
@@ -293,6 +293,48 @@ class BaseModel
     /**
      * @throws Exception
      */
+    public function addMany(array $data) : bool
+    {
+        if (empty($data)) {
+            $this->errors['logic'][] = 'There are no data to add';
+            return false;
+        }
+        
+        $insertStmt = '';
+        
+        foreach ($data as $values) {
+            $values = is_object($values) ? (array) $values : $values;
+            $this->validate($values, false);
+            
+            unset($values[$this->primaryKey], $values[$this->createdAtKey], $values[$this->updatedAtKey]);
+            
+            $keys = [];
+            foreach ($values as $value) {
+                $key = self::BIND_KEY . $this->bindCounter;
+                $keys[] = $key;
+                $this->binds[$key] = $value;
+                
+                $this->bindCounter++;
+            }
+            
+            $insertStmt .= " (" . implode(',', $keys) . ") ";
+        }
+        
+        if (! empty($this->errors))
+            return false;
+        
+        $names = array_keys(array_slice($data, 0, 1));
+        
+        $this->sql .= " INSERT INTO {$this->table} (" . implode(',', $names) . ") VALUES $insertStmt ";
+        
+        $this->execute();
+        
+        return empty($this->errors);
+    }
+    
+    /**
+     * @throws Exception
+     */
     public function addOne(array|object $values) : int|string|false
     {
         $values = is_object($values) ? (array) $values : $values;
@@ -326,8 +368,10 @@ class BaseModel
      */
     protected function validate(array $data, bool $onlyPassedData = true) : void
     {
+        $this->errorDataCounter++;
+        
         if (empty($data)) {
-            $this->errors['logic'][] = 'There is no data to validate';
+            $this->errors['data'][$this->errorDataCounter][] = 'There is no data to validate';
             return;
         }
         
@@ -372,8 +416,6 @@ class BaseModel
                 $this->processRules($field, $values, $rules, $data);
             }
         }
-        
-        $this->errorDataCounter++;
     }
     
     /**
