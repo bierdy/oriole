@@ -5,6 +5,11 @@ namespace Oriole\Models;
 use PDO;
 use PDOStatement;
 use Oriole\Oriole;
+use Oriole\Validation\Rules;
+use Oriole\Validation\Messages;
+use PDOException;
+use Exception;
+use InvalidArgumentException;
 
 class BaseModel
 {
