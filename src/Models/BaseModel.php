@@ -58,7 +58,6 @@ class BaseModel
      */
     protected array $binds = [];
     
-    
     /**
      * [
      *     'data' => [
@@ -78,6 +77,8 @@ class BaseModel
      * @var array
      */
     protected array $errors = [];
+    
+    protected int $errorDataCounter = 0;
     
     public function __construct()
     {
@@ -212,6 +213,7 @@ class BaseModel
         $this->sql = '';
         $this->bindCounter = 0;
         $this->binds = [];
+        $this->errorDataCounter = 0;
     }
     
     public function execute() : void
@@ -370,6 +372,8 @@ class BaseModel
                 $this->processRules($field, $values, $rules, $data);
             }
         }
+        
+        $this->errorDataCounter++;
     }
     
     /**
@@ -487,7 +491,7 @@ class BaseModel
                 
                 $param = ($param === false) ? '' : $param;
                 
-                $this->errors['data'][$field] = $this->getErrorMessage(
+                $this->errors['data'][$this->errorDataCounter][$field] = $this->getErrorMessage(
                     $rule,
                     $field,
                     $param,
