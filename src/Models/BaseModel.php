@@ -444,6 +444,24 @@ class BaseModel
     /**
      * @throws Exception
      */
+    public function update() : bool
+    {
+        if (empty($this->table))
+            $this->errors['logic'][] = 'Table key is empty';
+        
+        if (! empty($this->errors))
+            return false;
+        
+        $this->sql = " UPDATE {$this->table} " . $this->sql;
+        
+        $this->execute();
+        
+        return empty($this->errors);
+    }
+    
+    /**
+     * @throws Exception
+     */
     public function deleteMany(array $primaryKeys) : bool
     {
         if (empty($this->table))
