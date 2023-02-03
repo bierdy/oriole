@@ -678,11 +678,16 @@ class BaseModel
                 $isRuleMethodExist = method_exists($this->validationRulesHandler, $rule);
             }
             
-            // If it's a callable, call and get out of here.
-            if ($isRuleMethodExist)
-                $passed = $param === false ? $this->validationRulesHandler->$rule($value) : $this->validationRulesHandler->$rule($value, $param, $data);
-            else
+            // Placeholder for custom errors from the rules.
+            $error = null;
+            
+            // If it's not a callable, get out of here.
+            if (! $isRuleMethodExist)
                 throw new Exception("$rule is not a valid rule.");
+            
+            $passed = $param === false
+                ? $this->validationRulesHandler->$rule($value, $error)
+                : $this->validationRulesHandler->$rule($value, $param, $data, $error, $field);
             
             // Set the error message if we didn't survive.
             if ($passed === false) {
@@ -694,7 +699,7 @@ class BaseModel
                 
                 $param = ($param === false) ? '' : $param;
                 
-                $this->errors['data'][$this->errorDataCounter][$field] = $this->getErrorMessage(
+                $this->errors['data'][$this->errorDataCounter][$field] = $error ?? $this->getErrorMessage(
                     $rule,
                     $field,
                     $param,
