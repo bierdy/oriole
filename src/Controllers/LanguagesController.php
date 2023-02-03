@@ -92,4 +92,21 @@ class LanguagesController extends BaseController
         
         return $this->baseView->render('templates/languages/edit.php', $data);
     }
+    
+    /**
+     * @throws Exception
+     */
+    public function activate($id)
+    {
+        $this->languageModel->updateOne($id, ['is_active' => 1]);
+        
+        return $this->response->redirect(route_by_alias('languages_list'));
+    }
+    
+    public function deactivate($id)
+    {
+        $this->languageModel->updateOne($id, ['is_active' => 0]);
+        
+        return $this->response->redirect(route_by_alias('languages_list'));
+    }
 }
