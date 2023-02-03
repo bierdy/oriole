@@ -58,7 +58,7 @@ class VariablesController extends BaseController
         $custom_data = [
             'title' => 'Add variable',
             'post' => $post,
-            'languages_options' => ! empty($languages) ? ['' => 'Empty'] + array_combine(array_column($languages, 'id'), array_column($languages, 'title')) : ['' => 'Languages not found'],
+            'languages_options' => ! empty($languages) ? ['0' => 'Empty'] + array_combine(array_column($languages, 'id'), array_column($languages, 'title')) : ['' => 'Languages not found'],
             'message' => $message ?? '',
             'errors' => $errors ?? [],
         ];
@@ -95,7 +95,7 @@ class VariablesController extends BaseController
             'title' => 'Edit variable "' . $variable->title . '"',
             'post' => $post,
             'variable' => $variable,
-            'languages_options' => ! empty($languages) ? ['' => 'Empty'] + array_combine(array_column($languages, 'id'), array_column($languages, 'title')) : ['' => 'Languages not found'],
+            'languages_options' => ! empty($languages) ? ['0' => 'Empty'] + array_combine(array_column($languages, 'id'), array_column($languages, 'title')) : ['' => 'Languages not found'],
             'message' => getOrioleCookie('message', true) ?? $message ?? '',
             'errors' => $errors ?? [],
         ];

@@ -31,7 +31,7 @@
         </div>
         <div class="mb-3">
             <?= form_label('Language', 'language_id', ['class' => 'form-label']); ?>
-            <?= form_dropdown('language_id', $languages_options, $post['language_id'] ?? '', ['class' => 'form-control' , 'id' => 'language_id']); ?>
+            <?= form_dropdown('language_id', $languages_options, $post['language_id'] ?? '0', ['class' => 'form-control' , 'id' => 'language_id']); ?>
         </div>
         <div class="mb-3 overflow-hidden">
             <?= anchor(route_by_alias('variables_list'), 'Back', ['class' => 'btn btn-secondary float-start']); ?>
