@@ -785,4 +785,26 @@ class BaseModel
     {
         return $this->errors;
     }
+    
+    public function beginTransaction() : void
+    {
+        self::$dbh->beginTransaction();
+    }
+    
+    public function submitTransaction() : bool
+    {
+        try {
+            self::$dbh->commit();
+        } catch (PDOException $e) {
+            self::$dbh->rollBack();
+            return false;
+        }
+        
+        return true;
+    }
+    
+    public function rollBackTransaction() : void
+    {
+        self::$dbh->rollBack();
+    }
 }
