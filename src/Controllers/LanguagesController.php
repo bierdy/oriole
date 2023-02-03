@@ -129,4 +129,15 @@ class LanguagesController extends BaseController
         
         return $this->response->redirect(route_by_alias('languages_list'));
     }
+    
+    /**
+     * @throws Exception
+     */
+    public function setDefault($id)
+    {
+        $this->languageModel->set(['is_default' => 0])->where('is_default', '=', 1)->update();
+        $this->languageModel->updateOne($id, ['is_default' => 1]);
+        
+        return $this->response->redirect(route_by_alias('languages_list'));
+    }
 }
