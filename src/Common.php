@@ -268,6 +268,118 @@ if (! function_exists('form_input')) {
     }
 }
 
+if (! function_exists('form_textarea')) {
+    /**
+     * Textarea field
+     *
+     * @param array|string $data
+     * @param string $value
+     * @param object|array|string $extra string, array, object that can be cast to array
+     * @return string
+     */
+    function form_textarea(array|string $data = '', string $value = '', object|array|string $extra = '') : string
+    {
+        $defaults = [
+            'name' => is_array($data) ? '' : $data,
+            'cols' => '40',
+            'rows' => '10',
+        ];
+        if (! is_array($data) || ! isset($data['value'])) {
+            $val = $value;
+        } else {
+            $val = $data['value'];
+            unset($data['value']); // textareas don't use the value attribute
+        }
+        
+        // Unsets default rows and cols if defined in extra field as array or string.
+        if ((is_array($extra) && array_key_exists('rows', $extra)) || (is_string($extra) && stripos(preg_replace('/\s+/', '', $extra), 'rows=') !== false))
+            unset($defaults['rows']);
+        
+        if ((is_array($extra) && array_key_exists('cols', $extra)) || (is_string($extra) && stripos(preg_replace('/\s+/', '', $extra), 'cols=') !== false))
+            unset($defaults['cols']);
+        
+        return '<textarea ' . rtrim(parse_form_attributes($data, $defaults)) . stringify_attributes($extra) . '>' . htmlspecialchars($val) . '</textarea>' . PHP_EOL;
+    }
+}
+
+if (! function_exists('form_dropdown')) {
+    /**
+     * Drop-down Menu
+     *
+     * @param array|string $data
+     * @param array|string $options
+     * @param array|string $selected
+     * @param object|array|string $extra string, array, object that can be cast to array
+     * @return string
+     */
+    function form_dropdown(array|string $data = '', array|string $options = [], array|string $selected = [], object|array|string $extra = '') : string
+    {
+        $defaults = [];
+        if (is_array($data)) {
+            if (isset($data['selected'])) {
+                $selected = $data['selected'];
+                unset($data['selected']); // select tags don't have a selected attribute
+            }
+            if (isset($data['options'])) {
+                $options = $data['options'];
+                unset($data['options']); // select tags don't use an options attribute
+            }
+        } else {
+            $defaults = ['name' => $data];
+        }
+        
+        if (! is_array($selected))
+            $selected = [$selected];
+        if (! is_array($options))
+            $options = [$options];
+        
+        // If no selected state was submitted we will attempt to set it automatically
+        if (empty($selected)) {
+            if (is_array($data)) {
+                if (isset($data['name'], $_POST[$data['name']])) {
+                    $selected = [$_POST[$data['name']]];
+                }
+            } elseif (isset($_POST[$data])) {
+                $selected = [$_POST[$data]];
+            }
+        }
+        
+        // Standardize selected as strings, like the option keys will be
+        foreach ($selected as $key => $item)
+            $selected[$key] = (string) $item;
+        
+        $extra    = stringify_attributes($extra);
+        $multiple = (count($selected) > 1 && stripos($extra, 'multiple') === false) ? ' multiple="multiple"' : '';
+        $form     = '<select ' . rtrim(parse_form_attributes($data, $defaults)) . $extra . $multiple . '>' . PHP_EOL;
+        
+        foreach ($options as $key => $val) {
+            // Keys should always be strings for strict comparison
+            $key = (string) $key;
+            
+            if (is_array($val)) {
+                if (empty($val))
+                    continue;
+                
+                $form .= '<optgroup label="' . $key . '">' . PHP_EOL;
+                
+                foreach ($val as $optgroupKey => $optgroupVal) {
+                    // Keys should always be strings for strict comparison
+                    $optgroupKey = (string) $optgroupKey;
+                    
+                    $sel = in_array($optgroupKey, $selected, true) ? ' selected="selected"' : '';
+                    $form .= '<option value="' . htmlspecialchars($optgroupKey) . '"' . $sel . '>' . $optgroupVal . '</option>' . PHP_EOL;
+                }
+                
+                $form .= '</optgroup>' . PHP_EOL;
+            } else {
+                $form .= '<option value="' . htmlspecialchars($key) . '"' . (in_array($key, $selected, true) ? ' selected="selected"' : '') . '>' . $val . '</option>' . PHP_EOL;
+            }
+        }
+        
+        return $form . '</select>' . PHP_EOL;
+    }
+}
+
 if (! function_exists('parse_form_attributes')) {
     /**
      * Parse the form attributes
