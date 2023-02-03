@@ -2,7 +2,7 @@
 
 namespace Oriole\Models;
 
-class TemplateVariable extends BaseModel
+class TemplateVariableModel extends BaseModel
 {
     public string $table = 'oriole_template_variables';
     
