@@ -403,7 +403,10 @@ class BaseModel
             return false;
         
         $this->sql .= " UPDATE {$this->table} ";
-        $this->set($values)->whereIn($this->primaryKey, $primaryKeys);
+        $this->set($values);
+        
+        if (! empty($primaryKeys))
+            $this->whereIn($this->primaryKey, $primaryKeys);
         
         if (! empty($this->errors))
             return false;
@@ -453,7 +456,10 @@ class BaseModel
             return false;
         
         $this->sql .= " DELETE ";
-        $this->from($this->table)->whereIn($this->primaryKey, $primaryKeys);
+        $this->from($this->table);
+        
+        if (! empty($primaryKeys))
+            $this->whereIn($this->primaryKey, $primaryKeys);
         
         $this->execute();
         
