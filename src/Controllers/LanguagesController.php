@@ -58,4 +58,38 @@ class LanguagesController extends BaseController
         
         return $this->baseView->render('templates/languages/add.php', $data);
     }
+    
+    /**
+     * @throws Exception
+     */
+    public function edit(int $id = 0)
+    {
+        $requestMethod = $this->request->getRequestMethod();
+        $post = $this->request->getPost();
+        
+        unset($post['submit']);
+        
+        if ($requestMethod === 'post') {
+            if ($this->languageModel->updateOne($id, $post) === false) {
+                $message = 'Validation errors:';
+                $errors = $this->languageModel->errors();
+            } else {
+                setOrioleCookie('message', 'The language was successfully updated.');
+                return $this->response->redirect(route_by_alias('edit_language', $id));
+            }
+        }
+        
+        $language = $this->languageModel->reset()->getOne($id);
+        
+        $custom_data = [
+            'title' => 'Edit language "' . $language->title . '"',
+            'post' => $post,
+            'language' => $language,
+            'message' => getOrioleCookie('message', true) ?? $message ?? '',
+            'errors' => $errors ?? [],
+        ];
+        $data = array_merge($this->default_data, $custom_data);
+        
+        return $this->baseView->render('templates/languages/edit.php', $data);
+    }
 }
