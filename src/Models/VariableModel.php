@@ -10,10 +10,10 @@ class VariableModel extends BaseModel
     
     public array $validationRules = [
         'title' => 'required|is_unique[oriole_variables.title,id,{id}]',
-        'name' => 'required|is_unique[oriole_variables.name,id,{id}]|alpha_dash',
-        'class' => 'required|is_class_exist|class_is_not_implement_interface[Wagtail\Variables\VariableInterface]',
-        'options' => 'permit_empty|valid_json',
-        'template' => 'required',
+        'alias' => 'required|is_unique[oriole_variables.alias,id,{id}]|alpha_dash',
+        'variable_handler' => 'required|is_class_exist|class_is_not_implement_interface[Oriole\Variables\VariableInterface]',
+        'settings' => 'permit_empty|valid_json',
+        'variable_view' => 'required',
         'validation_rules' => 'permit_empty|valid_json',
     ];
     
