@@ -20,7 +20,7 @@ class Messages
         'exact_length'          => 'The {field} field must be exactly {param} characters in length.',
         'greater_than'          => 'The {field} field must contain a number greater than {param}.',
         'greater_than_equal_to' => 'The {field} field must contain a number greater than or equal to {param}.',
-        'hex'                   => 'The {field} field may only contain hexidecimal characters.',
+        'hex'                   => 'The {field} field may only contain hexadecimal characters.',
         'in_list'               => 'The {field} field must be one of: {param}.',
         'integer'               => 'The {field} field must contain an integer.',
         'is_natural'            => 'The {field} field must only contain digits.',
@@ -49,5 +49,6 @@ class Messages
         'valid_url_strict'      => 'The {field} field must contain a valid URL.',
         'valid_date'            => 'The {field} field must contain a valid date.',
         'valid_json'            => 'The {field} field must contain a valid json.',
+        'is_class_exist'        => 'The {field} field contain a not declared class {value}.',
     ];
 }
