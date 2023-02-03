@@ -509,6 +509,24 @@ class BaseModel
     /**
      * @throws Exception
      */
+    public function delete() : bool
+    {
+        if (empty($this->table))
+            $this->errors['logic'][] = 'Table key is empty';
+        
+        if (! empty($this->errors))
+            return false;
+        
+        $this->sql = " DELETE {$this->table} " . $this->sql;
+        
+        $this->execute();
+        
+        return empty($this->errors);
+    }
+    
+    /**
+     * @throws Exception
+     */
     public function truncate() : bool
     {
         if (empty($this->table))
