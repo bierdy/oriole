@@ -109,4 +109,24 @@ class LanguagesController extends BaseController
         
         return $this->response->redirect(route_by_alias('languages_list'));
     }
+    
+    /**
+     * @throws Exception
+     */
+    public function delete($id)
+    {
+        $this->languageModel->deleteOne($id);
+        
+        return $this->response->redirect(route_by_alias('languages_list'));
+    }
+    
+    /**
+     * @throws Exception
+     */
+    public function deleteAll()
+    {
+        $this->languageModel->truncate();
+        
+        return $this->response->redirect(route_by_alias('languages_list'));
+    }
 }
