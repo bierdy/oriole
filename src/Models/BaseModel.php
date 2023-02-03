@@ -441,6 +441,50 @@ class BaseModel
     /**
      * @throws Exception
      */
+    public function deleteMany(array $primaryKeys) : bool
+    {
+        if (empty($this->table))
+            $this->errors['logic'][] = 'Table key is empty';
+        
+        if (empty($this->primaryKey))
+            $this->errors['logic'][] = 'Primary key is empty';
+        
+        if (! empty($this->errors))
+            return false;
+        
+        $this->sql .= " DELETE ";
+        $this->from($this->table)->whereIn($this->primaryKey, $primaryKeys);
+        
+        $this->execute();
+        
+        return empty($this->errors);
+    }
+    
+    /**
+     * @throws Exception
+     */
+    public function deleteOne(string|int|float $primaryKey) : bool
+    {
+        if (empty($this->table))
+            $this->errors['logic'][] = 'Table key is empty';
+        
+        if (empty($this->primaryKey))
+            $this->errors['logic'][] = 'Primary key is empty';
+        
+        if (! empty($this->errors))
+            return false;
+    
+        $this->sql .= " DELETE ";
+        $this->from($this->table)->where($this->primaryKey, '=', $primaryKey);
+        
+        $this->execute();
+        
+        return empty($this->errors);
+    }
+    
+    /**
+     * @throws Exception
+     */
     protected function validate(array $data, bool $onlyPassedData = true) : void
     {
         $this->errorDataCounter++;
