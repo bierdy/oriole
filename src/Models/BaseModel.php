@@ -561,6 +561,8 @@ class BaseModel
                 $values = dot_array_search($field, $data);
             }
             
+            $values = $values ?? '';
+            
             if ($values === []) {
                 // We'll process the values right away if an empty array
                 $this->processRules($field, $values, $rules, $data);
