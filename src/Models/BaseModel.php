@@ -686,7 +686,7 @@ class BaseModel
                 throw new Exception("$rule is not a valid rule.");
             
             $passed = $param === false
-                ? $this->validationRulesHandler->$rule($value, $error)
+                ? $this->validationRulesHandler->$rule($value, $error, $field)
                 : $this->validationRulesHandler->$rule($value, $param, $data, $error, $field);
             
             // Set the error message if we didn't survive.
