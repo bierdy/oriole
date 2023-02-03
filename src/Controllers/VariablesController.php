@@ -32,4 +32,38 @@ class VariablesController extends BaseController
         
         return $this->baseView->render('templates/variables/list.php', $data);
     }
+    
+    /**
+     * @throws Exception
+     */
+    public function add()
+    {
+        $requestMethod = $this->request->getRequestMethod();
+        $post = $this->request->getPost();
+        
+        unset($post['submit']);
+        
+        if ($requestMethod === 'post') {
+            if (($id = $this->variableModel->addOne($post)) === false) {
+                $message = 'Validation errors:';
+                $errors = $this->variableModel->errors();
+            } else {
+                setOrioleCookie('message', 'The variable was successfully created.');
+                return $this->response->redirect(route_by_alias('edit_variable', $id));
+            }
+        }
+        
+        $languages = $this->languageModel->getAll();
+        
+        $custom_data = [
+            'title' => 'Add variable',
+            'post' => $post,
+            'languages_options' => ! empty($languages) ? ['' => 'Empty'] + array_combine(array_column($languages, 'id'), array_column($languages, 'title')) : ['' => 'Languages not found'],
+            'message' => $message ?? '',
+            'errors' => $errors ?? [],
+        ];
+        $data = array_merge($this->default_data, $custom_data);
+        
+        return $this->baseView->render('templates/variables/add.php', $data);
+    }
 }
