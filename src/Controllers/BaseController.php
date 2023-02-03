@@ -9,6 +9,7 @@ use Oriole\Models\BaseModel;
 use Oriole\Models\TemplateVariableModel;
 use Oriole\Models\LanguageModel;
 use Oriole\Models\VariableModel;
+use Oriole\Models\VariableValueModel;
 use Oriole\Views\BaseView;
 
 class BaseController
@@ -22,6 +23,7 @@ class BaseController
     protected TemplateVariableModel|null $templateVariableModel = null;
     protected LanguageModel|null $languageModel = null;
     protected VariableModel|null $variableModel = null;
+    protected VariableValueModel|null $variableValueModel = null;
     protected BaseView|null $baseView = null;
     protected array $default_data = [];
     
@@ -39,6 +41,7 @@ class BaseController
         $this->templateVariableModel = new TemplateVariableModel();
         $this->languageModel = new LanguageModel();
         $this->variableModel = new VariableModel();
+        $this->variableValueModel = new VariableValueModel();
         $this->baseView = new BaseView();
         
         $this->default_data = [
