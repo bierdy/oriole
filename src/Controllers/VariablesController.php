@@ -103,4 +103,24 @@ class VariablesController extends BaseController
         
         return $this->baseView->render('templates/variables/edit.php', $data);
     }
+    
+    /**
+     * @throws Exception
+     */
+    public function activate($id)
+    {
+        $this->variableModel->updateOne($id, ['is_active' => 1]);
+        
+        return $this->response->redirect(route_by_alias('variables_list'));
+    }
+    
+    /**
+     * @throws Exception
+     */
+    public function deactivate($id)
+    {
+        $this->variableModel->updateOne($id, ['is_active' => 0]);
+        
+        return $this->response->redirect(route_by_alias('variables_list'));
+    }
 }
