@@ -61,9 +61,9 @@
                                         <?= anchor(route_by_alias('deactivate_language', $language->id), '<i class="bi bi-toggle-on"></i>'); ?>
                                     <?php endif ?>
                                     <?php if (! empty($language->variables_count)) : ?>
-                                        <?= anchor(route_by_alias('delete_language', $language->id), '<i class="bi bi-trash link-danger"></i>', ['class' => 'modal-alert-link', 'data-alert-link-text' => "There are {$language->variables_count} variables with the language &quot;{$language->title}&quot;. To delete a language uninstall this language from all variables assigned it."]); ?>
+                                        <?= anchor(route_by_alias('delete_language', $language->id), '<i class="bi bi-trash link-danger"></i>', ['class' => 'modal-alert-link', 'data-alert-link-text' => "There are {$language->variables_count} variables with the language \"{$language->title}\". To delete a language uninstall this language from all variables assigned it."]); ?>
                                     <?php else : ?>
-                                        <?= anchor(route_by_alias('delete_language', $language->id), '<i class="bi bi-trash link-danger"></i>', ['class' => 'modal-confirm-link', 'data-confirm-link-text' => "Are you sure you want to delete language &quot;{$language->title}&quot;?"]); ?>
+                                        <?= anchor(route_by_alias('delete_language', $language->id), '<i class="bi bi-trash link-danger"></i>', ['class' => 'modal-confirm-link', 'data-confirm-link-text' => "Are you sure you want to delete language \"{$language->title}\"?"]); ?>
                                     <?php endif; ?>
                                 </div>
                             </td>
