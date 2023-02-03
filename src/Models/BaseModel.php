@@ -491,6 +491,24 @@ class BaseModel
     /**
      * @throws Exception
      */
+    public function truncate() : bool
+    {
+        if (empty($this->table))
+            $this->errors['logic'][] = 'Table key is empty';
+        
+        if (! empty($this->errors))
+            return false;
+        
+        $this->sql .= " TRUNCATE TABLE {$this->table} ";
+        
+        $this->execute();
+        
+        return empty($this->errors);
+    }
+    
+    /**
+     * @throws Exception
+     */
     protected function validate(array $data, bool $onlyPassedData = true) : void
     {
         $this->errorDataCounter++;
