@@ -642,4 +642,95 @@ class Rules
         
         return $errors['warning_count'] === 0 && $errors['error_count'] === 0;
     }
+    
+    /**
+     * Validate the existence of the class
+     *
+     * @param string|null $class Class or Class::method
+     * @return bool
+     */
+    public function is_class_exist(string $class = null) : bool
+    {
+        if (empty($class))
+            return true;
+        
+        $class = explode('::', $class)[0];
+        
+        return class_exists($class);
+    }
+    
+    /**
+     * Validate object interface implementation
+     *
+     * @param string|null $class Class or Class::method
+     * @param string|null $interface
+     * @param array $data
+     * @param string|null $error
+     * @param string|null $field
+     * @return bool
+     */
+    public function class_is_not_implement_interface(string $class = null, ? string $interface = null, array $data = [], ? string &$error = null, ? string $field = null) : bool
+    {
+        if (empty($class))
+            return true;
+        
+        if (empty($interface))
+        {
+            $error = "The $field field must contain a specified interface.";
+            
+            return false;
+        }
+        
+        $class = explode('::', $class)[0];
+        $class_interfaces = class_implements($class);
+        
+        if (! isset($class_interfaces[$interface]))
+        {
+            $error = "The $field field contain class $class not implemented the interface $interface.";
+            
+            return false;
+        }
+        
+        return true;
+    }
+    
+    /**
+     * Validate the existence of the class method
+     *
+     * @param string|null $class_method Class::method
+     * @param string|null $error
+     * @param string|null $field
+     * @return bool
+     */
+    public function is_method_exist(string $class_method = null, ? string &$error = null, ? string $field = null) : bool
+    {
+        if (empty($class_method))
+            return true;
+        
+        $class = explode('::', $class_method)[0] ?? null;
+        $method = explode('::', $class_method)[1] ?? null;
+        
+        if (is_null($method))
+        {
+            $error = "The $field field contain a not specified method.";
+            
+            return false;
+        }
+        
+        if (! class_exists($class))
+        {
+            $error = "The $field field contain a not declared class $class.";
+            
+            return false;
+        }
+        
+        if (! method_exists($class, $method))
+        {
+            $error = "The $field field contain method $method not declared in class $class";
+            
+            return false;
+        }
+        
+        return true;
+    }
 }
