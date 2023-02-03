@@ -104,6 +104,9 @@ class LanguagesController extends BaseController
         return $this->response->redirect(route_by_alias('languages_list'));
     }
     
+    /**
+     * @throws Exception
+     */
     public function deactivate($id)
     {
         $this->languageModel->updateOne($id, ['is_active' => 0]);
