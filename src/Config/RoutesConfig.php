@@ -27,13 +27,13 @@ class RoutesConfig extends AbstractRoutesConfig
             $routes->group('variables', function($routes)
             {
                 $routes->get('', 'VariablesController::list', ['as' => 'variables_list']);
-                $routes->match(['get', 'post'], 'add', 'VariablesController::add');
-                $routes->match(['get', 'post'], 'edit/(:num)', 'VariablesController::edit/$0');
-                $routes->get('activate/(:num)', 'VariablesController::activate/$0');
-                $routes->get('deactivate/(:num)', 'VariablesController::deactivate/$0');
-                $routes->get('delete/(:num)', 'VariablesController::delete/$0');
-                $routes->get('delete-all', 'VariablesController::deleteAll');
-                $routes->get('delete-value/(:num)', 'VariablesController::deleteValue/$0');
+                $routes->match(['get', 'post'], 'add', 'VariablesController::add', ['as' => 'add_variable']);
+                $routes->match(['get', 'post'], 'edit/(:num)', 'VariablesController::edit/$0', ['as' => 'edit_variable']);
+                $routes->get('activate/(:num)', 'VariablesController::activate/$0', ['as' => 'activate_variable']);
+                $routes->get('deactivate/(:num)', 'VariablesController::deactivate/$0', ['as' => 'deactivate_variable']);
+                $routes->get('delete/(:num)', 'VariablesController::delete/$0', ['as' => 'delete_variable']);
+                $routes->get('delete-all', 'VariablesController::deleteAll', ['as' => 'delete_all_variables']);
+                $routes->get('delete-value/(:num)', 'VariablesController::deleteValue/$0', ['as' => 'delete_variable_value']);
             });
             
             $routes->group('resources', function($routes)
