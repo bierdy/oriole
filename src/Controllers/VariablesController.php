@@ -66,4 +66,41 @@ class VariablesController extends BaseController
         
         return $this->baseView->render('templates/variables/add.php', $data);
     }
+    
+    /**
+     * @throws Exception
+     */
+    public function edit(int $id = 0)
+    {
+        $requestMethod = $this->request->getRequestMethod();
+        $post = $this->request->getPost();
+        
+        unset($post['submit']);
+        
+        if ($requestMethod === 'post') {
+            if ($this->variableModel->updateOne($id, $post) === false) {
+                $message = 'Validation errors:';
+                $errors = $this->variableModel->errors();
+            } else {
+                setOrioleCookie('message', 'The variable was successfully updated.');
+                return $this->response->redirect(route_by_alias('edit_variable', $id));
+            }
+        }
+        
+        $this->variableModel->reset();
+        $variable = $this->variableModel->getOne($id);
+        $languages = $this->languageModel->getAll();
+        
+        $custom_data = [
+            'title' => 'Edit variable "' . $variable->title . '"',
+            'post' => $post,
+            'variable' => $variable,
+            'languages_options' => ! empty($languages) ? ['' => 'Empty'] + array_combine(array_column($languages, 'id'), array_column($languages, 'title')) : ['' => 'Languages not found'],
+            'message' => getOrioleCookie('message', true) ?? $message ?? '',
+            'errors' => $errors ?? [],
+        ];
+        $data = array_merge($this->default_data, $custom_data);
+        
+        return $this->baseView->render('templates/variables/edit.php', $data);
+    }
 }
