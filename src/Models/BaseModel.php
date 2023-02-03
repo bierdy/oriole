@@ -234,19 +234,20 @@ class BaseModel
         return $this;
     }
     
-    protected function reset() : void
+    public function reset() : static
     {
         $this->fetchMode = null;
         $this->sql = '';
         $this->bindCounter = 0;
         $this->binds = [];
         $this->errorDataCounter = -1;
+        $this->errors = [];
+        
+        return $this;
     }
     
     public function execute() : void
     {
-        $this->errors = [];
-        
         try {
             $this->stmt = self::$dbh->prepare($this->sql);
             
@@ -260,8 +261,6 @@ class BaseModel
         } catch (PDOException $e) {
             $this->errors['pdo'][] = $e->getMessage();
         }
-    
-        $this->reset();
     }
     
     public function findAll() : false|array
