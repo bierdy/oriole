@@ -79,7 +79,8 @@ class LanguagesController extends BaseController
             }
         }
         
-        $language = $this->languageModel->reset()->getOne($id);
+        $this->languageModel->reset();
+        $language = $this->languageModel->getOne($id);
         
         $custom_data = [
             'title' => 'Edit language "' . $language->title . '"',
@@ -136,6 +137,7 @@ class LanguagesController extends BaseController
     public function setDefault($id)
     {
         $this->languageModel->set(['is_default' => 0])->where('is_default', '=', 1)->update();
+        $this->languageModel->reset();
         $this->languageModel->updateOne($id, ['is_default' => 1]);
         
         return $this->response->redirect(route_by_alias('languages_list'));
