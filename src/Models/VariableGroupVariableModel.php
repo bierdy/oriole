@@ -9,8 +9,8 @@ class VariableGroupVariableModel extends BaseModel
     public string $primaryKey = 'id';
     
     public array $validationRules = [
-        'variable_group_id' => 'required',
-        'variable_id' => 'required',
+        'variable_group_id' => 'required|numeric',
+        'variable_id' => 'required|numeric',
         'sort_order' => 'required|numeric',
     ];
     
