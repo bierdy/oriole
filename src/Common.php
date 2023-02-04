@@ -112,6 +112,25 @@ if (! function_exists('url_is')) {
     }
 }
 
+if (! function_exists('previous_url')) {
+    /**
+     * Returns the previous URL the current visitor was on.
+     * We'll use a sanitized url from $_SERVER['HTTP_REFERER']
+     * which can be set by the user so is untrusted and not set by certain browsers/servers.
+     *
+     * @return string
+     */
+    function previous_url() : string
+    {
+        $request = new Request();
+        
+        $httpReferer = $request->getServer('HTTP_REFERER', FILTER_SANITIZE_URL);
+        $adminBaseUrl = $request->getAdminBaseURL();
+        
+        return $httpReferer ? : $adminBaseUrl;
+    }
+}
+
 if (! function_exists('stringify_attributes')) {
     /**
      * Stringify attributes for use in HTML tags.
