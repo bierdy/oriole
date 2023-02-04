@@ -74,4 +74,27 @@ class VariableModel extends BaseModel
         
         return false;
     }
+    
+    /**
+     * @throws Exception
+     */
+    public function deleteManyVariables(array $primaryKeys) : bool
+    {
+        if (empty($primaryKeys)) {
+            if (empty($this->primaryKey)) {
+                $this->errors['logic'][] = 'Primary key is empty';
+                
+                return false;
+            }
+    
+            $primaryKeys = array_column($this->getAll(), $this->primaryKey);
+        }
+        
+        foreach ($primaryKeys as $primaryKey) {
+            if ($this->deleteOneVariable($primaryKey) === false)
+                return false;
+        }
+        
+        return true;
+    }
 }
