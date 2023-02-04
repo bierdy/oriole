@@ -143,4 +143,14 @@ class VariablesController extends BaseController
         
         return $this->response->redirect(route_by_alias('variables_list'));
     }
+    
+    /**
+     * @throws Exception
+     */
+    public function deleteValue(int $value_id = 0)
+    {
+        $this->variableModel->deleteOneVariableValue($value_id);
+        
+        return $this->response->redirect(previous_url());
+    }
 }
