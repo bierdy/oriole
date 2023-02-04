@@ -6,6 +6,7 @@ use Oriole\Oriole;
 use Oriole\HTTP\Request;
 use Oriole\HTTP\Response;
 use Oriole\Models\BaseModel;
+use Oriole\Models\ResourceModel;
 use Oriole\Models\TemplateVariableModel;
 use Oriole\Models\LanguageModel;
 use Oriole\Models\VariableModel;
@@ -21,6 +22,7 @@ class BaseController
     protected array|null $appConfig = null;
     protected array|null $cookieConfig = null;
     protected BaseModel|null $baseModel = null;
+    protected ResourceModel|null $resourceModel = null;
     protected TemplateVariableModel|null $templateVariableModel = null;
     protected LanguageModel|null $languageModel = null;
     protected VariableModel|null $variableModel = null;
@@ -40,6 +42,7 @@ class BaseController
         $this->appConfig = $this->oriole->getConfig('app');
         $this->cookieConfig = $this->oriole->getConfig('cookie');
         $this->baseModel = new BaseModel();
+        $this->resourceModel = new ResourceModel();
         $this->templateVariableModel = new TemplateVariableModel();
         $this->languageModel = new LanguageModel();
         $this->variableModel = new VariableModel();
@@ -48,28 +51,28 @@ class BaseController
         $this->baseView = new BaseView();
         
         $this->default_data = [
-                'title' => '',
-                //'resources_tree' => $this->resourceModel->getResourcesTree(),
-                'appConfig' => json_encode(array_merge($this->appConfig, ['currentBaseURL' => $this->request->getCurrentBaseURL()])),
-                'cookieConfig' => json_encode($this->cookieConfig),
-                'publicBaseURL' => $this->request->getPublicBaseURL(),
-                'headerMenu' => [
-                    'templates' => [
-                            'title' => 'Templates',
-                            'link' => route_by_alias('templates_list'),
-                            'active' => url_is(route_by_alias('templates_list') . '*'),
-                        ],
-                    'variables' => [
-                            'title' => 'Variables',
-                            'link' => route_by_alias('variables_list'),
-                            'active' => url_is(route_by_alias('variables_list') . '*'),
-                        ],
-                    'languages' => [
-                            'title' => 'Languages',
-                            'link' => route_by_alias('languages_list'),
-                            'active' => url_is(route_by_alias('languages_list') . '*'),
-                        ],
-                    ],
-            ];
+            'title' => '',
+            //'resources_tree' => $this->resourceModel->getResourcesTree(),
+            'appConfig' => json_encode(array_merge($this->appConfig, ['currentBaseURL' => $this->request->getCurrentBaseURL()])),
+            'cookieConfig' => json_encode($this->cookieConfig),
+            'publicBaseURL' => $this->request->getPublicBaseURL(),
+            'headerMenu' => [
+                'templates' => [
+                    'title' => 'Templates',
+                    'link' => route_by_alias('templates_list'),
+                    'active' => url_is(route_by_alias('templates_list') . '*'),
+                ],
+                'variables' => [
+                    'title' => 'Variables',
+                    'link' => route_by_alias('variables_list'),
+                    'active' => url_is(route_by_alias('variables_list') . '*'),
+                ],
+                'languages' => [
+                    'title' => 'Languages',
+                    'link' => route_by_alias('languages_list'),
+                    'active' => url_is(route_by_alias('languages_list') . '*'),
+                ],
+            ],
+        ];
     }
 }
