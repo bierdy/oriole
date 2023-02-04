@@ -97,4 +97,27 @@ class VariableModel extends BaseModel
         
         return true;
     }
+    
+    /**
+     * @throws Exception
+     */
+    public function deleteOneVariableValue(int $value_id) : bool
+    {
+        $variableValueModel = new VariableValueModel();
+        $resourceModel = new ResourceModel();
+        
+        $variable_value = $variableValueModel->getOne($value_id);
+        $resource = $resourceModel->getOne($variable_value->resource_id);
+        $variable = $this->getOne($variable_value->variable_id);
+        $variable_handler = new $variable->variable_handler([], $resource, $variable);
+        
+        if (method_exists($variable_handler, 'deleteValue')) {
+            $variable_handler->deleteValue($value_id);
+        } else {
+            $variableValueModel->reset()->deleteOne($value_id);
+            setOrioleCookie('message', 'The value of "' . ucfirst(mb_strtolower($variable->title)) . '" variable was successfully deleted.');
+        }
+        
+        return true;
+    }
 }
