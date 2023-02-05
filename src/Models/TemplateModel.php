@@ -10,7 +10,7 @@ class TemplateModel extends BaseModel
     
     public array $validationRules = [
         'title' => 'required|is_unique[oriole_templates.title,id,{id}]',
-        'route_handler' => 'permit_empty|is_class_exist|is_method_exist',
+        'template_handler' => 'permit_empty|is_class_exist|is_method_exist',
     ];
     
     public array $validationMessages = [];
