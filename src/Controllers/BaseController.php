@@ -7,6 +7,7 @@ use Oriole\HTTP\Request;
 use Oriole\HTTP\Response;
 use Oriole\Models\BaseModel;
 use Oriole\Models\ResourceModel;
+use Oriole\Models\TemplateModel;
 use Oriole\Models\TemplateVariableModel;
 use Oriole\Models\LanguageModel;
 use Oriole\Models\VariableModel;
@@ -23,6 +24,7 @@ class BaseController
     protected array|null $cookieConfig = null;
     protected BaseModel|null $baseModel = null;
     protected ResourceModel|null $resourceModel = null;
+    protected TemplateModel|null $templateModel = null;
     protected TemplateVariableModel|null $templateVariableModel = null;
     protected LanguageModel|null $languageModel = null;
     protected VariableModel|null $variableModel = null;
@@ -43,6 +45,7 @@ class BaseController
         $this->cookieConfig = $this->oriole->getConfig('cookie');
         $this->baseModel = new BaseModel();
         $this->resourceModel = new ResourceModel();
+        $this->templateModel = new TemplateModel();
         $this->templateVariableModel = new TemplateVariableModel();
         $this->languageModel = new LanguageModel();
         $this->variableModel = new VariableModel();
