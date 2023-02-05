@@ -28,4 +28,35 @@ class TemplatesController extends BaseController
         
         return $this->baseView->render('templates/templates/list.php', $data);
     }
+    
+    /**
+     * @throws Exception
+     */
+    public function add()
+    {
+        $requestMethod = $this->request->getRequestMethod();
+        $post = $this->request->getPost();
+        
+        unset($post['submit']);
+        
+        if ($requestMethod === 'post') {
+            if (($id = $this->templateModel->addOne($post)) === false) {
+                $message = 'Validation errors:';
+                $errors = $this->templateModel->errors();
+            } else {
+                setOrioleCookie('message', 'The template was successfully created.');
+                return $this->response->redirect(route_by_alias('edit_template', $id));
+            }
+        }
+        
+        $custom_data = [
+            'title' => 'Add template',
+            'post' => $post,
+            'message' => $message ?? '',
+            'errors' => $errors ?? [],
+        ];
+        $data = array_merge($this->default_data, $custom_data);
+        
+        return $this->baseView->render('templates/templates/add.php', $data);
+    }
 }
