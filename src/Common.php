@@ -399,6 +399,40 @@ if (! function_exists('form_dropdown')) {
     }
 }
 
+if (! function_exists('form_checkbox')) {
+    /**
+     * Checkbox Field
+     *
+     * @param array|string $data
+     * @param string $value
+     * @param bool $checked
+     * @param object|array|string $extra string, array, object that can be cast to array
+     * @return string
+     */
+    function form_checkbox(array|string $data = '', string $value = '', bool $checked = false, object|array|string $extra = '') : string
+    {
+        $defaults = [
+            'type'  => 'checkbox',
+            'name'  => ! is_array($data) ? $data : '',
+            'value' => $value,
+        ];
+        
+        if (is_array($data) && array_key_exists('checked', $data)) {
+            $checked = $data['checked'];
+            
+            if ($checked === false)
+                unset($data['checked']);
+            else
+                $data['checked'] = 'checked';
+        }
+        
+        if ($checked === true)
+            $defaults['checked'] = 'checked';
+        
+        return '<input ' . parse_form_attributes($data, $defaults) . stringify_attributes($extra) . ' />' . PHP_EOL;
+    }
+}
+
 if (! function_exists('parse_form_attributes')) {
     /**
      * Parse the form attributes
