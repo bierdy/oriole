@@ -7,9 +7,10 @@ use PDOStatement;
 use Oriole\Oriole;
 use Oriole\Validation\Rules;
 use Oriole\Validation\Messages;
-use PDOException;
+use Closure;
 use Exception;
 use InvalidArgumentException;
+use PDOException;
 
 class BaseModel
 {
@@ -145,30 +146,58 @@ class BaseModel
         return $this->where($name, $operator, $value, 'OR');
     }
     
-    public function whereIn(string $name, array $values, string $logic = '') : static
+    protected function whereInCondition(string $name, array|Closure $values, string $logic, string $type) : static
     {
-        $whereIn = [];
-        foreach ($values as $value) {
-            $key = self::BIND_KEY . $this->bindCounter;
-            $whereIn[] = $key;
-            $this->binds[$key] = $value;
+        $this->sql .= " $logic $name $type (";
+        
+        if (is_callable($values) && get_class($values) === 'Closure') {
+            $values($this);
+        } else {
+            $whereIn = [];
+            foreach ($values as $value) {
+                $key = self::BIND_KEY . $this->bindCounter;
+                $whereIn[] = $key;
+                $this->binds[$key] = $value;
+                
+                $this->bindCounter++;
+            }
             
-            $this->bindCounter++;
+            $this->sql .= implode(',', $whereIn);
         }
         
-        $this->sql .= ' ' . ($logic ? : 'WHERE') . " $name IN (" . implode(',', $whereIn) . ") ";
+        $this->sql .= ") ";
         
         return $this;
     }
     
-    public function andWhereIn(string $name, array $values) : static
+    public function whereIn(string $name, array|Closure $values) : static
     {
-        return $this->whereIn($name, $values, 'AND');
+        return $this->whereInCondition($name, $values, 'WHERE', 'IN');
     }
     
-    public function orWhereIn(string $name, array $values) : static
+    public function andWhereIn(string $name, array|Closure $values) : static
     {
-        return $this->whereIn($name, $values, 'OR');
+        return $this->whereInCondition($name, $values, 'AND', 'IN');
+    }
+    
+    public function orWhereIn(string $name, array|Closure $values) : static
+    {
+        return $this->whereInCondition($name, $values, 'OR', 'IN');
+    }
+    
+    public function whereNotIn(string $name, array|Closure $values) : static
+    {
+        return $this->whereInCondition($name, $values, 'WHERE', 'NOT IN');
+    }
+    
+    public function andWhereNotIn(string $name, array|Closure $values) : static
+    {
+        return $this->whereInCondition($name, $values, 'AND', 'NOT IN');
+    }
+    
+    public function orWhereNotIn(string $name, array|Closure $values) : static
+    {
+        return $this->whereInCondition($name, $values, 'OR', 'NOT IN');
     }
     
     public function join(string $type, string $table, string $on) : static
