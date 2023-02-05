@@ -11,7 +11,7 @@ class TemplatesController extends BaseController
         $templates = $this->baseModel
             ->select("t.*, COUNT(DISTINCT r.id) AS resources_count")
             ->from("{$this->templateModel->table} AS t")
-            ->join("{$this->resourceModel->table} AS r", 't.id = r.template_id', 'left')
+            ->join('left', "{$this->resourceModel->table} AS r", 't.id = r.template_id')
             ->groupBy('t.id')
             ->orderBy('t.id')
             ->findAll();
