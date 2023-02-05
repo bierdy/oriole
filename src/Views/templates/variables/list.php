@@ -7,7 +7,7 @@
             <?= anchor(route_by_alias('delete_all_variables'), 'Delete all variables', ['class' => 'btn btn-danger modal-confirm-link', 'data-confirm-link-text' => 'Are you sure you want to delete all variables?' . PHP_EOL . 'All values also will be deleted.']); ?>
         </p>
         <div class="table-responsive mb-3">
-            <table class="table link-secondary mb-0">
+            <table class="table link-secondary m-0">
                 <thead class="table-light">
                     <tr>
                         <th>#</th>
@@ -40,7 +40,7 @@
                                         <?= anchor(route_by_alias('activate_variable', $variable->id), '<i class="bi bi-toggle-off"></i>'); ?>
                                     <?php else : ?>
                                         <?= anchor(route_by_alias('deactivate_variable', $variable->id), '<i class="bi bi-toggle-on"></i>'); ?>
-                                    <?php endif ?>
+                                    <?php endif; ?>
                                     <?= anchor(route_by_alias('delete_variable', $variable->id), '<i class="bi bi-trash link-danger"></i>', ['class' => 'modal-confirm-link', 'data-confirm-link-text' => "Are you sure you want to delete variable \"$variable->title\"?"  . PHP_EOL . "The values of this variable for all resources using this variable also will be deleted."]); ?>
                                 </div>
                             </td>
@@ -51,7 +51,7 @@
         </div>
     <?php else : ?>
         <p>There are no variables.</p>
-    <?php endif ?>
+    <?php endif; ?>
     <div class="mb-3 overflow-hidden">
         <?= anchor(route_by_alias('add_variable'), 'Add variable', ['class' => 'btn btn-primary float-end']); ?>
     </div>

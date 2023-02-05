@@ -45,7 +45,7 @@
                             <td>
                                 <?php if ($language->is_default) : ?>
                                     <i class="bi bi-check"></i>
-                                <?php endif ?>
+                                <?php endif; ?>
                             </td>
                             <td><?= $language->sort_order; ?></td>
                             <td><?= date('Y.m.d H:i:s', strtotime($language->created_at)); ?></td>
@@ -54,12 +54,12 @@
                                 <div class="text-end">
                                     <?php if (empty($language->is_default)) : ?>
                                         <?= anchor(route_by_alias('set_default_language', $language->id), 'Set default'); ?>
-                                    <?php endif ?>
+                                    <?php endif; ?>
                                     <?php if (empty($language->is_active)) : ?>
                                         <?= anchor(route_by_alias('activate_language', $language->id), '<i class="bi bi-toggle-off"></i>'); ?>
                                     <?php else : ?>
                                         <?= anchor(route_by_alias('deactivate_language', $language->id), '<i class="bi bi-toggle-on"></i>'); ?>
-                                    <?php endif ?>
+                                    <?php endif; ?>
                                     <?php if (! empty($language->variables_count)) : ?>
                                         <?= anchor(route_by_alias('delete_language', $language->id), '<i class="bi bi-trash link-danger"></i>', ['class' => 'modal-alert-link', 'data-alert-link-text' => "There are $language->variables_count variables with the language \"$language->title\". To delete a language uninstall this language from all variables assigned it."]); ?>
                                     <?php else : ?>
@@ -74,7 +74,7 @@
         </div>
     <?php else : ?>
         <p>There are no languages.</p>
-    <?php endif ?>
+    <?php endif; ?>
     <div class="mb-3 overflow-hidden">
         <?= anchor(route_by_alias('add_language'), 'Add language', ['class' => 'btn btn-primary float-end']); ?>
     </div>
