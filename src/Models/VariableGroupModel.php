@@ -8,6 +8,8 @@ class VariableGroupModel extends BaseModel
     
     public string $primaryField = 'id';
     
+    public array $fields = ['title'];
+    
     public array $validationRules = [
         'title' => 'required',
     ];

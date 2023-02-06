@@ -26,6 +26,8 @@ class BaseModel
     
     public string $updatedAtField = 'updated_at';
     
+    public array $fields = [];
+    
     public array $validationRules = [];
     
     public array $validationMessages = [];

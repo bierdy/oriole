@@ -10,6 +10,8 @@ class VariableModel extends BaseModel
     
     public string $primaryField = 'id';
     
+    public array $fields = ['title', 'alias', 'is_active', 'variable_handler', 'variable_view', 'settings', 'validation_rules', 'language_id'];
+    
     public array $validationRules = [
         'title' => 'required|is_unique[oriole_variables.title,id,{id}]',
         'alias' => 'required|is_unique[oriole_variables.alias,id,{id}]|alpha_dash',

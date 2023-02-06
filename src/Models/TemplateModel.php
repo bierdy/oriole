@@ -8,6 +8,8 @@ class TemplateModel extends BaseModel
     
     public string $primaryField = 'id';
     
+    public array $fields = ['title', 'icon', 'template_handler', 'is_active', 'is_unique'];
+    
     public array $validationRules = [
         'title' => 'required|is_unique[oriole_templates.title,id,{id}]',
         'template_handler' => 'permit_empty|is_class_exist|is_method_exist',

@@ -8,6 +8,8 @@ class TemplateVariableModel extends BaseModel
     
     public string $primaryField = 'id';
     
+    public array $fields = ['template_id', 'variable_id'];
+    
     public array $validationRules = [
         'template_id' => 'required|numeric',
         'variable_id' => 'required|numeric',
