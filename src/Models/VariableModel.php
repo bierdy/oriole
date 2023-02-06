@@ -36,10 +36,10 @@ class VariableModel extends BaseModel
         
         $this->deleteOne($primaryField);
         
-        $templateVariableModel->from($templateVariableModel->table)->where('variable_id', '=', $primaryField)->delete();
+        $templateVariableModel->where('variable_id', '=', $primaryField)->delete();
         $this->errors = array_merge_recursive($this->errors, $templateVariableModel->errors());
         
-        $variableValueModel->from($variableValueModel->table)->where('variable_id', '=', $primaryField)->delete();
+        $variableValueModel->where('variable_id', '=', $primaryField)->delete();
         $this->errors = array_merge_recursive($this->errors, $variableValueModel->errors());
         
         $variable_group_variables = $variableGroupVariableModel->select('*')->from($variableGroupVariableModel->table)->where('variable_id', '=', $primaryField)->findAll();

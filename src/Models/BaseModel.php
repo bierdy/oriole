@@ -545,7 +545,7 @@ class BaseModel
         if (! empty($this->errors))
             return false;
         
-        $this->sql = " DELETE {$this->table} " . $this->sql;
+        $this->sql = " DELETE FROM {$this->table} " . $this->sql;
         
         $this->execute();
         
