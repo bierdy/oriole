@@ -36,8 +36,6 @@ class LanguagesController extends BaseController
         $requestMethod = $this->request->getRequestMethod();
         $post = $this->request->getPost();
         
-        unset($post['submit']);
-        
         if ($requestMethod === 'post') {
             if (($id = $this->languageModel->addOne($post)) === false) {
                 $message = 'Validation errors:';
@@ -66,8 +64,6 @@ class LanguagesController extends BaseController
     {
         $requestMethod = $this->request->getRequestMethod();
         $post = $this->request->getPost();
-        
-        unset($post['submit']);
         
         if ($requestMethod === 'post') {
             if ($this->languageModel->updateOne($id, $post) === false) {

@@ -41,8 +41,6 @@ class VariablesController extends BaseController
         $requestMethod = $this->request->getRequestMethod();
         $post = $this->request->getPost();
         
-        unset($post['submit']);
-        
         if ($requestMethod === 'post') {
             if (($id = $this->variableModel->addOne($post)) === false) {
                 $message = 'Validation errors:';
@@ -74,8 +72,6 @@ class VariablesController extends BaseController
     {
         $requestMethod = $this->request->getRequestMethod();
         $post = $this->request->getPost();
-        
-        unset($post['submit']);
         
         if ($requestMethod === 'post') {
             if ($this->variableModel->updateOne($id, $post) === false) {

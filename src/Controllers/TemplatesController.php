@@ -37,8 +37,6 @@ class TemplatesController extends BaseController
         $requestMethod = $this->request->getRequestMethod();
         $post = $this->request->getPost();
         
-        unset($post['submit']);
-        
         if ($requestMethod === 'post') {
             if (($id = $this->templateModel->addOne($post)) === false) {
                 $message = 'Validation errors:';
@@ -67,8 +65,6 @@ class TemplatesController extends BaseController
     {
         $requestMethod = $this->request->getRequestMethod();
         $post = $this->request->getPost();
-        
-        unset($post['submit']);
         
         if ($requestMethod === 'post') {
             $post_variables = [];
@@ -104,7 +100,6 @@ class TemplatesController extends BaseController
                 foreach($post_variables as $post_variable) {
                     $checked = $post_variable['checked'];
                     $template_variable_id = $post_variable['template_variable_id'];
-                    unset($post_variable['checked'], $post_variable['template_variable_id']);
                     
                     if ($checked && $template_variable_id)
                         $this->templateVariableModel->updateOne($template_variable_id, $post_variable);
