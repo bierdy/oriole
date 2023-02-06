@@ -193,4 +193,14 @@ class TemplatesController extends BaseController
         
         return $this->response->redirect(route_by_alias('templates_list'));
     }
+    
+    /**
+     * @throws Exception
+     */
+    public function delete($id)
+    {
+        $this->templateModel->deleteOneTemplate($id);
+        
+        return $this->response->redirect(route_by_alias('templates_list'));
+    }
 }
