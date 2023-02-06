@@ -173,4 +173,24 @@ class TemplatesController extends BaseController
         
         return $this->baseView->render('templates/templates/edit.php', $data);
     }
+    
+    /**
+     * @throws Exception
+     */
+    public function activate($id)
+    {
+        $this->templateModel->updateOne($id, ['is_active' => 1]);
+        
+        return $this->response->redirect(route_by_alias('templates_list'));
+    }
+    
+    /**
+     * @throws Exception
+     */
+    public function deactivate($id)
+    {
+        $this->templateModel->updateOne($id, ['is_active' => 0]);
+        
+        return $this->response->redirect(route_by_alias('templates_list'));
+    }
 }
