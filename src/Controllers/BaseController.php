@@ -12,6 +12,7 @@ use Oriole\Models\TemplateVariableModel;
 use Oriole\Models\LanguageModel;
 use Oriole\Models\VariableModel;
 use Oriole\Models\VariableValueModel;
+use Oriole\Models\VariableGroupModel;
 use Oriole\Models\TemplateVariableGroupModel;
 use Oriole\Models\VariableGroupVariableModel;
 use Oriole\Views\BaseView;
@@ -30,6 +31,7 @@ class BaseController
     protected LanguageModel|null $languageModel = null;
     protected VariableModel|null $variableModel = null;
     protected VariableValueModel|null $variableValueModel = null;
+    protected VariableGroupModel|null $variableGroupModel = null;
     protected TemplateVariableGroupModel|null $templateVariableGroupModel = null;
     protected VariableGroupVariableModel|null $variableGroupVariableModel = null;
     protected BaseView|null $baseView = null;
@@ -52,6 +54,7 @@ class BaseController
         $this->languageModel = new LanguageModel();
         $this->variableModel = new VariableModel();
         $this->variableValueModel = new VariableValueModel();
+        $this->variableGroupModel = new VariableGroupModel();
         $this->templateVariableGroupModel = new TemplateVariableGroupModel();
         $this->variableGroupVariableModel = new VariableGroupVariableModel();
         $this->baseView = new BaseView();
