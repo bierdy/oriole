@@ -101,29 +101,64 @@ class Request
     /**
      * Get value/values from global variables (like $_GET or $_SERVER)
      *
-     * @param string $type
+     * @param string $method
      * @param string|null $name
      * @param int|null $filter
      * @param null $flags
      * @return array|string|null
      */
-    protected function getGlobal(string $type, ? string $name = null, ? int $filter = null, $flags = null) : array|string|null
+    protected function getGlobal(string $method, ? string $name = null, ? int $filter = null, $flags = null) : array|string|null
     {
+        $method = strtolower($method);
+        
+        // Null filters cause null values to return.
         $filter ??= FILTER_DEFAULT;
         $flags = is_array($flags) ? $flags : (is_numeric($flags) ? (int) $flags : 0);
         
-        if (! is_null($name)) {
-            if (is_null($value = self::$globals[$type][$name] ?? null))
-                return null;
+        // Return all values when $name is null
+        if (is_null($name)) {
+            $values = [];
             
-            return filter_var($value, $filter, $flags);
+            foreach (self::$globals[$method] as $key => $value)
+                $values[$key] = is_array($value) ? $this->getGlobal($method, $key, $filter, $flags) : filter_var($value, $filter, $flags);
+            
+            return $values;
         }
         
-        $values = self::$globals[$type] ?? [];
-        foreach ($values as &$value)
-            $value = filter_var($value, $filter, $flags);
+        // Does the index contain array notation?
+        if (($count = preg_match_all('/(?:^[^\[]+)|\[[^]]*\]/', $name, $matches)) > 1) {
+            $value = self::$globals[$method];
+            
+            for ($i = 0; $i < $count; $i++) {
+                $key = trim($matches[0][$i], '[]');
+                
+                if ($key === '') // Empty notation will return the value as array
+                    break;
+                
+                if (isset($value[$key]))
+                    $value = $value[$key];
+                else
+                    return null;
+            }
+        }
         
-        return $values;
+        if (! isset($value))
+            $value = self::$globals[$method][$name] ?? null;
+        
+        if (is_array($value) && ($filter !== FILTER_DEFAULT || ((is_numeric($flags) && $flags !== 0) || is_array($flags) && $flags !== []))) {
+            // Iterate over array and append filter and flags
+            array_walk_recursive($value, static function (&$val) use ($filter, $flags) {
+                $val = filter_var($val, $filter, $flags);
+            });
+            
+            return $value;
+        }
+        
+        // Cannot filter these types of data automatically...
+        if (is_array($value) || is_object($value) || $value === null)
+            return $value;
+        
+        return filter_var($value, $filter, $flags);
     }
     
     public function getRequestScheme() : string
