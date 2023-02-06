@@ -16,12 +16,12 @@ class RoutesConfig extends AbstractRoutesConfig
             $routes->group('templates', function($routes)
             {
                 $routes->get('', 'TemplatesController::list', ['as' => 'templates_list']);
-                $routes->match(['get', 'post'], 'add', 'TemplatesController::add');
-                $routes->match(['get', 'post'], 'edit/(:num)', 'TemplatesController::edit/$0');
-                $routes->get('activate/(:num)', 'TemplatesController::activate/$0');
-                $routes->get('deactivate/(:num)', 'TemplatesController::deactivate/$0');
-                $routes->get('delete/(:num)', 'TemplatesController::delete/$0');
-                $routes->get('delete-all', 'TemplatesController::deleteAll');
+                $routes->match(['get', 'post'], 'add', 'TemplatesController::add', ['as' => 'add_template']);
+                $routes->match(['get', 'post'], 'edit/(:num)', 'TemplatesController::edit/$0', ['as' => 'edit_template']);
+                $routes->get('activate/(:num)', 'TemplatesController::activate/$0', ['as' => 'activate_template']);
+                $routes->get('deactivate/(:num)', 'TemplatesController::deactivate/$0', ['as' => 'deactivate_template']);
+                $routes->get('delete/(:num)', 'TemplatesController::delete/$0', ['as' => 'delete_template']);
+                $routes->get('delete-all', 'TemplatesController::deleteAll', ['as' => 'delete_all_templates']);
             });
             
             $routes->group('variables', function($routes)
@@ -62,9 +62,9 @@ class RoutesConfig extends AbstractRoutesConfig
             
             $routes->group('variable-groups', function($routes)
             {
-                $routes->match(['get', 'post'], 'add/(:num)', 'VariableGroupsController::add/$0');
-                $routes->match(['get', 'post'], 'edit/(:num)', 'VariableGroupsController::edit/$0');
-                $routes->get('delete/(:num)', 'VariableGroupsController::delete/$0');
+                $routes->match(['get', 'post'], 'add/(:num)', 'VariableGroupsController::add/$0', ['as' => 'add_variable_group']);
+                $routes->match(['get', 'post'], 'edit/(:num)', 'VariableGroupsController::edit/$0', ['as' => 'edit_variable_group']);
+                $routes->get('delete/(:num)', 'VariableGroupsController::delete/$0', ['as' => 'delete_variable_group']);
             });
             
             $routes->get('get-assets/(:any)/(:segment)/(:segment)', 'AssetsController::get/$0/$1/$2', ['as' => 'get_assets']);
