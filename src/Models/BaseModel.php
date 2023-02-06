@@ -574,7 +574,7 @@ class BaseModel
     /**
      * @throws Exception
      */
-    protected function validate(array $data, bool $onlyPassedData = true) : void
+    public function validate(array $data, bool $onlyPassedData = true) : void
     {
         $this->errorDataCounter++;
         
