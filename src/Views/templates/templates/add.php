@@ -18,7 +18,7 @@
             <?= form_input('template_handler', $post['template_handler'] ?? '', ['class' => 'form-control' , 'id' => 'template_handler']); ?>
         </div>
         <div class="form-check mb-3">
-            <?= form_checkbox('is_unique', true, $post['is_unique'] ?? false, ['class' => 'form-check-input mb-1' , 'id' => 'is_unique']); ?>
+            <?= form_checkbox('is_unique', 1, $post['is_unique'] ?? 0, ['class' => 'form-check-input mb-1' , 'id' => 'is_unique']); ?>
             <?= form_label('Unique', 'is_unique', ['class' => 'form-label']); ?>
         </div>
         <div class="mb-3 overflow-hidden">
