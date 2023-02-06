@@ -237,12 +237,11 @@ class BaseModel
     public function set(array|object $values) : static
     {
         $values = is_object($values) ? (array) $values : $values;
+        $this->filterValues($values);
         $this->validate($values);
         
         if (! empty($this->errors))
             return $this;
-        
-        unset($values[$this->primaryField], $values[$this->createdAtField], $values[$this->updatedAtField]);
         
         $keys = [];
         foreach ($values as $name => $value) {
@@ -360,9 +359,8 @@ class BaseModel
         $keysArray = [];
         foreach ($data as $values) {
             $values = is_object($values) ? (array) $values : $values;
+            $this->filterValues($values);
             $this->validate($values, false);
-            
-            unset($values[$this->primaryField], $values[$this->createdAtField], $values[$this->updatedAtField]);
             
             $keys = [];
             foreach ($values as $value) {
@@ -394,12 +392,11 @@ class BaseModel
     public function addOne(array|object $values) : int|string|false
     {
         $values = is_object($values) ? (array) $values : $values;
+        $this->filterValues($values);
         $this->validate($values, false);
         
         if (! empty($this->errors))
             return false;
-        
-        unset($values[$this->primaryField], $values[$this->createdAtField], $values[$this->updatedAtField]);
         
         $names = [];
         $keys = [];
@@ -837,5 +834,10 @@ class BaseModel
     public function rollBackTransaction() : void
     {
         self::$dbh->rollBack();
+    }
+    
+    protected function filterValues(array &$values) : void
+    {
+        $values = array_intersect_key($values, array_flip($this->fields));
     }
 }
