@@ -20,11 +20,11 @@ class BaseModel
     
     public string $table = '';
     
-    public string $primaryKey = '';
+    public string $primaryField = '';
     
-    public string $createdAtKey = 'created_at';
+    public string $createdAtField = 'created_at';
     
-    public string $updatedAtKey = 'updated_at';
+    public string $updatedAtField = 'updated_at';
     
     public array $validationRules = [];
     
@@ -240,7 +240,7 @@ class BaseModel
         if (! empty($this->errors))
             return $this;
         
-        unset($values[$this->primaryKey], $values[$this->createdAtKey], $values[$this->updatedAtKey]);
+        unset($values[$this->primaryField], $values[$this->createdAtField], $values[$this->updatedAtField]);
         
         $keys = [];
         foreach ($values as $name => $value) {
@@ -306,12 +306,12 @@ class BaseModel
         return empty($this->errors) ? $this->stmt->fetch() : false;
     }
     
-    public function getAll(array $primaryKeys = []) : false|array
+    public function getAll(array $primaryFields = []) : false|array
     {
         if (empty($this->table))
             $this->errors['logic'][] = 'Table key is empty';
         
-        if (empty($this->primaryKey))
+        if (empty($this->primaryField))
             $this->errors['logic'][] = 'Primary key is empty';
         
         if (! empty($this->errors))
@@ -319,26 +319,26 @@ class BaseModel
         
         $this->select('*')->from($this->table);
         
-        if (! empty($primaryKeys))
-            $this->whereIn($this->primaryKey, $primaryKeys);
+        if (! empty($primaryFields))
+            $this->whereIn($this->primaryField, $primaryFields);
         
         $this->execute();
         
         return empty($this->errors) ? $this->stmt->fetchAll() : false;
     }
     
-    public function getOne(string|int|float $primaryKey)
+    public function getOne(string|int|float $primaryField)
     {
         if (empty($this->table))
             $this->errors['logic'][] = 'Table key is empty';
         
-        if (empty($this->primaryKey))
+        if (empty($this->primaryField))
             $this->errors['logic'][] = 'Primary key is empty';
         
         if (! empty($this->errors))
             return false;
         
-        $this->select('*')->from($this->table)->where($this->primaryKey, '=', $primaryKey);
+        $this->select('*')->from($this->table)->where($this->primaryField, '=', $primaryField);
         
         $this->execute();
         
@@ -360,7 +360,7 @@ class BaseModel
             $values = is_object($values) ? (array) $values : $values;
             $this->validate($values, false);
             
-            unset($values[$this->primaryKey], $values[$this->createdAtKey], $values[$this->updatedAtKey]);
+            unset($values[$this->primaryField], $values[$this->createdAtField], $values[$this->updatedAtField]);
             
             $keys = [];
             foreach ($values as $value) {
@@ -397,7 +397,7 @@ class BaseModel
         if (! empty($this->errors))
             return false;
         
-        unset($values[$this->primaryKey], $values[$this->createdAtKey], $values[$this->updatedAtKey]);
+        unset($values[$this->primaryField], $values[$this->createdAtField], $values[$this->updatedAtField]);
         
         $names = [];
         $keys = [];
@@ -420,12 +420,12 @@ class BaseModel
     /**
      * @throws Exception
      */
-    public function updateMany(array $primaryKeys, array|object $values) : bool
+    public function updateMany(array $primaryFields, array|object $values) : bool
     {
         if (empty($this->table))
             $this->errors['logic'][] = 'Table key is empty';
         
-        if (empty($this->primaryKey))
+        if (empty($this->primaryField))
             $this->errors['logic'][] = 'Primary key is empty';
         
         if (! empty($this->errors))
@@ -434,8 +434,8 @@ class BaseModel
         $this->sql .= " UPDATE {$this->table} ";
         $this->set($values);
         
-        if (! empty($primaryKeys))
-            $this->whereIn($this->primaryKey, $primaryKeys);
+        if (! empty($primaryFields))
+            $this->whereIn($this->primaryField, $primaryFields);
         
         if (! empty($this->errors))
             return false;
@@ -448,19 +448,19 @@ class BaseModel
     /**
      * @throws Exception
      */
-    public function updateOne(string|int|float $primaryKey, array|object $values) : bool
+    public function updateOne(string|int|float $primaryField, array|object $values) : bool
     {
         if (empty($this->table))
             $this->errors['logic'][] = 'Table key is empty';
         
-        if (empty($this->primaryKey))
+        if (empty($this->primaryField))
             $this->errors['logic'][] = 'Primary key is empty';
         
         if (! empty($this->errors))
             return false;
         
         $this->sql .= " UPDATE {$this->table} ";
-        $this->set($values)->where($this->primaryKey, '=', $primaryKey);
+        $this->set($values)->where($this->primaryField, '=', $primaryField);
         
         if (! empty($this->errors))
             return false;
@@ -491,12 +491,12 @@ class BaseModel
     /**
      * @throws Exception
      */
-    public function deleteMany(array $primaryKeys) : bool
+    public function deleteMany(array $primaryFields) : bool
     {
         if (empty($this->table))
             $this->errors['logic'][] = 'Table key is empty';
         
-        if (empty($this->primaryKey))
+        if (empty($this->primaryField))
             $this->errors['logic'][] = 'Primary key is empty';
         
         if (! empty($this->errors))
@@ -505,8 +505,8 @@ class BaseModel
         $this->sql .= " DELETE ";
         $this->from($this->table);
         
-        if (! empty($primaryKeys))
-            $this->whereIn($this->primaryKey, $primaryKeys);
+        if (! empty($primaryFields))
+            $this->whereIn($this->primaryField, $primaryFields);
         
         $this->execute();
         
@@ -516,19 +516,19 @@ class BaseModel
     /**
      * @throws Exception
      */
-    public function deleteOne(string|int|float $primaryKey) : bool
+    public function deleteOne(string|int|float $primaryField) : bool
     {
         if (empty($this->table))
             $this->errors['logic'][] = 'Table key is empty';
         
-        if (empty($this->primaryKey))
+        if (empty($this->primaryField))
             $this->errors['logic'][] = 'Primary key is empty';
         
         if (! empty($this->errors))
             return false;
     
         $this->sql .= " DELETE ";
-        $this->from($this->table)->where($this->primaryKey, '=', $primaryKey);
+        $this->from($this->table)->where($this->primaryField, '=', $primaryField);
         
         $this->execute();
         

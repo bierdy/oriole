@@ -6,7 +6,7 @@ class TemplateVariableModel extends BaseModel
 {
     public string $table = 'oriole_template_variables';
     
-    public string $primaryKey = 'id';
+    public string $primaryField = 'id';
     
     public array $validationRules = [
         'template_id' => 'required|numeric',

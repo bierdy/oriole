@@ -6,7 +6,7 @@ class TemplateModel extends BaseModel
 {
     public string $table = 'oriole_templates';
     
-    public string $primaryKey = 'id';
+    public string $primaryField = 'id';
     
     public array $validationRules = [
         'title' => 'required|is_unique[oriole_templates.title,id,{id}]',

@@ -6,7 +6,7 @@ class VariableGroupModel extends BaseModel
 {
     public string $table = 'oriole_variable_groups';
     
-    public string $primaryKey = 'id';
+    public string $primaryField = 'id';
     
     public array $validationRules = [
         'title' => 'required',

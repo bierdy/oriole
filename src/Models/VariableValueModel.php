@@ -6,7 +6,7 @@ class VariableValueModel extends BaseModel
 {
     public string $table = 'oriole_variable_values';
     
-    public string $primaryKey = 'id';
+    public string $primaryField = 'id';
     
     public array $validationRules = [
         'resource_id' => 'required|numeric',

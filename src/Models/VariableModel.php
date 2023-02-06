@@ -8,7 +8,7 @@ class VariableModel extends BaseModel
 {
     public string $table = 'oriole_variables';
     
-    public string $primaryKey = 'id';
+    public string $primaryField = 'id';
     
     public array $validationRules = [
         'title' => 'required|is_unique[oriole_variables.title,id,{id}]',
@@ -24,7 +24,7 @@ class VariableModel extends BaseModel
     /**
      * @throws Exception
      */
-    public function deleteOneVariable(string|int|float $primaryKey) : bool
+    public function deleteOneVariable(string|int|float $primaryField) : bool
     {
         $templateVariableModel = new TemplateVariableModel();
         $variableValueModel = new VariableValueModel();
@@ -32,15 +32,15 @@ class VariableModel extends BaseModel
         
         $this->beginTransaction();
         
-        $this->deleteOne($primaryKey);
+        $this->deleteOne($primaryField);
         
-        $templateVariableModel->from($templateVariableModel->table)->where('variable_id', '=', $primaryKey)->delete();
+        $templateVariableModel->from($templateVariableModel->table)->where('variable_id', '=', $primaryField)->delete();
         $this->errors = array_merge_recursive($this->errors, $templateVariableModel->errors());
         
-        $variableValueModel->from($variableValueModel->table)->where('variable_id', '=', $primaryKey)->delete();
+        $variableValueModel->from($variableValueModel->table)->where('variable_id', '=', $primaryField)->delete();
         $this->errors = array_merge_recursive($this->errors, $variableValueModel->errors());
         
-        $variable_group_variables = $variableGroupVariableModel->select('*')->from($variableGroupVariableModel->table)->where('variable_id', '=', $primaryKey)->findAll();
+        $variable_group_variables = $variableGroupVariableModel->select('*')->from($variableGroupVariableModel->table)->where('variable_id', '=', $primaryField)->findAll();
         
         if (! empty($variable_group_variables)) {
             foreach($variable_group_variables as $variable_group_variable) {
@@ -78,20 +78,20 @@ class VariableModel extends BaseModel
     /**
      * @throws Exception
      */
-    public function deleteManyVariables(array $primaryKeys) : bool
+    public function deleteManyVariables(array $primaryFields) : bool
     {
-        if (empty($primaryKeys)) {
-            if (empty($this->primaryKey)) {
+        if (empty($primaryFields)) {
+            if (empty($this->primaryField)) {
                 $this->errors['logic'][] = 'Primary key is empty';
                 
                 return false;
             }
     
-            $primaryKeys = array_column($this->getAll(), $this->primaryKey);
+            $primaryFields = array_column($this->getAll(), $this->primaryField);
         }
         
-        foreach ($primaryKeys as $primaryKey) {
-            if ($this->deleteOneVariable($primaryKey) === false)
+        foreach ($primaryFields as $primaryField) {
+            if ($this->deleteOneVariable($primaryField) === false)
                 return false;
         }
         

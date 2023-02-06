@@ -6,7 +6,7 @@ class TemplateVariableGroupModel extends BaseModel
 {
     public string $table = 'oriole_template_variable_groups';
     
-    public string $primaryKey = 'id';
+    public string $primaryField = 'id';
     
     public array $validationRules = [
         'template_id' => 'required|numeric',

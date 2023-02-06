@@ -6,7 +6,7 @@ class ResourceModel extends BaseModel
 {
     public string $table = 'oriole_resources';
     
-    public string $primaryKey = 'id';
+    public string $primaryField = 'id';
     
     public array $validationRules = [
         'title' => 'required|is_unique[oriole_resources.title,id,{id}]',
