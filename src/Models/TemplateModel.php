@@ -2,6 +2,8 @@
 
 namespace Oriole\Models;
 
+use Exception;
+
 class TemplateModel extends BaseModel
 {
     public string $table = 'oriole_templates';
@@ -35,5 +37,47 @@ class TemplateModel extends BaseModel
                     ->where('t.is_unique', '=', 1);
             })
             ->findAll();
+    }
+    
+    /**
+     * @throws Exception
+     */
+    public function deleteOneTemplate(string|int|float $primaryField) : bool
+    {
+        $templateVariableModel = new TemplateVariableModel();
+        $templateVariableGroupModel = new TemplateVariableGroupModel();
+        $variableGroupModel = new VariableGroupModel();
+        $variableGroupVariableModel = new VariableGroupVariableModel();
+        
+        $this->beginTransaction();
+        
+        $this->deleteOne($primaryField);
+        
+        $templateVariableModel->where('template_id', '=', $primaryField)->delete();
+        $this->errors = array_merge_recursive($this->errors, $templateVariableModel->errors());
+        
+        $template_variable_groups = $templateVariableGroupModel->select('*')->from($templateVariableGroupModel->table)->where('template_id', '=', $primaryField)->findAll();
+        foreach($template_variable_groups as $template_variable_group) {
+            $templateVariableGroupModel->reset()->deleteOne($template_variable_group->id);
+            $this->errors = array_merge_recursive($this->errors, $templateVariableGroupModel->errors());
+            
+            $variableGroupModel->deleteOne($template_variable_group->variable_group_id);
+            $this->errors = array_merge_recursive($this->errors, $variableGroupModel->errors());
+            
+            $variableGroupVariableModel->where('variable_group_id', '=', $template_variable_group->variable_group_id)->delete();
+            $this->errors = array_merge_recursive($this->errors, $variableGroupVariableModel->errors());
+        }
+        
+        $this->errors = array_diff($this->errors, array('', ' ', null, 0, array()));
+        
+        if (! empty($this->errors)) {
+            $this->rollBackTransaction();
+            return false;
+        }
+        
+        if ($this->submitTransaction())
+            return true;
+        
+        return false;
     }
 }
