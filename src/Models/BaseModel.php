@@ -237,8 +237,8 @@ class BaseModel
     public function set(array|object $values) : static
     {
         $values = is_object($values) ? (array) $values : $values;
-        $this->filterValues($values);
         $this->validate($values);
+        $this->filterValues($values);
         
         if (! empty($this->errors))
             return $this;
@@ -359,8 +359,8 @@ class BaseModel
         $keysArray = [];
         foreach ($data as $values) {
             $values = is_object($values) ? (array) $values : $values;
-            $this->filterValues($values);
             $this->validate($values, false);
+            $this->filterValues($values);
             
             $keys = [];
             foreach ($values as $value) {
@@ -392,8 +392,8 @@ class BaseModel
     public function addOne(array|object $values) : int|string|false
     {
         $values = is_object($values) ? (array) $values : $values;
-        $this->filterValues($values);
         $this->validate($values, false);
+        $this->filterValues($values);
         
         if (! empty($this->errors))
             return false;
