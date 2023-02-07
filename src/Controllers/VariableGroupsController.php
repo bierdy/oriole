@@ -50,4 +50,42 @@ class VariableGroupsController extends BaseController
         
         return $this->baseView->render('templates/variable_groups/add.php', $data);
     }
+    
+    /**
+     * @throws Exception
+     */
+    public function edit(int $id = 0)
+    {
+        $requestMethod = $this->request->getRequestMethod();
+        $post = $this->request->getPost();
+        
+        if ($requestMethod === 'post') {
+            if ($this->variableGroupModel->updateOne($id, $post) === false) {
+                $message = 'Validation errors:';
+                $errors = $this->variableGroupModel->errors();
+            } else {
+                setOrioleCookie('message', 'The variable group was successfully updated.');
+                return $this->response->redirect(route_by_alias('edit_variable_group', $id));
+            }
+        }
+        
+        $variable_group = $this->variableGroupModel->reset()->getOne($id);
+        $template_variable_group = $this->templateVariableGroupModel
+            ->select('*')
+            ->from($this->templateVariableGroupModel->table)
+            ->where('variable_group_id', '=', $id)
+            ->findOne();
+        
+        $custom_data = [
+            'title' => 'Edit variable group "' . $variable_group->title . '"',
+            'post' => $post,
+            'variable_group' => $variable_group,
+            'template_variable_group' => $template_variable_group,
+            'message' => getOrioleCookie('message', true) ?? $message ?? '',
+            'errors' => $errors ?? [],
+        ];
+        $data = array_merge($this->default_data, $custom_data);
+        
+        return $this->baseView->render('templates/variable_groups/edit.php', $data);
+    }
 }
