@@ -20,8 +20,11 @@ class AssetsController
         $file_path = trim($file_path, '/ ');
         $file_path = ! empty($file_path) ? $file_path . '/' : '';
         
-        if (! method_exists($this, $file_ext))
+        if (! method_exists($this, $file_ext)) {
+            $this->response->setStatusCode(415);
+            
             return '';
+        }
         
         $this->response->removeHeader('Content-Type');
         $this->{$file_ext}();
