@@ -92,12 +92,10 @@ class VariableModel extends BaseModel
             $primaryFields = array_column($this->getAll(), $this->primaryField);
         }
         
-        foreach ($primaryFields as $primaryField) {
-            if ($this->deleteOneVariable($primaryField) === false)
-                return false;
-        }
+        foreach ($primaryFields as $primaryField)
+            $this->deleteOneVariable($primaryField);
         
-        return true;
+        return empty($this->errors);
     }
     
     /**
