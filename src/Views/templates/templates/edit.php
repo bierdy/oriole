@@ -36,7 +36,7 @@
                 Variables
             </div>
             <div>
-                <?= anchor(route_by_alias('add_variable_group', $template->id), 'Add variable group', ['class' => 'btn btn-light']); ?>
+                <?= anchor(route_by_alias('add_variable_group', $template->id), 'Add variable group', ['class' => 'btn btn-outline-primary']); ?>
             </div>
             <div class="mb-3">
                 <div class="card-placeholder">
