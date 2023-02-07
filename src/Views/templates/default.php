@@ -7,8 +7,8 @@
         <meta name="format-detection" content="telephone=no">
         <title><?= $title; ?></title>
         <link href="<?= route_by_alias('get_assets', 'assets/img', 'favicon', 'png'); ?>" rel="shortcut icon" type="image/png">
-        <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.1.0/dist/css/bootstrap.min.css" rel="stylesheet" type="text/css">
-        <link href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.5.0/font/bootstrap-icons.css" rel="stylesheet" type="text/css">
+        <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.2.3/dist/css/bootstrap.min.css" rel="stylesheet" type="text/css">
+        <link href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.10.3/font/bootstrap-icons.css" rel="stylesheet" type="text/css">
         <link href="<?= route_by_alias('get_assets', 'assets/css', 'styles', 'css'); ?>" rel="stylesheet" type="text/css">
         <script>
             window.app_config = <?= $appConfig; ?>;
@@ -36,10 +36,10 @@
             </div>
         </main>
         <?= $this->render('layouts/common/footer.php'); ?>
-        <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.6.0/jquery.min.js"></script>
-        <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.1.0/dist/js/bootstrap.bundle.min.js"></script>
+        <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.6.3/jquery.min.js"></script>
+        <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.2.3/dist/js/bootstrap.bundle.min.js"></script>
         <script src="https://cdn.jsdelivr.net/npm/js-cookie@3.0.1/dist/js.cookie.min.js"></script>
-        <script src="https://cdn.ckeditor.com/ckeditor5/29.2.0/classic/ckeditor.js"></script>
+        <script src="https://cdn.ckeditor.com/ckeditor5/36.0.0/classic/ckeditor.js"></script>
         <script src="<?= route_by_alias('get_assets', 'assets/js', 'app', 'js'); ?>"></script>
     </body>
 </html>
