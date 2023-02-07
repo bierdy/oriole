@@ -49,7 +49,10 @@
                             <?= form_input(['type' => 'hidden', 'name' => "template_variable_groups[$template_variable_group->id][sort_order]", 'value' => $template_variable_group->sort_order, 'class' => 'card-order']); ?>
                             <div class="card-header">
                                 <?= $template_variable_group->title; ?>
-                                <?= anchor(route_by_alias('delete_variable_group', $template_variable_group->id), '<i class="bi bi-trash link-danger"></i>', ['class' => 'modal-confirm-link', 'data-confirm-link-text' => "Are you sure you want to delete variable group \"$template_variable_group->title\"?"]); ?>
+                                <div class="text-end">
+                                    <?= anchor(route_by_alias('edit_variable_group', $template_variable_group->id), '<i class="bi bi-pencil"></i>'); ?>
+                                    <?= anchor(route_by_alias('delete_variable_group', $template_variable_group->id), '<i class="bi bi-trash link-danger"></i>', ['class' => 'modal-confirm-link', 'data-confirm-link-text' => "Are you sure you want to delete variable group \"$template_variable_group->title\"?"]); ?>
+                                </div>
                             </div>
                             <div class="card-body">
                                 <div class="card-body-placeholder">
