@@ -25,7 +25,7 @@ class VariableGroupsController extends BaseController
                 $this->variableGroupModel->reset()->deleteOne($id);
             } else {
                 setOrioleCookie('message', 'The variable group was successfully created.');
-                return $this->response->redirect(route_by_alias('edit_template', $template_id));
+                return $this->response->redirect(route_by_alias('edit_variable_group', $id));
             }
         }
         
