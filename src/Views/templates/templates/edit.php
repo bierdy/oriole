@@ -51,7 +51,7 @@
                                 <?= $template_variable_group->title; ?>
                                 <div class="text-end">
                                     <?= anchor(route_by_alias('edit_variable_group', $template_variable_group->id), '<i class="bi bi-pencil"></i>'); ?>
-                                    <?= anchor(route_by_alias('delete_variable_group', $template_variable_group->id), '<i class="bi bi-trash link-danger"></i>', ['class' => 'modal-confirm-link', 'data-confirm-link-text' => "Are you sure you want to delete variable group \"$template_variable_group->title\"?"]); ?>
+                                    <?= anchor(route_by_alias('delete_variable_group', $template_variable_group->id), '<i class="bi bi-trash link-danger"></i>', ['class' => 'modal-confirm-link', 'data-confirm-link-text' => "Are you sure you want to delete variable group \"$template_variable_group->title\"?" . PHP_EOL . "Resources variables values will not be deleted."]); ?>
                                 </div>
                             </div>
                             <div class="card-body">
