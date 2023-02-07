@@ -80,4 +80,25 @@ class TemplateModel extends BaseModel
         
         return false;
     }
+    
+    /**
+     * @throws Exception
+     */
+    public function deleteManyTemplates(array $primaryFields) : bool
+    {
+        if (empty($primaryFields)) {
+            if (empty($this->primaryField)) {
+                $this->errors['logic'][] = 'Primary key is empty';
+                
+                return false;
+            }
+            
+            $primaryFields = array_column($this->getAll(), $this->primaryField);
+        }
+        
+        foreach ($primaryFields as $primaryField)
+            $this->deleteOneTemplate($primaryField);
+        
+        return empty($this->errors);
+    }
 }
