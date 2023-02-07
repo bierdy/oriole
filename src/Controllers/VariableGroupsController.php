@@ -88,4 +88,23 @@ class VariableGroupsController extends BaseController
         
         return $this->baseView->render('templates/variable_groups/edit.php', $data);
     }
+    
+    /**
+     * @throws Exception
+     */
+    public function delete(int $id = 0)
+    {
+        $template_variable_group = $this->templateVariableGroupModel
+            ->select('*')
+            ->from($this->templateVariableGroupModel->table)
+            ->where('variable_group_id', '=', $id)
+            ->findOne();
+        
+        if ($this->variableGroupModel->deleteOneVariableGroup($id))
+            setOrioleCookie('message', 'The variable group was successfully deleted.');
+        else
+            setOrioleCookie('message', 'Errors occurred when deleting a variable group.');
+        
+        return $this->response->redirect(route_by_alias('edit_template', $template_variable_group->template_id));
+    }
 }
